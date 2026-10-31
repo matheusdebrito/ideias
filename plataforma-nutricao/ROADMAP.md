@@ -22,7 +22,7 @@
 | 1 | Visão de produto e público-alvo | Concluída | Dois públicos, proposta de valor, monetização inicial, MVP adulto |
 | 2 | Modelo de dietas e refeições | Concluída | Plano versus diário, versionamento, bibliotecas, horários/observações, composição fixa |
 | 3 | Criação e atribuição de dietas | Concluída | Fluxo profissional, atribuição, cardápio padrão com personalizações semanais, categorias, vigência imediata/programada, visualização antecipada, cancelamento/reagendamento |
-| 4 | Base de alimentos e cálculos nutricionais | Em andamento | Regras de cadastro, unidades, cálculos e dados incompletos definidas; pesagem pós-preparo como padrão para alimentos cozidos; TBCA/TACO/JSON adiada para etapa 9; pendem identificação/duplicidade e histórico |
+| 4 | Base de alimentos e cálculos nutricionais | Em andamento | Cadastro, unidades, cálculos, dados incompletos, pesagem pós-preparo e marcas de industrializados definidos; fonte TBCA/TACO/JSON adiada para etapa 9; pendem política de aviso de duplicidade e detalhes de retenção |
 | 5 | Diário alimentar, metas e indicadores | Pendente | Registro do consumo real, histórico, metas datadas, saldo diário/semanal/mensal, peso e IMC |
 | 6 | Gestão de pacientes e permissões | Pendente | Convites, vínculo único, revogação, acesso aos dados, histórico profissional, validação CRN |
 | 7 | Monetização e assinaturas | Pendente | Recursos gratuitos e pagos, planos, limites, cobrança, cancelamento e continuidade do acesso |
@@ -78,6 +78,8 @@ Estas pendências ficam registradas, não são decisões tomadas por omissão.
 
 **Preparo definido:** o plano e o diário priorizam alimentos na forma pronta para consumo e peso após preparo (para arroz, carnes, massas etc.); alimentos de consumo cru seguem disponíveis; receitas por ingredientes crus são possibilidade futura, sem conversão genérica de peso cru/cozido. Ver [ALIMENTOS.md](./ALIMENTOS.md).
 
-**Pendências atuais para concluir a etapa 4:** identificação/duplicidade e marcas dos alimentos e preservação dos dados publicados. **Pendências para a etapa 9 e antes do lançamento:** fonte do catálogo, licença/autorização quando aplicável, cobertura, importação e aritmética decimal/modo de arredondamento técnico.
+**Marcas confirmadas:** alimentos comuns não precisam ter marca; produtos industrializados podem ser diferenciados por marca/variante relevante, sem unificar composição nutricional de produtos diferentes.
+
+**Pendências atuais para concluir a etapa 4:** política de aviso de possíveis duplicatas no cadastro; detalhes de exclusão/arquivamento e preservação de histórico poderão ser alinhados com a etapa 8 (privacidade/retenção) e a etapa 9 (modelo de dados). **Pendências para a etapa 9 e antes do lançamento:** fonte do catálogo, licença/autorização quando aplicável, cobertura, importação e aritmética decimal/modo de arredondamento técnico.
 
 **Importante:** conclusão das 10 etapas encerra o planejamento, não significa que o software foi desenvolvido, validado ou colocado em produção.
