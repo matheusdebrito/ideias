@@ -3,9 +3,9 @@
 > **Status:** planejamento do produto; nenhuma etapa representa implementação concluída do software.
 > **Data de referência:** 31/10/2026
 > **Etapas de planejamento:** 10
-> **Concluídas (definições funcionais principais):** 3
-> **Em andamento:** etapa 4 — Base de alimentos e cálculos nutricionais
-> **Restantes:** 7, incluindo a etapa 4
+> **Concluídas (definições funcionais principais):** 4
+> **Em andamento:** etapa 5 — Diário alimentar, metas e indicadores
+> **Restantes:** 6, incluindo a etapa 5
 
 ## Convenções
 
@@ -22,8 +22,8 @@
 | 1 | Visão de produto e público-alvo | Concluída | Dois públicos, proposta de valor, monetização inicial, MVP adulto |
 | 2 | Modelo de dietas e refeições | Concluída | Plano versus diário, versionamento, bibliotecas, horários/observações, composição fixa |
 | 3 | Criação e atribuição de dietas | Concluída | Fluxo profissional, atribuição, cardápio padrão com personalizações semanais, categorias, vigência imediata/programada, visualização antecipada, cancelamento/reagendamento |
-| 4 | Base de alimentos e cálculos nutricionais | Em andamento | Cadastro, unidades, cálculos, dados incompletos, pesagem pós-preparo e marcas de industrializados definidos; fonte TBCA/TACO/JSON adiada para etapa 9; pendem política de aviso de duplicidade e detalhes de retenção |
-| 5 | Diário alimentar, metas e indicadores | Pendente | Registro do consumo real, histórico, metas datadas, saldo diário/semanal/mensal, peso e IMC |
+| 4 | Base de alimentos e cálculos nutricionais | Concluída | Cadastro, unidades, cálculos, dados incompletos, pesagem pós-preparo, marcas e aviso de duplicidade definidos; fonte TBCA/TACO/JSON adiada para etapa 9; retenção para etapas 8/9 |
+| 5 | Diário alimentar, metas e indicadores | Em andamento | Registro do consumo real, histórico/correções, metas datadas, saldo diário/semanal/mensal, peso e IMC |
 | 6 | Gestão de pacientes e permissões | Pendente | Convites, vínculo único, revogação, acesso aos dados, histórico profissional, validação CRN |
 | 7 | Monetização e assinaturas | Pendente | Recursos gratuitos e pagos, planos, limites, cobrança, cancelamento e continuidade do acesso |
 | 8 | Requisitos não funcionais, segurança e privacidade | Pendente | LGPD, controle de acesso, riscos, retenção, portabilidade, observabilidade, desempenho, backup |
@@ -58,7 +58,7 @@ Ver: [DIETAS.md](./DIETAS.md).
 
 Estas pendências ficam registradas, não são decisões tomadas por omissão.
 
-## Critério para avançar na etapa 4
+## Encerramento da etapa 4 e próximos passos
 
 **Confirmado para o MVP:** usuários comuns e nutricionistas poderão cadastrar alimentos personalizados, inclusive industrializados com dados declarados de rótulos. Ver [ALIMENTOS.md](./ALIMENTOS.md).
 
@@ -80,6 +80,10 @@ Estas pendências ficam registradas, não são decisões tomadas por omissão.
 
 **Marcas confirmadas:** alimentos comuns não precisam ter marca; produtos industrializados podem ser diferenciados por marca/variante relevante, sem unificar composição nutricional de produtos diferentes.
 
-**Pendências atuais para concluir a etapa 4:** política de aviso de possíveis duplicatas no cadastro; detalhes de exclusão/arquivamento e preservação de histórico poderão ser alinhados com a etapa 8 (privacidade/retenção) e a etapa 9 (modelo de dados). **Pendências para a etapa 9 e antes do lançamento:** fonte do catálogo, licença/autorização quando aplicável, cobertura, importação e aritmética decimal/modo de arredondamento técnico.
+**Duplicidade confirmada:** no cadastro personalizado, exibir candidatos semelhantes encontrados no catálogo privado do próprio criador, sem bloqueio de salvamento e sem fusão automática.
+
+**Etapa 4 concluída funcionalmente:** as regras aprovadas estão detalhadas em [ALIMENTOS.md](./ALIMENTOS.md). A escolha da fonte (TBCA/TACO/JSON), licença/autorização aplicável, cobertura, importação, algoritmo de similaridade e aritmética decimal/modo técnico de arredondamento ficam na etapa 9. Regras de exclusão/retenção e preservação de dados pessoais serão detalhadas nas etapas 8 e 9, sem retroceder o planejamento funcional.
+
+**Etapa 5 iniciada:** definir ações de correção do diário alimentar e detalhar metas/indicadores, mantendo a separação entre consumo real e prescrição. Ver [DIARIO.md](./DIARIO.md).
 
 **Importante:** conclusão das 10 etapas encerra o planejamento, não significa que o software foi desenvolvido, validado ou colocado em produção.
