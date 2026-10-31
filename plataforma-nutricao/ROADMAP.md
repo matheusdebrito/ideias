@@ -22,7 +22,7 @@
 | 1 | Visão de produto e público-alvo | Concluída | Dois públicos, proposta de valor, monetização inicial, MVP adulto |
 | 2 | Modelo de dietas e refeições | Concluída | Plano versus diário, versionamento, bibliotecas, horários/observações, composição fixa |
 | 3 | Criação e atribuição de dietas | Concluída | Fluxo profissional, atribuição, cardápio padrão com personalizações semanais, categorias, vigência imediata/programada, visualização antecipada, cancelamento/reagendamento |
-| 4 | Base de alimentos e cálculos nutricionais | Em andamento | Alimentos personalizados privados com núcleo nutricional obrigatório; referências 100 g/100 mL/porção e medidas caseiras condicionadas a equivalência; pendem licença/fontes TBCA, lacunas institucionais, arredondamento e importação |
+| 4 | Base de alimentos e cálculos nutricionais | Em andamento | Alimentos privados com núcleo obrigatório, porções e conversões definidas; alimentos institucionais com macro/energia ausente consultáveis mas não utilizáveis em dietas/diário; pendem licença/fontes TBCA, arredondamento e importação |
 | 5 | Diário alimentar, metas e indicadores | Pendente | Registro do consumo real, histórico, metas datadas, saldo diário/semanal/mensal, peso e IMC |
 | 6 | Gestão de pacientes e permissões | Pendente | Convites, vínculo único, revogação, acesso aos dados, histórico profissional, validação CRN |
 | 7 | Monetização e assinaturas | Pendente | Recursos gratuitos e pagos, planos, limites, cobrança, cancelamento e continuidade do acesso |
@@ -68,6 +68,8 @@ Estas pendências ficam registradas, não são decisões tomadas por omissão.
 
 **Porções confirmadas:** composição nutricional por 100 g, 100 mL ou porção declarada; medidas caseiras apenas com equivalências conhecidas por alimento. Não converter massa/volume/unidade sem fator específico e rastreável. Ver [ALIMENTOS.md](./ALIMENTOS.md).
 
-**Pendente:** confirmar cobertura/licenciamento comercial e formato da TBCA, fontes complementares, política para lacunas dos dados institucionais e regras de arredondamento/validação detalhadas.
+**Completude dos dados institucionais confirmada:** permitir busca/consulta de alimentos com valores essenciais incompletos, mas bloquear seleção para dietas/modelos/diário até completar energia, proteínas, carboidratos e gorduras totais. Micronutrientes ausentes não bloqueiam o uso, mas relatórios sinalizam cobertura incompleta.
+
+**Pendente:** confirmar cobertura/licenciamento comercial e formato da TBCA, fontes complementares, estratégia de importação e regras de arredondamento/validação detalhadas.
 
 **Importante:** conclusão das 10 etapas encerra o planejamento, não significa que o software foi desenvolvido, validado ou colocado em produção.
