@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.29  
+> **Versão:** 0.30  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -95,7 +95,10 @@ Requisitos importantes para a qualidade dos dados:
 - **Não usar valores de alimento cru para calcular o peso do prato pronto.** A absorção/perda de água, óleo e outras mudanças no preparo precisam estar refletidas na entrada nutricional correspondente. Não converter automaticamente peso cru em peso cozido com fator genérico.
 - **Marca (confirmado no MVP):** alimentos comuns e genéricos, como arroz branco cozido ou banana, podem existir sem marca. Produtos industrializados podem ter marca identificada e exibida junto ao nome, especialmente quando ela diferencia a composição nutricional (por exemplo, diferentes iogurtes, pães ou suplementos).
 - A busca deve privilegiar descrições simples para alimentos comuns e diferenciar produtos industrializados por **nome, marca, apresentação/variante relevante e composição nutricional** quando disponíveis. Não misturar produtos de marcas diferentes como se tivessem os mesmos nutrientes; marca ausente não deve impedir o uso de alimento genérico.
-- A presença da marca é informação descritiva do alimento, não um campo universalmente obrigatório. A estratégia detalhada de identificação de possíveis duplicatas continua em aberto.
+- A presença da marca é informação descritiva do alimento, não um campo universalmente obrigatório.
+- **Aviso de possíveis duplicidades no cadastro de alimentos personalizados (definido no MVP):** ao criar um alimento, verificar possíveis nomes semelhantes apenas **no catálogo privado do próprio criador**. Exibir candidatos existentes antes de confirmar o salvamento para que ele possa conferir ou selecionar um já cadastrado.
+- **Aviso, não bloqueio:** permitir que o criador prossiga e salve um registro distinto mesmo com nome semelhante; não fundir, substituir ou atualizar automaticamente alimentos já existentes. Marca, variante, preparo e composição podem justificar registros diferentes.
+- A busca por possíveis duplicados nunca expõe cadastros privados de outras pessoas e não altera registros de dieta ou diário já salvos.
 - Registrar a fonte, a versão e a data de referência dos dados.
 - Não misturar valores de fontes diferentes sem identificar sua procedência.
 - Permitir conversão de quantidades e medidas caseiras com regras explícitas.
