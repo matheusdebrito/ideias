@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.40  
+> **Versão:** 0.41  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -188,13 +188,18 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 
 ### 3.4. Metas e indicadores de consumo
 
-- Cadastro de metas calóricas e acompanhamento do consumo.
+- **Metas próprias sem nutricionista (confirmado para o MVP):** qualquer usuário adulto, inclusive na modalidade pessoal gratuita e sem vínculo profissional, pode cadastrar, consultar e alterar livremente suas metas de calorias (kcal), proteínas (g), carboidratos (g) e gorduras totais (g). Não exigir nutricionista, dieta ativa nem assinatura profissional para gerenciá-las.
+- As metas são **opcionais e independentes por nutriente**: o usuário escolhe quais deseja preencher, sem obrigatoriedade de definir os quatro valores em conjunto. Não inventar metas para campos não definidos e não transformar metas pessoais em prescrições clínicas.
+- Nutricionistas com autorização poderão definir metas profissionais para pacientes; o paciente pode ajustá-las seguindo o fluxo de confirmação já aprovado, preservando sempre a referência profissional original. Metas pessoais sem nutricionista não exigem o aviso específico de alteração de uma meta prescrita.
+- Exibir, para cada nutriente com meta vigente, consumo registrado e diferença em relação à meta aplicável à data consultada. Sem meta definida para determinado nutriente, apresentar apenas seu consumo registrado, sem saldo ou rótulo de desvio.
+- Persistir autor/origem e início de vigência das metas para consulta histórica. Mudanças posteriores, pessoais ou profissionais, não reescrevem metas efetivas dos dias passados.
+- A consistência entre a meta energética e a soma simplificada calculada dos macros pode ser informativa, mas não deve bloquear o cadastro automaticamente; fontes, fibras, arredondamentos e objetivos individualizados podem gerar diferenças.
 - Comparação do consumo registrado com a meta válida naquele dia, sem tratar isso como diagnóstico.
 - Exibição de calorias e macronutrientes por refeição e total diário.
 - **Painel diário confirmado no MVP:** mostrar **calorias consumidas**, **meta calórica efetiva do dia**, **calorias restantes até a meta** e, caso a meta seja ultrapassada, **quanto o consumo ficou acima dela**. Exibir também **proteínas, carboidratos e gorduras totais consumidos** (em gramas) naquele dia.
 - A diferença é calculada entre meta calórica efetiva **da data consultada** e total consumido: quando o consumo for menor ou igual à meta, apresentar valor restante não negativo; quando for maior, apresentar o excedente como **acima da meta**, sem confundir o usuário com um valor negativo de calorias restantes. Se a data não tiver meta válida, apresentar consumo normalmente e indicar **sem meta definida**, sem inventar saldo nem assumir meta zero.
 - Atualizar o painel quando refeições forem criadas, corrigidas ou excluídas, inclusive lançamentos retroativos, usando a data local de consumo do registro e os valores nutricionais preservados em cada item. **Não arredondar antes de somar**; formatar valores na apresentação conforme as regras nutricionais já definidas.
-- Metas específicas de macronutrientes, gráficos e fórmulas de resumo semanal/mensal permanecem em discussão; esta decisão confirma os **totais consumidos** de macros no painel diário, não uma distribuição-alvo.
+- **Metas opcionais de macronutrientes aprovadas:** proteína, carboidrato e gordura podem ter objetivos próprios definidos pelo usuário ou nutricionista autorizado. O painel mostra os totais consumidos mesmo sem objetivos, e apresenta a comparação somente onde houver meta válida. Permanecem em aberto os detalhes visuais da distribuição e os gráficos/saldos de comparação por período.
 - Consulta de períodos anteriores, preservando as metas vigentes à época.
 - **Alteração de meta definida pelo nutricionista (confirmado no MVP):** o paciente pode alterar a meta que utiliza para acompanhar calorias e macronutrientes, mesmo quando a referência atual veio de seu nutricionista. Antes de aplicar a alteração, a interface deve avisar explicitamente que a meta foi definida pelo profissional e pedir confirmação inequívoca; cancelar mantém a meta atual.
 - A confirmação cria uma **meta de acompanhamento ajustada pelo paciente**, com autor/origem e vigência identificados, que se torna a referência efetiva dos indicadores a partir da alteração. A meta original prescrita pelo nutricionista **permanece preservada e consultável**, não é modificada e não pode ser falsamente atribuída ao profissional.
