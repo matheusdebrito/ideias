@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.4  
+> **Versão:** 0.5  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -107,6 +107,19 @@ Requisitos importantes para a qualidade dos dados:
 
 Cada item consumido deve preservar quantidade, unidade, data/hora, composição nutricional calculada no momento do registro e referência/fonte do alimento. Isso evita que uma atualização futura do catálogo TBCA altere retroativamente os totais históricos.
 
+### 3.3.1. Registro a partir de refeições e modelos (MVP)
+
+O usuário poderá registrar seu consumo de três maneiras:
+- **Escolher uma refeição da dieta vigente:** copiar alimentos e quantidades planejadas para um registro de consumo editável.
+- **Escolher uma refeição da biblioteca pessoal:** usar modelo de refeição previamente salvo, sem modificá-lo.
+- **Criar uma refeição avulsa:** cadastrar alimentos e quantidades manualmente; o registro entra no diário, mas só se torna modelo reutilizável se o usuário escolher explicitamente **salvar para reutilizar**.
+
+Em qualquer fluxo, o usuário poderá ajustar a refeição antes de confirmá-la. A confirmação salva uma **cópia independente** no diário; alterar a dieta ou o modelo não altera o histórico de consumo. Evitar duplicação de registro se a mesma confirmação for reenviada.
+
+**Biblioteca profissional no MVP:** o nutricionista poderá criar, consultar, editar, excluir e reutilizar seus próprios modelos de refeições ao montar dietas de diferentes pacientes. Cada uso copia os alimentos e quantidades para o rascunho do plano do paciente; mudanças posteriores no modelo do nutricionista nunca alteram dietas já publicadas ou outros pacientes. Modelos profissionais não são automaticamente compartilhados com pacientes nem entre nutricionistas.
+
+**Especificação funcional:** [DIETAS.md](./DIETAS.md).
+
 ### 3.4. Metas e indicadores de consumo
 
 - Cadastro de metas calóricas e acompanhamento do consumo.
@@ -125,8 +138,9 @@ Cada item consumido deve preservar quantidade, unidade, data/hora, composição 
 
 **Plano profissional:** o nutricionista elabora e atribui planos a pacientes. O paciente pode consultar o plano profissional, mas não alterar sua prescrição.
 
-**Separação entre planejamento e consumo:**
+**Separação entre planejamento, modelos reutilizáveis e consumo:**
 - Refeições previstas em uma dieta representam **o plano**.
+- Modelos pessoais e profissionais representam **refeições reutilizáveis** na criação de registros ou de planos.
 - Refeições registradas no diário representam **o consumo real**.
 - O diário é independente das dietas e de suas versões.
 - A comparação entre plano e diário poderá identificar diferenças, sem alterar nenhum dos registros.
@@ -187,6 +201,7 @@ Ainda precisam ser definidos: limites de pacientes, planos comerciais, período 
 9. **Escopo 18+:** apenas adultos podem se cadastrar ou ser acompanhados por nutricionistas na primeira versão; sem perfis dependentes ou módulos pediátricos.
 10. **Proteção proporcional:** a restrição 18+ não é uma dispensa automática das obrigações da LGPD e do ECA Digital quando aplicáveis; revisar risco de acesso por menores e aferição de idade antes do lançamento.
 11. **Sem diagnósticos automatizados:** indicadores não substituem avaliação profissional.
+12. **Bibliotecas independentes:** modelos pessoais e profissionais não alteram registros históricos de consumo ou dietas publicadas.
 
 ## 5. Escopo futuro — não priorizar no primeiro lançamento
 
@@ -224,6 +239,7 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 8. Quais campos e alternativas estarão disponíveis em um plano: horários, substituições, orientações?
 9. Como será o processo de troca de nutricionista?
 10. O versionamento dos planos pessoais deverá ter o mesmo detalhamento do profissional?
+11. A organização das dietas será diária fixa, semanal ou padrão diário com personalização por dia da semana?
 
 ## 8. Referências iniciais
 
