@@ -3,7 +3,7 @@
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
 > **Etapa:** 4 de 10 — Base de alimentos e cálculos nutricionais (em andamento)
-> **Versão:** 0.2
+> **Versão:** 0.3
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Decisões confirmadas** são distintas de **propostas a validar**.
@@ -22,7 +22,12 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 - Uma refeição copiada da dieta para o diário alimentar cria novos dados de consumo independentes; não transforma o alimento privado do profissional em alimento pessoal do paciente.
 - Um usuário não pode consultar, alterar, listar ou excluir alimentos privados de outro usuário pelo ID ou pela API. A autorização precisa ser garantida no servidor.
 - Distinguir alimento de catálogo (com sua referência e versão de origem) de alimento personalizado com dados declarados pelo usuário. O fato de ser cadastrado não implica validação por entidade oficial.
-- Valores nutricionais não informados **não podem ser interpretados como zero**.
+- **No cadastro manual de alimento personalizado são obrigatórios:** nome, quantidade de referência (positiva), unidade de referência, energia (kcal), proteínas (g), carboidratos (g) e gorduras totais (g). É preciso informar explicitamente os quatro nutrientes essenciais; valor zero é permitido quando informado e coerente, mas ausência não é zero.
+- Macronutrientes essenciais e energia não podem ficar em branco no alimento personalizado salvo; impedir salvamento e apontar precisamente os campos ausentes ou inválidos.
+- Fibras, vitaminas, minerais e outros componentes são opcionais no cadastro manual. Nutriente opcional não informado deve permanecer **desconhecido**, não zero.
+- Para totais de micronutrientes no plano ou diário, se qualquer item relevante não possuir o nutriente, indicar cobertura incompleta e não apresentar a soma parcial como total exato. Evitar reportar como zero valores desconhecidos.
+- Verificar valores numéricos não negativos, quantidade de referência positiva e unidade válida. Pode-se sinalizar inconsistências relevantes entre energia e macros, mas **não exigir igualdade exata** entre kcal informada e kcal estimada a partir dos macronutrientes, considerando arredondamentos, fibra e fatores nutricionais.
+- A obrigatoriedade dos quatro valores essenciais é uma regra do **cadastro manual personalizado**. Alimentos importados de fontes institucionais podem ter dados não analisados/ausentes e requerem critérios próprios de seleção e apresentação, a definir; não inventar valores para completá-los.
 - O alimento selecionado terá quantidade e unidade para o cálculo proporcional.
 - Alterações posteriores no cadastro de um alimento não podem reescrever o histórico de refeições consumidas ou dietas publicadas. Os registros de destino preservam a composição utilizada no momento da gravação.
 - TBCA é a **fonte principal candidata**, com TACO como possível complemento. A incorporação comercial, atribuição e redistribuição dependem de validação das condições aplicáveis; não há licença presumida.
@@ -31,7 +36,7 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 
 1. Buscar um alimento existente.
 2. Caso não exista, oferecer a ação **Cadastrar alimento**.
-3. Solicitar nome, dados de referência da porção/unidade e valores disponíveis na fonte escolhida, como o rótulo.
+3. Solicitar nome, quantidade e unidade de referência, kcal, proteínas, carboidratos e gorduras totais; oferecer campos opcionais para fibras, vitaminas, minerais e demais componentes, conforme o rótulo.
 4. Mostrar a origem declarada, em contraste com alimentos de fontes de composição nutricional institucional.
 5. Salvar alimento e disponibilizá-lo para seleção segundo as permissões de acesso.
 
@@ -39,8 +44,8 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 
 ## 4. Decisões em aberto — não presumir definição
 
-1. Quais campos devem ser obrigatórios no cadastro inicial: nome, porção/medida de referência, energia, macros? Como tratar rótulos com informação parcial?
-2. Como representar produtos com porção em g, mL, unidade e medidas caseiras sem conversões falsas?
+1. Como representar produtos com porção em g, mL, unidade e medidas caseiras sem conversões falsas?
+2. Como lidar com rótulos com campos essenciais faltantes (impedem cadastro manual) e alimentos institucionais com nutrientes ausentes (política própria)?
 3. Como sinalizar alimentos semelhantes, marcas, preparação (cru/cozido) e possíveis duplicidades?
 4. Qual é a base nutricional legalmente e operacionalmente disponível para uso comercial? Verificar cobertura da TBCA, formato, direitos de uso/redistribuição e possibilidade de TACO.
 5. Quais campos e regras de arredondamento serão usados na exibição, cálculos e comparação de nutrientes?
@@ -56,6 +61,10 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 | Nutricionista usa alimento privado em dieta publicada | Paciente vê os dados incorporados na dieta, mas não obtém acesso ao catálogo privado do nutricionista |
 | Paciente registra no diário refeição de dieta com alimento privado do nutricionista | Diário recebe cópia independente sem dar acesso ao cadastro privado original |
 | Cadastro não informa determinado micronutriente | A ausência é preservada e não aparece como valor zero |
+| Usuário tenta salvar alimento personalizado sem kcal, proteínas, carboidratos ou gorduras totais | Sistema não salva e indica os campos essenciais faltantes |
+| Usuário informa valor zero em proteína, carboidrato ou gordura | Zero informado pode ser aceito; não confundir com campo vazio |
+| Alimento tem micronutrientes desconhecidos e entra em refeição | Refeição pode ser utilizada; agregados desse nutriente são explicitamente incompletos |
+| Energia informada difere levemente do cálculo simplificado 4-4-9 | Não bloquear por diferença exata: validar apenas inconsistências evidentes, respeitando arredondamentos e fatores de conversão |
 | Dieta publicada usa alimento que depois é editado | Dieta publicada mantém seu retrato histórico |
 | Diário registra alimento que depois é editado | Registro de consumo mantém seus valores originais |
 | Um alimento tem origem e porção de referência distintas de outro | Cálculo respeita cada origem e sua unidade, sem converter silenciosamente |
