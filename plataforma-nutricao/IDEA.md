@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.16  
+> **Versão:** 0.17  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -182,6 +182,7 @@ Regras detalhadas e critérios de aceitação em [DIETAS.md](./DIETAS.md).
 - Quando uma nova versão profissional for programada para uma data futura, a versão atual continua vigente até a transição; a versão futura não substitui a atual antes da data definida.
 - O paciente poderá visualizar antecipadamente a próxima dieta publicada em uma área claramente identificada como **Próxima dieta**, com sua data/hora de início. Essa visualização é somente informativa; a dieta futura não será confundida com a prescrição vigente nem usada como padrão para registrar o consumo antes de começar a valer.
 - Cada paciente poderá ter **no máximo uma dieta profissional futura programada** por vez. Para programar outra, a anterior deverá ser cancelada primeiro.
+- A primeira dieta profissional de um paciente também poderá ter vigência imediata ou programada. Se for programada, o paciente verá apenas a seção **Próxima dieta** até o início da vigência, sem uma dieta vigente exibida.
 - Antes do início da vigência, o nutricionista poderá cancelar a publicação programada ou reagendar sua data/hora de início, mantendo o conteúdo da versão publicada. Essas ações serão registradas no histórico. Se a vigência já tiver começado, não será permitido cancelar ou reagendar aquela versão; uma alteração deverá gerar nova versão.
 - No início da vigência programada, a nova versão passa a ser a única vigente e a anterior permanece no histórico, com seu período de vigência encerrado.
 - A transição deve ocorrer automaticamente, sem exigir que o nutricionista ou paciente esteja conectado.
