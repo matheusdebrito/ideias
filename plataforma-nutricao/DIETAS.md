@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 1.1
+> **Versão:** 1.2
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -139,6 +139,7 @@ O nutricionista poderá:
 - O plano pessoal pertence ao usuário; o profissional é criado pelo nutricionista e atribuído a um paciente.
 - **Regra do MVP:** cada paciente pode ter no máximo uma dieta profissional vigente por vez. O sistema deve impedir a publicação de uma segunda dieta profissional ativa para o mesmo paciente.
 - **Regra do MVP:** cada paciente pode ter no máximo uma versão profissional futura no estado `SCHEDULED` por vez. O backend e a persistência devem impedir um segundo agendamento enquanto houver um existente não cancelado ou ativado.
+- A primeira dieta profissional atribuída ao paciente também pode ser publicada com vigência imediata ou programada; não é obrigatório existir uma versão anterior.
 - Alterar a prescrição vigente cria uma nova versão do mesmo plano lógico, com início de vigência definido. A versão anterior é encerrada e permanece consultável no histórico.
 - Não criar uma segunda dieta profissional paralela para contornar o versionamento. Se futuramente houver necessidade de planos paralelos (por exemplo, estratégias distintas), isso será uma evolução de produto fora do MVP.
 - Uma versão em rascunho pode ser editada antes da publicação.
@@ -162,6 +163,8 @@ O nutricionista poderá:
 - Uma versão profissional programada é uma publicação válida, mas não é a versão vigente até chegar sua data/hora de início.
 - Por paciente, pode existir apenas uma próxima dieta programada. A versão vigente e uma única versão futura `SCHEDULED` podem coexistir temporalmente, desde que suas vigências não se sobreponham.
 - O paciente pode consultar a versão futura publicada antes do início em uma seção claramente identificada como **Próxima dieta**, com data/hora prevista de início.
+- Se for a primeira dieta profissional e ainda não houver versão vigente, a interface mostra somente **Próxima dieta**, com a data/hora de início. Não deve exibir uma dieta vigente vazia nem apresentar erro por ainda não existir plano ativo.
+- Enquanto não houver dieta profissional vigente, o paciente continua podendo usar o diário alimentar normalmente: registrar refeições avulsas ou modelos pessoais, sem depender de uma dieta profissional. A dieta futura não será usada como origem de refeição no diário antes da ativação.
 - A próxima dieta é apresentada em modo de consulta, sem substituir visualmente a dieta vigente e sem ser selecionada automaticamente no fluxo de registro de consumo antes de sua ativação.
 - A versão futura não permite que o paciente edite a prescrição; dúvidas ou pedidos de alteração devem ser tratados com o nutricionista.
 - O histórico precisa registrar autor, momento da publicação, modalidade de vigência, data/hora efetiva e fuso usado.
@@ -261,6 +264,8 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Nutricionista altera modelo profissional após publicar dietas | Versões publicadas de ambos os pacientes não mudam |
 | Nutricionista publica nova versão com vigência imediata | A nova versão fica vigente imediatamente e a anterior é encerrada no histórico |
 | Nutricionista publica nova versão com vigência futura | A versão atual continua vigente até a data/hora programada; a futura aparece como programada |
+| Nutricionista publica a primeira dieta de um paciente com vigência futura | Paciente vê somente a seção Próxima dieta; não há dieta vigente nem erro; diário alimentar continua disponível |
+| Paciente registra refeição avulsa antes da primeira dieta profissional entrar em vigor | Registro é salvo normalmente no diário, sem exigir dieta ativa |
 | Nutricionista tenta criar um segundo agendamento para o paciente | Backend bloqueia a operação e orienta a cancelar ou reagendar a versão já programada |
 | Paciente consulta a próxima dieta antes da vigência | Vê a versão futura em seção identificada, com início previsto, sem confundi-la com a atual nem usá-la automaticamente no diário |
 | Nutricionista cancela uma versão programada antes do início | A versão recebe estado cancelado, permanece no histórico e a dieta atual continua vigente |
