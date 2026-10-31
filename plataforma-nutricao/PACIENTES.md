@@ -1,8 +1,8 @@
 # Gestão de pacientes, vínculos e permissões — Especificação funcional
 
 > **Status:** planejamento funcional, não implementado
-> **Etapa:** 6 de 10 — Gestão de pacientes e permissões (em andamento)
-> **Versão:** 1.3
+> **Etapa:** 6 de 10 — Gestão de pacientes e permissões (concluída funcionalmente)
+> **Versão:** 1.4
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [DIETAS.md](./DIETAS.md), [DIARIO.md](./DIARIO.md)
 
@@ -38,7 +38,7 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 14. **Privacidade da recusa:** o profissional pode ver que o convite foi recusado, **sem justificativa obrigatória**, sem acesso a dados privados do paciente e sem saber se o destinatário possui conta apenas pelo ato de enviar o convite. Não confundir estado enviado com entrega confirmada do e-mail.
 15. **Notificação por e-mail ao nutricionista confirmada para o MVP:** após a decisão **aceito ou recusado** ser registrada, enviar uma mensagem ao e-mail verificado da conta profissional **que originou o convite**, com resultado e acesso à área de convites no painel. A mensagem não deve conter valores nutricionais, peso, metas, histórico de saúde ou justificativa de recusa. O status no painel permanece a fonte de verdade.
 16. **Consistência e falhas:** a notificação só pode refletir um estado efetivamente confirmado no servidor: **aceito** exige autorização e vínculo ativado; **recusado** exige recusa real. Falha no envio não reverte a decisão, não impede o paciente de concluir o fluxo e não apresenta sucesso de entrega não confirmado. Processamento assíncrono, retries e prevenção de e-mails duplicados serão especificados na etapa 9.
-17. **Em aberto:** provedor de e-mail, falhas/limites de reenvio, destino de metas profissionais depois de desvinculação e eventual notificação ao profissional antigo. **Troca direta por confirmação única já foi aprovada.** Não ampliar e-mails automaticamente para outros eventos.
+17. **Proteção contra abuso aprovada:** limitar automaticamente envios e reenvios excessivos por profissional e destinatário, além de padrões suspeitos, sem criar etapas extras na utilização normal. Estados de convites, trocas, continuidade de metas e notificação de desligamento já estão definidos. **Ficam para a etapa 9:** limites numéricos, mecanismos técnicos, provedor de e-mail e retentativas; não ampliar notificações para eventos não aprovados.
 
 ## 4. Convite por e-mail para pacientes com ou sem conta (**confirmado no MVP**)
 
@@ -48,7 +48,7 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 - **Conta inexistente:** usuário conclui cadastro 18+, valida o e-mail convidado e só então consulta e decide sobre o convite.
 - O link do convite é um acesso ao fluxo de decisão, **não uma credencial suficiente para ler dados do paciente nem um aceite automático**.
 - A API verifica destinatário e autorização no momento de ativar vínculo; status da conta do destinatário não deve ser exposto indevidamente ao convidador.
-- Prazo de validade, reenvio, política de tentativas e detalhes do serviço de entrega serão definidos separadamente; a decisão presente não fixa um prazo.
+- O prazo de **7 dias** e o reenvio com invalidação do link antigo já estão definidos; limites automáticos contra abuso também foram aprovados. Números, janelas e mecanismos de envio/retentativas ficam para a etapa 9.
 
 ## 5. Validade, reenvio e acompanhamento do convite (**confirmado no MVP**)
 
@@ -188,6 +188,11 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 | Cadastro CRN tem número/regional divergente ou pertence a outra pessoa | Solicitação não aprovada e opção clara de corrigir os dados; não criar permissões de nutricionista |
 | Conta Em validação tenta chamar API de prescrição diretamente | Servidor bloqueia ação sem depender da interface |
 | Usuário com CRN em validação deseja usar diário e plano pessoal | Recursos pessoais continuam utilizáveis, sem capacidades profissionais |
+| Nutricionista tenta reenviar convites várias vezes ao mesmo e-mail em curto período | Servidor aplica limite por destinatário e por emissor, evitando spam; não criar convites extras |
+| Profissional válido envia convites moderados a pacientes diferentes | Uso legítimo permitido sem desafios adicionais ou bloqueio indiscriminado |
+| Convite ou reenvio é bloqueado por frequência excessiva | Apresentar mensagem simples de limite temporário, sem informar se destinatário tem conta e sem afirmar envio |
+| Convite ativo existe e tentativa de reenvio é bloqueada | Convite/link e prazo anterior permanecem inalterados |
+| Profissional usa requisições diretas ou múltiplos cliques para contornar limite | API rejeita o excesso mesmo fora da interface, sem duplicar efeitos |
 
 ## 11. Notificação de encerramento ao nutricionista anterior (**confirmada no MVP**)
 
@@ -217,13 +222,22 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 - **Estados e rechecagem:** manter estados distinguíveis de **Em validação**, **Validado** e **Não aprovado / requer correção**, com orientação clara para correção sem expor dados desnecessários. Como tratar posterior irregularidade, bloqueio ou revalidação do registro será detalhado nas etapas 8/9, com controle de privilégios baseado em situação efetivamente verificada.
 - **Segurança e histórico:** a validação profissional é um requisito **adicional**, nunca substitui autenticação da conta, aceite do paciente, vínculo ativo e autorização específica de dados. Preservar trilha mínima da decisão de validação e sua autoria para auditoria, com retenção e acesso definidos na etapa 8.
 
-## 14. Decisões ainda em aberto na etapa 6
+## 14. Proteção automática contra abuso de convites (**confirmada no MVP**)
 
-- **Entrega e retorno dos convites:** convite por e-mail, identificação do destinatário, validade de **7 dias**, reenvio invalidando o anterior e retorno no painel e por e-mail já confirmados. **Escopo de cinco categorias e aceite em tela única com resumo claro também confirmados**, sem múltiplos controles individuais no MVP. Pendem tratamento técnico de falha/repetição de envios e limites contra abuso. Não expor se determinada pessoa possui conta a usuários não autorizados.
+- **Envio e reenvio com limites automáticos:** proteger convites por e-mail contra solicitações repetidas, spam e disparos em massa, incluindo **múltiplos reenvios ao mesmo destinatário**, sem prejudicar o profissional que convida diversos pacientes legítimos.
+- **Regras de uso sem fricção:** em uso normal não exigir CAPTCHA, etapas extras de confirmação, justificativa de convite nem bloqueios excessivos. Aplicar controles no servidor considerando, entre outros, **identidade do nutricionista validado**, **endereço destinatário**, **frequência de reenvios**, padrões de volume e tentativas de contornar limites.
+- **Separação por escopo:** um limite temporário para reenvios a um destinatário não deve impedir automaticamente convites legítimos a outras pessoas. Proteger também contra novos convites usados para contornar uma restrição do mesmo par nutricionista/destinatário. Limites gerais por emissor e proteções em nível de infraestrutura podem complementar a regra específica.
+- **Feedback simples e sem vazamento de dados:** se o limite for alcançado, informar discretamente que o convite não pôde ser enviado agora e poderá ser tentado mais tarde, com orientação de aguardar. **Não afirmar envio bem-sucedido quando o servidor não autorizou nem enfileirou o envio**. Não revelar se o e-mail pertence a uma conta, se o destinatário está cadastrado ou dados privados do paciente.
+- **Estados preservados:** tentativa bloqueada não cria convite válido, não muda status de convite anterior nem cancela vínculo existente. Em reenvio autorizado, manter regra já aprovada de novo convite/link e invalidação atômica do link anterior. Falhas de entrega posteriores não se confundem com bloqueio de limite.
+- **Garantias técnicas adiadas à etapa 9:** definir **valores numéricos, janelas de tempo, cooldown por destinatário, limites por emissor, medidas contra contorno por contas/IP, idempotência e observabilidade**, considerando limites do provedor de e-mail. Não fixar valores arbitrários como requisito de produto nesta etapa. Adicionar testes contra múltiplos cliques, concorrência e explosão de reenvios; não depender do botão desabilitado no frontend.
+
+## 15. Pendências técnicas e jurídicas encaminhadas a outras etapas
+
+- **Convites definidos funcionalmente:** convite por e-mail, validade de **7 dias**, reenvio invalidando o anterior, retorno ao profissional, escopo de cinco categorias, aceite simples e **limites automáticos de envio e reenvio sem etapas extras**. **Etapa 9:** parâmetros numéricos, segurança dos endpoints, idempotência, provedor de e-mail, entrega e retentativas; sem revelar a existência de conta do destinatário.
 - **Troca direta aprovada:** paciente pode aceitar convite de outro profissional com uma única confirmação, encerrando o vínculo antigo e ativando o novo atomicamente, sem dois profissionais simultâneos.
 - **Planos profissionais antigos — decidido:** ao encerrar vínculo, a dieta profissional vigente vai para consulta no histórico e eventuais versões futuras programadas são canceladas, preservando conteúdo e autoria. Troca direta por convite já definida; **última meta efetiva preservada como referência pessoal após desvinculação**, com origem profissional registrada.
 - **Revogação e encerramento confirmados:** o histórico pessoal anterior ao vínculo será acessível ao profissional autorizado; o paciente poderá encerrar o acompanhamento em **Meu nutricionista**, com confirmação simples, revogação imediata do acesso, encerramento da dieta profissional vigente e cancelamento das versões futuras. **Aviso com nome do paciente ao ex-profissional por e-mail e no histórico de vínculos já aprovado**; não inclui motivo nem dados nutricionais, e não restabelece acesso. A autorização não inclui bibliotecas privadas anteriores.
 - **Registro do nutricionista — decidido:** solicitar nome completo, número e regional do CRN; permitir cadastro em **Em validação**; liberar convites, vínculo e prescrições **somente após aprovação do registro e da titularidade**. **Em aberto para etapas 8/9:** fonte/método de consulta, evidências proporcionais, rechecagens, suspensão e integração técnica.
 - **Dados profissionais após encerramento:** guarda obrigatória, eliminação, portabilidade e outros requisitos da LGPD na etapa 8.
 
-**Observação:** esta especificação registra apenas decisões funcionais; não há implementação do sistema nesta fase.
+**Encerramento funcional da etapa 6:** convites, autorização, compartilhamento, encerramento/troca de nutricionista, preservação dos dados/metas/dietas, aviso ao ex-profissional, verificação do CRN e proteção contra abuso estão definidos para o MVP. Requisitos técnicos e jurídicos identificados serão detalhados nas etapas 8/9. Esta especificação não representa software implementado ou testado.
