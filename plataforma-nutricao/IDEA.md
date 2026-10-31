@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.17  
+> **Versão:** 0.18  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -138,7 +138,7 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 
 ### 3.5. Planos alimentares e dietas
 
-**Plano pessoal:** o usuário pode montar seus próprios planos com refeições, alimentos e quantidades. Isso é organização alimentar, não prescrição clínica automática.
+**Plano pessoal:** o usuário pode montar seus próprios planos com refeições, alimentos e quantidades. Isso é organização alimentar, não prescrição clínica automática. Planos pessoais salvos terão histórico de versões: ao salvar alterações em um plano existente, a aplicação preserva o estado anterior e registra uma nova versão. No MVP, dietas pessoais não precisam de agendamento de vigência.
 
 **Plano profissional:** o nutricionista elabora e atribui planos a pacientes. O paciente pode consultar o plano profissional, mas não alterar sua prescrição. No MVP, cada paciente poderá ter **uma única dieta profissional vigente por vez**. Alterações na prescrição geram novas versões do mesmo plano lógico, mantendo as versões anteriores no histórico.
 
@@ -188,7 +188,7 @@ Regras detalhadas e critérios de aceitação em [DIETAS.md](./DIETAS.md).
 - A transição deve ocorrer automaticamente, sem exigir que o nutricionista ou paciente esteja conectado.
 - Cada versão deve preservar suas refeições planejadas, alimentos, quantidades, observações/instruções e composição nutricional de referência.
 - Registrar autor, data/hora e resumo ou motivo da atualização.
-- Cada plano possui uma única versão vigente por vez; versões antigas permanecem consultáveis, respeitando retenção de dados. Uma versão futura publicada fica em estado programado, não vigente, até sua data de início.
+- Cada plano possui uma única versão vigente por vez; versões antigas permanecem consultáveis, respeitando retenção de dados. O versionamento também se aplica a planos pessoais, com fluxo simples de salvar alterações e preservar a versão anterior, sem agendamento de vigência no MVP. Uma versão futura publicada fica em estado programado, não vigente, até sua data de início.
 - No MVP, um paciente não pode ter dois planos profissionais vigentes simultaneamente. A atualização da dieta vigente gera uma nova versão; o plano anterior permanece no histórico, sem coexistência de prescrições profissionais ativas.
 - Não substituir a versão anterior, pois precisamos reconstruir **qual plano estava vigente em determinado dia**.
 - Refeições do diário e seus nutrientes nunca são alterados por atualização de versão do plano.
