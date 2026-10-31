@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.20  
+> **Versão:** 0.21  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -102,7 +102,10 @@ Requisitos importantes para a qualidade dos dados:
 - O alimento personalizado poderá ser selecionado na criação de refeições, dietas e registros de consumo conforme as permissões do seu proprietário.
 - Quantidades, unidade-base e valores informados devem ser explicitados para calcular a porção corretamente. Nutriente sem valor informado deve permanecer **desconhecido**, não assumir zero.
 - Versões de dietas publicadas e refeições consumidas preservam um retrato dos valores utilizados e não são alteradas quando o alimento personalizado for editado.
-- **Ainda em aberto:** se alimentos personalizados serão privados por padrão, compartilháveis com pacientes ou publicados em um catálogo comunitário; essa questão será decidida separadamente, sem presumir publicação global.
+- **Privacidade e visibilidade (confirmado no MVP):** cada alimento personalizado é **privado ao seu criador** (usuário comum ou nutricionista). Não existe catálogo comunitário de alimentos personalizados no MVP.
+- Se um nutricionista usar seu alimento personalizado em um plano profissional publicado, o paciente poderá **consultar a descrição e os valores nutricionais incorporados àquela dieta**, sem ganhar acesso ao cadastro original no catálogo privado do profissional, nem permissão para editá-lo ou reutilizá-lo como alimento próprio.
+- Caso o paciente registre uma refeição a partir do plano, será criada uma cópia independente dos valores necessários para registrar o consumo, sem criar acesso ao alimento privado do nutricionista.
+- O controle de acesso deve ser aplicado pelo servidor; conhecer o identificador de um alimento privado não concede permissão de leitura ou edição.
 
 Detalhamento funcional e questões da etapa 4 em [ALIMENTOS.md](./ALIMENTOS.md).
 
@@ -297,7 +300,7 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 8. Como será a troca de nutricionista?
 9. O usuário comum poderá criar suas próprias categorias personalizadas de refeições?
 10. Quais campos adicionais realmente agregam valor ao cadastro das refeições, sem poluir a interface?
-11. Como escopar visibilidade, compartilhamento, correção e origem de alimentos personalizados cadastrados por usuários e nutricionistas?
+11. Quais regras adicionais de correção e retenção aplicar aos alimentos personalizados e seus históricos sem expor registros privados?
 
 **Definições funcionais centrais do módulo de dietas concluídas para planejamento:** criação e atribuição, categorias, composição fixa, horários opcionais, observações, cardápio semanal, múltiplas refeições da mesma categoria, biblioteca, histórico/versionamento e agendamentos. Detalhes de implementação e questões transversais serão tratados nas demais etapas.
 
