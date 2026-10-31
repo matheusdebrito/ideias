@@ -87,7 +87,41 @@ O nutricionista poderá:
 - Uma nova versão de dieta não substitui retroativamente valores registrados no diário.
 - É proibido alterar automaticamente dietas de outros pacientes quando o nutricionista modifica um modelo em sua biblioteca.
 
-## 6. Invariantes de domínio
+## 6. Organização semanal: padrão diário com personalização (**Definido para o MVP**)
+
+**Modelo escolhido:** cada plano possui um **cardápio diário padrão**, que se repete nos sete dias da semana. Quem monta o plano (usuário comum ou nutricionista) pode **personalizar refeições em dias específicos da semana**, sem precisar preencher sete cardápios completos.
+
+### 6.1. Comportamento
+
+1. Criar refeições no cardápio padrão (por exemplo, café da manhã, almoço e jantar).
+2. Por padrão, essas refeições aparecem de segunda-feira a domingo.
+3. Para um dia da semana, permitir substituir, acrescentar ou retirar **refeições planejadas específicas**.
+4. Refeições não personalizadas naquele dia continuam seguindo o cardápio padrão.
+5. Remover uma personalização restaura a refeição do padrão naquele dia; remover intencionalmente a refeição apenas naquele dia deve ser uma ação explícita, diferente de restaurar o padrão.
+6. Alterar o padrão dentro de um **rascunho** atualiza os dias que ainda herdam aquela refeição; as personalizações explícitas ficam preservadas, sem reescrita silenciosa.
+7. Uma vez publicada, a versão preserva o padrão e todas as personalizações; alterações posteriores exigem nova versão.
+8. O sistema calcula o total nutricional **de cada dia da semana** conforme o cardápio efetivamente aplicável, e pode apresentar um resumo semanal.
+
+**Exemplo:** almoço padrão com arroz, feijão e frango em todos os dias. No sábado, o usuário substitui apenas o almoço por outra combinação; café da manhã e jantar continuam herdados do padrão. No domingo, pode usar o padrão integral.
+
+**Limite inicial:** personalizações recorrentes por **dia da semana**. Exceções para datas isoladas (feriados, viagens etc.) não estão confirmadas para o MVP.
+
+### 6.2. Persistência conceitual
+
+Uma versão de plano contém refeições planejadas padrão e eventuais regras de personalização por dia da semana. O que vale em uma data resulta de: (1) versão do plano vigente naquela data; (2) dia da semana; (3) personalizações explícitas, se houver; (4) refeições padrão para o restante.
+
+As refeições do **diário** continuam sendo registros de consumo independentes. Registrar algo diferente do cardápio de terça-feira nunca altera nem a versão do plano nem o padrão de terça-feira.
+
+### 6.3. Critérios de aceitação
+
+- Sem personalizações, os sete dias mostram o mesmo cardápio padrão.
+- Personalizar somente o almoço de sábado mantém as outras refeições e os outros dias inalterados.
+- Alterar o cardápio padrão em um rascunho não apaga uma personalização explícita de sábado.
+- Restaurar o padrão de sábado remove a personalização, sem apagar a refeição padrão.
+- Publicar nova versão com mudanças semanais preserva a visualização de versões anteriores.
+- Os totais nutricionais de sábado refletem a personalização, não a combinação padrão substituída.
+
+## 7. Invariantes de domínio
 
 1. Refeições consumidas e itens consumidos não dependem da existência de plano ativo ou modelo salvo.
 2. Uma refeição planejada pertence a uma versão específica do plano. A versão publicada é imutável.
@@ -98,18 +132,18 @@ O nutricionista poderá:
 7. O salvamento opcional como modelo deve ser explícito e separado do registro alimentar.
 8. Requisições repetidas de confirmação não devem registrar o mesmo consumo duas vezes sem intenção explícita.
 
-## 7. Proposta de entidades (não é o esquema final)
+## 8. Proposta de entidades (não é o esquema final)
 
 - `PlanoAlimentar`
 - `VersaoPlano`
-- `RefeicaoPlanejada` e `ItemPlanejado`
+- `RefeicaoPlanejada` e `ItemPlanejado`, com base diária padrão e personalizações recorrentes por dia da semana
 - `ModeloRefeicao` e `ItemModelo` — com propriedade explicitamente diferenciada (usuário ou nutricionista)
 - `RefeicaoConsumida` e `ItemConsumido`
 - `Alimento` e dados nutricionais versionados / rastreáveis
 
 **Proposta de implementação:** compartilhar componentes de edição e serviço de cálculo, mas não utilizar uma única tabela genérica de refeições para todos os contextos sem avaliar cuidadosamente as permissões, integridade e históricos.
 
-## 8. Cenários de aceitação do MVP
+## 9. Cenários de aceitação do MVP
 
 | Cenário | Resultado esperado |
 | --- | --- |
@@ -124,9 +158,8 @@ O nutricionista poderá:
 | Nutricionista tenta obter biblioteca de outro nutricionista | Servidor nega acesso |
 | Usuário envia duas confirmações iguais por erro de rede | Sistema evita consumo duplicado por repetição da mesma operação |
 
-## 9. Decisões em aberto — não presumir definição
+## 10. Decisões em aberto — não presumir definição
 
-- Dieta diária fixa, plano semanal ou cardápio diário com exceções por dia da semana?
 - Refeições programadas terão horário obrigatório, opcional ou apenas ordem?
 - Substituições de alimentos farão parte do MVP? Se sim, serão cadastradas manualmente pelo nutricionista?
 - Modelos pessoais e profissionais poderão ter categorias, favoritos ou tags desde o MVP?
@@ -134,6 +167,6 @@ O nutricionista poderá:
 - Refeição registrada a partir de um modelo deverá armazenar um identificador de origem opcional (para análises) sem se tornar dependente do modelo?
 - Quais ações de correção de histórico permitirão auditoria apropriada?
 
-## 10. Critérios de priorização
+## 11. Critérios de priorização
 
 No MVP, priorizar a criação e reutilização de modelos, registro de consumo, publicação de planos com histórico e isolamento de dados. Não incluir rede social, compartilhamento público ou recomendações automáticas de substituições sem validação nutricional.
