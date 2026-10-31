@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.2  
+> **Versão:** 0.3  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -63,13 +63,14 @@ A validação das credenciais profissionais e os requisitos específicos para o 
 
 ### 3.1. Perfil e dados antropométricos
 
-- Cadastro de idade/data de nascimento, sexo e altura.
-- Registro de peso com data da medição.
-- Histórico de peso, sem sobrescrever medições anteriores.
-- Cálculo e apresentação do IMC.
-- Exibição do contexto e das limitações do IMC.
+- Cadastro de data de nascimento, sexo e altura, conforme a necessidade dos cálculos e do acompanhamento.
+- Registro de peso com data e histórico sem sobrescrita de medições anteriores.
+- Cálculo de IMC para adultos, acompanhado de explicação sobre suas limitações.
+- Crianças e adolescentes poderão ter acompanhamento profissional dentro do produto, mas a aplicação não interpretará automaticamente o IMC deles.
 
-O produto deverá atender adultos, crianças e adolescentes. Para menores de idade, a experiência precisa considerar responsáveis legais, proteção reforçada de dados e fluxos apropriados à idade. O IMC adulto não deve ser aplicado indiscriminadamente a crianças e adolescentes: a avaliação deve utilizar referências por idade e sexo e metodologia validada para a faixa etária. O escopo para bebês e primeira infância também deverá ser explicitamente definido.
+**Decisão de produto:** não criar perfis dependentes nem exigir uma conta de responsável como funcionalidade de produto. Para menores admitidos na plataforma, considerar contas individuais. O produto não tem como público prioritário crianças muito pequenas; a idade mínima e o modo de ingresso de menores ainda precisam ser definidos.
+
+**Ressalva obrigatória:** a opção por não criar perfis dependentes não dispensa a análise jurídica de proteção de crianças e adolescentes, mecanismos proporcionais de aferição de idade e eventuais medidas de participação/autorização de responsáveis. Essas obrigações precisam ser verificadas antes do lançamento, considerando LGPD e ECA Digital.
 
 ### 3.2. Base de alimentos e composição nutricional
 
@@ -97,48 +98,56 @@ Requisitos importantes para a qualidade dos dados:
 
 ### 3.3. Diário alimentar
 
-- Cadastro de refeições com data e horário.
-- Organização por momentos de alimentação, como café da manhã, almoço, jantar e lanches.
-- Inclusão de alimentos e quantidades consumidas.
-- Cálculo nutricional de cada item.
-- Totalização por refeição e por dia.
-- Consulta e edição do histórico, respeitando a preservação dos dados necessários para auditoria e histórico.
+- Registro de refeições com data e horário e organização por café da manhã, almoço, jantar, lanches etc.
+- Inclusão de alimentos, quantidades e unidades realmente consumidas.
+- Cálculo de calorias, proteínas, carboidratos, gorduras e outros nutrientes disponíveis.
+- Totalização por refeição e dia; consulta, correção explícita e histórico.
 
-O diário deve representar **o que a pessoa efetivamente consumiu**, e não o que estava planejado em sua dieta.
+**Regra fundamental:** o diário registra **o que a pessoa efetivamente comeu**, independentemente de ter um plano alimentar ativo. Atualizar, encerrar ou trocar uma dieta não modifica registros anteriores de refeições consumidas.
+
+Cada item consumido deve preservar quantidade, unidade, data/hora, composição nutricional calculada no momento do registro e referência/fonte do alimento. Isso evita que uma atualização futura do catálogo TBCA altere retroativamente os totais históricos.
 
 ### 3.4. Metas e indicadores de consumo
 
-- Permitir cadastrar uma meta calórica diária.
-- Comparar o consumo registrado com a meta.
-- Mostrar se o consumo está abaixo, dentro ou acima da meta, sem transformar essa comparação em diagnóstico de saúde.
-- Exibir calorias, carboidratos, proteínas e gorduras por refeição e no total diário.
-- Consultar períodos anteriores, mantendo a meta que era válida em cada período.
-- Apresentar resumos semanais e mensais.
+- Cadastro de metas calóricas e acompanhamento do consumo.
+- Comparação do consumo registrado com a meta válida naquele dia, sem tratar isso como diagnóstico.
+- Exibição de calorias e macronutrientes por refeição e total diário.
+- Consulta de períodos anteriores, preservando as metas vigentes à época.
+- Resumos semanais e mensais. Definições de saldo, média e tolerância em aberto.
 
-A definição matemática de saldo semanal e mensal ainda está em aberto. A interface deverá diferenciar consumo total, média diária e diferença em relação à meta, evitando interpretações equivocadas de compensação entre dias.
+**Adultos:** a aplicação poderá estimar uma meta energética por método validado e permitir ajustes manuais. O cálculo requer dados suficientes, explicação dos limites e revisão de profissionais antes do lançamento.
 
-A meta energética será estimada automaticamente e poderá ser ajustada manualmente, com validações. O cálculo não poderá usar uma única equação para todas as idades: deverá selecionar métodos de referência adequados à faixa etária, sexo, medidas e demais dados necessários. Para crianças e adolescentes, a estimativa precisa considerar crescimento e desenvolvimento, e não deve ser apresentada como prescrição ou recomendação de emagrecimento. Se não houver dados suficientes ou método validado para um perfil, a aplicação deverá informar que não pode estimar a meta em vez de inventar um valor. As fórmulas, limites e mensagens deverão ser validados por nutricionistas antes da disponibilização.
+**Crianças e adolescentes:** a aplicação **não calcula nem recomenda automaticamente necessidades energéticas ou metas calóricas**, nem interpreta IMC infantil. As metas, quando necessárias, serão definidas pelo nutricionista; o app poderá apresentar o acompanhamento dos valores informados pelo profissional. Não sugerir emagrecimento por conta própria para menores.
 
 ### 3.5. Planos alimentares e dietas
 
-A plataforma deverá distinguir dois conceitos:
+**Plano pessoal:** o usuário pode montar seus próprios planos com refeições, alimentos e quantidades. Isso é organização alimentar, não prescrição clínica automática.
 
-**Plano pessoal:** organização alimentar criada livremente pelo próprio usuário, com seleção de refeições, alimentos e quantidades. O sistema calcula a composição nutricional com base no catálogo, mas não deve confundir esse recurso com prescrição clínica.
+**Plano profissional:** o nutricionista elabora e atribui planos a pacientes. O paciente pode consultar o plano profissional, mas não alterar sua prescrição.
 
-**Plano profissional:** plano elaborado por nutricionista no contexto do acompanhamento de um paciente.
+**Separação entre planejamento e consumo:**
+- Refeições previstas em uma dieta representam **o plano**.
+- Refeições registradas no diário representam **o consumo real**.
+- O diário é independente das dietas e de suas versões.
+- A comparação entre plano e diário poderá identificar diferenças, sem alterar nenhum dos registros.
 
-Regras para planos pessoais e profissionais:
-- O usuário pode criar e atualizar seus próprios planos pessoais.
-- O nutricionista cria e atribui planos profissionais aos pacientes.
-- O paciente pode consultar o plano profissional vigente, mas não alterar seu conteúdo prescrito.
-- Atualizar um plano publicado significa criar uma nova versão, não sobrescrever a versão anterior.
-- Cada versão publicada deve preservar uma fotografia imutável dos alimentos, quantidades, refeições e orientações daquela versão.
-- Registrar autor da alteração, data/hora, motivo ou resumo das mudanças e período de vigência.
-- Manter uma única versão vigente por plano; versões anteriores permanecem no histórico.
-- Permitir rascunhos editáveis antes da publicação, sem modificar versões já publicadas.
-- O diário alimentar permanece independente do plano, registrando o que foi realmente consumido.
+**Versionamento do plano:**
+- Um rascunho pode ser editado antes da publicação.
+- Ao atualizar um plano publicado, criar uma nova versão com data de início de vigência.
+- Cada versão deve preservar suas refeições planejadas, alimentos, quantidades, orientações e composição nutricional de referência.
+- Registrar autor, data/hora e resumo ou motivo da atualização.
+- Cada plano possui uma única versão vigente por vez; versões antigas permanecem consultáveis, respeitando retenção de dados.
+- Não substituir a versão anterior, pois precisamos reconstruir **qual plano estava vigente em determinado dia**.
+- Refeições do diário e seus nutrientes nunca são alterados por atualização de versão do plano.
 
-Uma atualização não pode alterar retroativamente a dieta que estava vigente em um período anterior. O modelo de versionamento deverá ser aplicado também aos planos pessoais, caso o histórico seja relevante para o usuário.
+**Modelo conceitual proposto (não é ainda um esquema físico de banco):**
+- `PlanoAlimentar`: identidade, titular, tipo pessoal/profissional e nutricionista responsável, quando aplicável.
+- `VersaoPlano`: identificador do plano, número da versão, vigência, autor e estado.
+- `RefeicaoPlanejada` / `ItemPlanejado`: estrutura nutricional vinculada a uma versão específica.
+- `RefeicaoConsumida` / `ItemConsumido`: diário vinculado ao usuário e ao momento de consumo, **sem dependência obrigatória** de plano ou versão.
+- `MetaHistorica`: metas com vigência e origem (usuário, estimativa ou nutricionista).
+
+A independência do diário preserva **o que a pessoa comeu**; o versionamento preserva **o que estava prescrito/planejado**. Uma coisa não substitui a outra.
 
 ### 3.6. Gestão de pacientes
 
@@ -167,18 +176,17 @@ Ainda precisam ser definidos: limites de pacientes, planos comerciais, período 
 
 ## 4. Princípios de produto
 
-1. **Separar planejamento de registro:** plano alimentar e diário alimentar são conceitos diferentes.
-2. **Dois públicos centrais:** a experiência pessoal gratuita e a experiência profissional paga devem ser planejadas desde o início.
-3. **Versionar planos:** uma atualização publicada cria nova versão e preserva as anteriores.
-4. **Preservar histórico:** mudanças de peso, metas e planos não devem apagar o estado anterior.
-5. **Rastrear a origem nutricional:** todo valor nutricional deve ter fonte e unidade identificáveis.
-6. **Permissões explícitas:** um nutricionista só acessa dados de pacientes com vínculo ativo e autorização apropriada.
-7. **Dados do usuário não podem ser reféns da assinatura profissional:** o paciente mantém acesso aos seus dados pessoais.
-8. **Segurança e privacidade desde o início:** dados de saúde exigem tratamento cuidadoso e conformidade com a LGPD.
-9. **Proteção de menores:** o produto deve respeitar o melhor interesse de crianças e adolescentes e implementar fluxos apropriados para responsáveis e dados sensíveis.
-10. **Não confundir indicador com diagnóstico:** IMC e comparação de calorias não representam avaliação nutricional completa.
-11. **Cálculos por faixa etária:** metas energéticas e avaliação antropométrica precisam utilizar métodos adequados à idade e validados por profissionais.
-12. **Não automatizar prescrição profissional sem validação adequada:** recursos de recomendação devem ter escopo, limites e revisão apropriados.
+1. **Dois públicos centrais:** experiências pessoal gratuita e profissional paga desenhadas em conjunto.
+2. **Planejamento e consumo independentes:** plano alimentar não é o diário alimentar.
+3. **Histórico preservado:** metas, medidas, planos e registros alimentares não podem ser alterados retroativamente por mudanças em outros dados.
+4. **Planos versionados:** atualizar plano publicado cria nova versão; refeições planejadas pertencem à versão.
+5. **Valores históricos estáveis:** registros de consumo mantêm o valor nutricional e sua origem na época do lançamento.
+6. **Dados rastreáveis:** fonte, unidade e contexto de preparo dos alimentos devem estar identificáveis.
+7. **Permissões explícitas:** nutricionista visualiza dados autorizados somente durante vínculo ativo, com exceções legais de retenção a avaliar.
+8. **Direitos dos pacientes:** dados pessoais e diário alimentar não ficam condicionados à assinatura do nutricionista.
+9. **Proteção de dados e menores:** LGPD e ECA Digital considerados desde o projeto; sem criar perfis dependentes por padrão.
+10. **Cálculos pediátricos fora da automação:** metas e avaliação infantil serão realizadas por nutricionistas.
+11. **Sem diagnósticos automatizados:** indicadores não substituem avaliação profissional.
 
 ## 5. Escopo futuro — não priorizar no primeiro lançamento
 
@@ -195,28 +203,27 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 
 ## 6. Riscos e pontos de atenção
 
-- **Segurança e privacidade:** dados pessoais e informações de saúde podem ser dados pessoais sensíveis pela LGPD.
-- **Menores de idade:** atender crianças e adolescentes amplia significativamente a responsabilidade de produto, privacidade e segurança. Será necessário definir quem cria e administra o perfil, como o responsável comprova sua autoridade, quais dados são coletados, como o menor participa e como funciona o acesso do nutricionista. A LGPD exige que o tratamento observe o melhor interesse de crianças e adolescentes; a base legal aplicável deve ser avaliada juridicamente para cada finalidade.
-- **Cálculos pediátricos:** estimativas de energia e indicadores de crescimento exigem métodos próprios por idade e sexo, dados de entrada confiáveis e validação de nutricionistas. Não reutilizar automaticamente fórmulas ou faixas de IMC para adultos.
-- **Limites profissionais:** prescrição dietética e assistência nutricional têm regras próprias no Brasil. A experiência de auto-organização alimentar precisa ser diferenciada da prescrição profissional.
-- **Qualidade da base:** fontes podem ter cobertura, idade, métodos e nutrientes diferentes.
-- **Unidades e preparo:** erros em porções, densidade, estado cru/cozido e conversões comprometem os totais.
-- **Histórico:** alterações em metas, alimentos e dietas não podem modificar indevidamente resultados passados.
-- **Custos do modelo gratuito:** é necessário estimar infraestrutura e suporte para usuários não pagantes.
-- **Adoção profissional:** o produto precisa resolver um problema real do fluxo de trabalho do nutricionista, não apenas oferecer uma tela de cadastro de pacientes.
+- **Privacidade:** dados alimentares e de saúde exigem minimização, proteção e autorização apropriada.
+- **Acesso de profissionais:** vínculo com um único nutricionista ativo e autorização não dispensam controle servidor/banco contra acesso indevido a dados de outros pacientes.
+- **Menores:** não haverá perfis dependentes, mas obrigações legais sobre idade, privacidade, segurança e responsável devem ser avaliadas. A exigência de vinculação de conta de até 16 anos no ECA Digital está no capítulo de redes sociais; não presumir aplicação automática de todas essas regras a um diário nutricional sem análise.
+- **Público pediátrico:** a aplicação não calculará automaticamente metas ou recomendações para menores, que ficarão a cargo de nutricionistas. Definir faixa etária mínima e forma de ingresso.
+- **Qualidade nutricional:** fontes podem conter dados ausentes, unidades diferentes e informações específicas de preparo.
+- **Histórico:** atualizações em TBCA, dietas e metas não podem alterar retrospectivamente informações antigas.
+- **Custos do gratuito:** estimar armazenamento e uso médio antes do lançamento.
+- **Viabilidade comercial:** validar se o profissional percebe valor suficiente na gestão e no acompanhamento de pacientes para pagar mensalidade.
 
 ## 7. Questões em aberto para a descoberta
 
-1. Como será a estrutura de conta para menores: perfil dependente criado pelo responsável, conta própria do menor vinculada ao responsável ou outro modelo?
-2. Qual idade mínima será permitida para login próprio? Bebês e crianças pequenas terão apenas perfis dependentes?
-3. Quais dados e ações poderão ser administrados pelo responsável e quais poderão ser acessados pelo próprio adolescente?
-4. Como validar o registro profissional do nutricionista?
-5. Como será definido o saldo semanal e mensal?
-6. Quais recursos serão gratuitos e quais farão parte da assinatura profissional?
-7. Quais dados serão mantidos disponíveis ao paciente após o encerramento do vínculo com o nutricionista?
-8. Qual será o fluxo de exportação, portabilidade, retenção e exclusão dos dados?
-9. Quais campos compõem um plano alimentar: horários, refeições, alimentos, quantidades, substituições e orientações?
-10. Como será o fluxo de transferência de um paciente de um nutricionista para outro?
+1. Qual idade mínima será admitida na aplicação? Menores ingressarão apenas mediante convite de nutricionista?
+2. Como satisfazer exigências aplicáveis de aferição de idade e participação/autorização de responsáveis **sem perfis dependentes**? Requer validação jurídica.
+3. Como validar o registro profissional do nutricionista?
+4. Como calcular o saldo semanal/mensal, as médias e a tolerância de meta?
+5. Quais recursos compõem o plano profissional pago? Haverá limites de pacientes?
+6. Quais dados ficam disponíveis depois do encerramento do vínculo profissional?
+7. Qual será o fluxo de exportação, portabilidade, retenção e exclusão dos dados?
+8. Quais campos e alternativas estarão disponíveis em um plano: horários, substituições, orientações?
+9. Como será o processo de troca de nutricionista?
+10. O versionamento dos planos pessoais deverá ter o mesmo detalhamento do profissional?
 
 ## 8. Referências iniciais
 
@@ -225,6 +232,8 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 - [Lei nº 8.234/1991 — Regulamentação da profissão de nutricionista](https://www.planalto.gov.br/ccivil_03/leis/1989_1994/l8234.htm)
 - [CFN — Nota Técnica nº 82/2023 sobre prescrição dietética](https://www.cfn.org.br/wp-content/uploads/2023/11/AMPLIADA_PRESCRI%C3%87%C3%83O-DIET%C3%89TICA-COMO-ATIVIDADE-PRIVATIVA-DO-NUTRICIONISTA.pdf)
 - [LGPD — Lei nº 13.709/2018, art. 14 (crianças e adolescentes)](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm)
+- [ECA Digital — Lei nº 15.211/2025](https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/l15211.htm)
+- [ANPD — Informações oficiais sobre o ECA Digital](https://www.gov.br/anpd/pt-br/assuntos/noticias/eca-digital)
 - [ANPD — Enunciado CD/ANPD nº 1/2023 sobre bases legais e melhor interesse](https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-divulga-enunciado-sobre-o-tratamento-de-dados-pessoais-de-criancas-e-adolescentes)
 - [Ministério da Saúde — Orientações para avaliação antropométrica](https://www.gov.br/saude/pt-br/composicao/saps/vigilancia-alimentar-e-nutricional/arquivos/orientacoes-para-a-coleta-e-analise-de-dados-antropometricos-em-servicos-de-saude)
 - [National Academies — Dietary Reference Intakes for Energy (2023)](https://www.nationalacademies.org/read/26818/chapter/2) — referência técnica que demonstra a necessidade de equações distintas por idade, sexo e atividade; não deve ser adotada automaticamente como padrão clínico brasileiro.
