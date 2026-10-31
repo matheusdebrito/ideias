@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 0.5
+> **Versão:** 0.6
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -137,9 +137,14 @@ O nutricionista poderá:
 ## 5. Dietas e versionamento (**Definido**)
 
 - O plano pessoal pertence ao usuário; o profissional é criado pelo nutricionista e atribuído a um paciente.
+- **Regra do MVP:** cada paciente pode ter no máximo uma dieta profissional vigente por vez. O sistema deve impedir a publicação de uma segunda dieta profissional ativa para o mesmo paciente.
+- Alterar a prescrição vigente cria uma nova versão do mesmo plano lógico, com início de vigência definido. A versão anterior é encerrada e permanece consultável no histórico.
+- Não criar uma segunda dieta profissional paralela para contornar o versionamento. Se futuramente houver necessidade de planos paralelos (por exemplo, estratégias distintas), isso será uma evolução de produto fora do MVP.
 - Uma versão em rascunho pode ser editada antes da publicação.
 - A publicação fixa alimentos, quantidades, observações/instruções da refeição e dos itens, valores de referência e início da vigência.
 - Atualização de versão publicada cria nova versão do plano, preservando as anteriores.
+- A publicação da nova versão encerra a vigência da versão anterior no instante definido para a transição; não pode haver sobreposição de duas versões vigentes do mesmo plano.
+- Para cada paciente, não pode haver dois planos profissionais vigentes ao mesmo tempo.
 - O histórico deve permitir identificar a versão vigente em determinada data.
 - O paciente pode registrar consumo diferente do plano sem alterar a versão prescrita.
 - Uma nova versão de dieta não substitui retroativamente valores registrados no diário.
@@ -184,6 +189,7 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 ## 7. Invariantes de domínio
 
 1. Refeições consumidas e itens consumidos não dependem da existência de plano ativo ou modelo salvo.
+2. Um paciente tem no máximo um plano profissional vigente no MVP; a regra deve ser garantida no domínio e na persistência, não apenas escondendo botões na interface.
 2. Uma refeição planejada pertence a uma versão específica do plano. A versão publicada é imutável.
 3. Exclusão ou edição de modelos pessoais/profissionais não reescreve consumos ou planos publicados.
 4. Copiar uma refeição jamais significa compartilhar o mesmo registro mutável.
@@ -228,6 +234,7 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Paciente não consome um dos alimentos prescritos | Pode registrar o consumo real no diário; a prescrição permanece inalterada |
 | Nutricionista altera modelo profissional após publicar dietas | Versões publicadas de ambos os pacientes não mudam |
 | Nutricionista atualiza dieta de um paciente | Uma nova versão entra em vigor; anterior fica no histórico |
+| Nutricionista tenta publicar uma segunda dieta profissional vigente para o mesmo paciente | Operação é bloqueada ou direcionada para atualizar o plano vigente; nunca ficam dois planos profissionais ativos |
 | Paciente registra alimentação diferente do prescrito | O diário registra o ocorrido; plano publicado não muda |
 | Nutricionista tenta obter biblioteca de outro nutricionista | Servidor nega acesso |
 | Usuário envia duas confirmações iguais por erro de rede | Sistema evita consumo duplicado por repetição da mesma operação |
