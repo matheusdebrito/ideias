@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (em andamento)
-> **Versão:** 1.0
+> **Versão:** 1.1
 > **Data:** 31/10/2026
 > **Fonte principal da visão:** [IDEA.md](./IDEA.md) e [DIETAS.md](./DIETAS.md)
 > **Convenção:** regras confirmadas estão separadas das decisões em aberto.
@@ -58,7 +58,11 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 - Se o período não tiver qualquer refeição, exibir **sem dados registrados**, incluindo o contador de dias igual a zero e sem calcular média numérica.
 - Criar, editar, mover de data/fuso ou excluir registros deve recalcular totais, média e dias registrados de todos os períodos afetados, inclusive após lançamento retroativo.
 - **Ainda não definido:** metas específicas de macronutrientes, metas x consumo e tolerância em semanas/meses com dias ausentes, forma de apresentação dos gráficos e a convenção de início da semana. Não supor que o total ou a média registrada represente a alimentação inteira do usuário.
-- Medidas corporais (peso, altura e IMC, com limitações explicadas) integram a visão do produto; o detalhamento de edição e históricos será tratado nesta etapa.
+- **Registro de peso (confirmado no MVP):** permitir que o usuário adulto registre seu peso **quando quiser**, com data da medição e valor em kg, sem exigir frequência ou metas obrigatórias. Exibir a evolução em **gráfico cronológico**, preservando todas as medições distintas.
+- **Correções (confirmado):** permitir editar a data ou o valor de uma medição já registrada; a correção atualiza a série temporal sem apagar ou sobrescrever outras medições. Política de exclusão, retenção e acesso ao histórico de correção pertence às etapas 8 e 9.
+- **IMC atual (confirmado):** calcular com o **peso mais recente registrado** e a **altura válida do perfil**, por `IMC = pesoKg / (alturaMetros * alturaMetros)`. Sem peso ou altura válidos, exibir **IMC indisponível**, sem inventar valores. O MVP atende exclusivamente adultos (18+).
+- **Apresentação responsável:** o IMC é apenas um indicador geral e **não avalia individualmente composição corporal nem define diagnóstico**; evitar alertas automáticos ou julgamentos baseados somente nele. Dados de peso são do usuário e o acesso profissional é condicionado às autorizações já previstas.
+- **Pendente para arquitetura:** como apresentar IMC associado a medições antigas quando a altura cadastrada mudar; nunca reescrever os valores originais de peso nem simular alturas históricas não registradas.
 - Metas e estimativas não são automaticamente prescrições clínicas.
 - **Mudança de meta profissional pelo paciente (confirmado no MVP):** permitir que o paciente altere a meta efetiva de acompanhamento de calorias e/ou macronutrientes, mesmo quando ela foi definida pelo nutricionista. Antes de aplicar, exibir mensagem explícita de origem profissional e solicitar confirmação. Cancelamento não modifica a meta.
 - A alteração confirmada fica marcada como **ajuste do paciente**, com identificação de autoria, data e início de vigência; os indicadores futuros usam essa meta ajustada. Não sobrescrever, editar ou reatribuir a prescrição profissional original: ela continua acessível para comparação e o plano profissional publicado permanece inalterado.
@@ -77,7 +81,7 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 1. **Metas:** ajuste pessoal com confirmação, aviso discreto no painel profissional e aplicação automática de novas metas do nutricionista definidos. E-mail/push externos por ajuste de meta ficam fora do MVP; detalhes visuais do indicador vão para a etapa de implementação.
 2. **Períodos e fusos:** fuso por refeição, correção manual e agrupamento dos registros por data local já definidos. A contagem de dias e média dos períodos semanal/mensal foi confirmada; resta definir a convenção de início da semana. Horário de verão/conversões continuam para a etapa 9.
 3. **Indicadores:** painel diário, totais registrados, média por dia com registros e quantidade de dias registrados por semana/mês já confirmados. Restam gráficos/saldos frente a metas em períodos incompletos, metas de macros e critérios de cobertura de micronutrientes.
-4. **Medidas corporais:** frequência, correção de registros e apresentação de peso/IMC ao longo do tempo.
+4. **Medidas corporais:** registro livre de peso com data, correção de medições, gráfico histórico e IMC atual pelo peso mais recente/altura do perfil foram aprovados. Restam regras técnicas de altura histórica e retenção de medições (etapas 8 e 9).
 5. **Retenção e permissões da trilha de correções:** quais registros de auditoria podem persistir e quais atores poderão visualizá-los, respeitando privacidade e eliminação de dados? Resolver nas etapas 8 e 9.
 
 ## 5. Fluxo de alteração de meta profissional (**Definido para o MVP**)
@@ -130,11 +134,24 @@ O período mostrará totais **registrados** de energia e macronutrientes, média
 
 Atualizar esses resultados após inclusão, exclusão ou correção de registros, inclusive lançamentos retroativos e mudanças da data/fuso. Sem arredondamento intermediário.
 
-## 10. Casos de aceitação de referência
+## 10. Acompanhamento de peso e IMC (**Definido para o MVP**)
+
+- **Peso:** registrar livremente em kg, com a data em que a medição foi feita. Não exigir pesagem diária ou semanal. Apresentar gráfico de evolução com registros ordenados pela data de medição, sem confundir data de registro com data da aferição.
+- **Correção:** o dono da informação pode editar uma medição histórica e atualizar o gráfico, preservando os outros registros. Regras de retenção, trilha de correção e tratamento de exclusões serão analisadas na etapa de privacidade.
+- **IMC atual:** usar a última medição de peso disponível, a altura atualmente informada no perfil e a fórmula peso (kg) dividido pela altura (m) ao quadrado. Validar peso e altura positivos e informar quando algum dado não estiver disponível.
+- **Limites:** a interpretação do IMC é geral e não equivale a avaliação da composição corporal ou diagnóstico individual. Não deduzir IMC histórico automaticamente de uma altura atual como se fosse uma altura medida no passado; definir abordagem na etapa 9.
+
+## 11. Casos de aceitação de referência
 
 | Cenário | Resultado esperado |
 | --- | --- |
 | Usuário sem dieta registra refeição avulsa | Consumo entra no diário normalmente |
+| Usuário registra 72 kg medidos em data anterior | Gráfico de peso inclui o ponto na data da medição, sem tratá-lo como pesagem do dia do cadastro |
+| Usuário registra várias medições ao longo de semanas | Gráfico mostra a evolução das medições, sem exigir frequência mínima |
+| Usuário corrige uma medição antiga de 75 para 74 kg | Corrige apenas a medição escolhida, preserva os demais pontos e atualiza o gráfico |
+| Usuário tem 72 kg como peso mais recente e 1,80 m de altura válida no perfil | Exibir IMC atual aproximado de 22,2, contextualizado como indicador geral |
+| Usuário não informou altura ou não possui peso registrado | Indicar IMC indisponível, sem mostrar zero ou inferir valores |
+| Usuário modifica altura do perfil | Manter medições históricas de peso; regra dos IMCs históricos permanece para arquitetura |
 | Semana contém 7 dias e apenas 3 têm refeições registradas, somando 4.500 kcal | Exibir 3 dias com registros, total registrado 4.500 kcal, média 1.500 kcal por dia registrado; não dividir por 7 |
 | Um dia tem várias refeições registradas | Contar esse dia uma única vez no divisor, somando todas as refeições |
 | Período não possui refeições registradas | Exibir sem dados registrados e nenhum valor de média, sem assumir ingestão zero |
@@ -187,4 +204,4 @@ Atualizar esses resultados após inclusão, exclusão ou correção de registros
 
 ---
 
-A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, ajustes confirmados de metas, aviso no painel profissional, novas metas profissionais automáticas, indicadores diários e resumos semanais/mensais por dias com registros foram aprovados para o MVP.** Permanecem pendentes gráficos/saldos por período, metas específicas de macros, peso/IMC, detalhes técnicos de horário de verão, retenção e acesso à trilha.
+A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, ajustes confirmados de metas, aviso no painel profissional, novas metas profissionais automáticas, indicadores diários, resumos semanais/mensais por dias com registros, acompanhamento histórico de peso e cálculo do IMC atual foram aprovados para o MVP.** Permanecem pendentes gráficos/saldos nutricionais por período, metas específicas de macros, detalhes técnicos de horário de verão e altura histórica, retenção e acesso à trilha.
