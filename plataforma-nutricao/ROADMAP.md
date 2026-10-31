@@ -72,6 +72,8 @@ Estas pendências ficam registradas, não são decisões tomadas por omissão.
 
 **Precisão confirmada:** aplicar conversões e somas sem arredondamento intermediário; arredondar somente na apresentação (kcal geralmente 0 ou 1 casa, macros 1 casa, micros conforme mg/µg e precisão da fonte). Não apresentar falsa exatidão. Ver [ALIMENTOS.md](./ALIMENTOS.md).
 
-**Pendente:** confirmar cobertura/licenciamento comercial e formato da TBCA, fontes complementares, estratégia de importação, modo decimal e arredondamento técnico exato na etapa 9 de arquitetura.
+**Risco de fonte verificado em 31/10/2026:** a TBCA oficial restringe reprodução/comercialização e requer contato com os coordenadores para fins comerciais ([site oficial](https://www.tbca.net.br/index.html)). A disponibilidade pública da TACO ([NEPA/UNICAMP](https://nepa.unicamp.br/tabela-brasileira-de-composicao-de-alimentos-4a-edicao/)) não comprova permissão para distribuição em aplicativo pago. A autorização e as condições de cada base precisam ser verificadas antes de importar para o produto comercial.
+
+**Pendente:** obter autorização formal da TBCA ou definir fonte alternativa juridicamente utilizável, confirmar cobertura e formato de dados, estratégia de importação, modo decimal e arredondamento técnico exato na etapa 9 de arquitetura.
 
 **Importante:** conclusão das 10 etapas encerra o planejamento, não significa que o software foi desenvolvido, validado ou colocado em produção.
