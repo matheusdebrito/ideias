@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 0.4
+> **Versão:** 0.5
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -151,28 +151,30 @@ O nutricionista poderá:
 
 ### 6.1. Comportamento
 
-1. Criar refeições no cardápio padrão (por exemplo, café da manhã, almoço e jantar).
+1. Criar refeições no cardápio padrão (por exemplo, café da manhã, almoço e jantar). Um mesmo dia pode conter várias refeições independentes com a mesma categoria, como dois registros de café da manhã.
 2. Por padrão, essas refeições aparecem de segunda-feira a domingo.
-3. Para um dia da semana, permitir substituir, acrescentar ou retirar **refeições planejadas específicas**.
+3. Para um dia da semana, permitir substituir, acrescentar ou retirar **refeições planejadas específicas**. A operação identifica a refeição pelo seu registro próprio, não apenas pela categoria: remover um café da manhã não remove os demais cafés da manhã daquele dia.
 4. Refeições não personalizadas naquele dia continuam seguindo o cardápio padrão.
 5. Remover uma personalização restaura a refeição do padrão naquele dia; remover intencionalmente a refeição apenas naquele dia deve ser uma ação explícita, diferente de restaurar o padrão.
 6. Alterar o padrão dentro de um **rascunho** atualiza os dias que ainda herdam aquela refeição; as personalizações explícitas ficam preservadas, sem reescrita silenciosa.
 7. Uma vez publicada, a versão preserva o padrão e todas as personalizações; alterações posteriores exigem nova versão.
 8. O sistema calcula o total nutricional **de cada dia da semana** conforme o cardápio efetivamente aplicável, e pode apresentar um resumo semanal.
 
-**Exemplo:** almoço padrão com arroz, feijão e frango em todos os dias. No sábado, o usuário substitui apenas o almoço por outra combinação; café da manhã e jantar continuam herdados do padrão. No domingo, pode usar o padrão integral.
+**Exemplo:** o padrão pode conter dois registros independentes classificados como café da manhã, cada um com sua própria composição e horário sugerido. Na segunda-feira, o nutricionista pode acrescentar um terceiro café da manhã ou personalizar apenas um dos dois. Essa alteração não afeta o outro café da manhã nem os demais dias. O almoço padrão continua herdado normalmente.
 
 **Limite inicial:** personalizações recorrentes por **dia da semana**. Exceções para datas isoladas (feriados, viagens etc.) não estão confirmadas para o MVP.
 
 ### 6.2. Persistência conceitual
 
-Uma versão de plano contém refeições planejadas padrão e eventuais regras de personalização por dia da semana. O que vale em uma data resulta de: (1) versão do plano vigente naquela data; (2) dia da semana; (3) personalizações explícitas, se houver; (4) refeições padrão para o restante.
+Uma versão de plano contém várias refeições planejadas padrão, inclusive múltiplas refeições com a mesma categoria, e eventuais regras de personalização por dia da semana. Cada ocorrência planejada tem identidade própria; categoria (por exemplo, café da manhã), horário sugerido e posição de exibição não são identificadores únicos. O que vale em uma data resulta de: (1) versão do plano vigente naquela data; (2) dia da semana; (3) personalizações explícitas, se houver; (4) refeições padrão para o restante.
 
 As refeições do **diário** continuam sendo registros de consumo independentes. Registrar algo diferente do cardápio de terça-feira nunca altera nem a versão do plano nem o padrão de terça-feira.
 
 ### 6.3. Critérios de aceitação
 
-- Sem personalizações, os sete dias mostram o mesmo cardápio padrão.
+- Sem personalizações, os sete dias mostram o mesmo cardápio padrão, incluindo todas as ocorrências de cada categoria.
+- Um plano aceita duas ou mais refeições com a categoria café da manhã no mesmo dia.
+- Personalizar ou remover uma dessas refeições não altera as outras refeições com a mesma categoria.
 - Personalizar somente o almoço de sábado mantém as outras refeições e os outros dias inalterados.
 - Alterar o cardápio padrão em um rascunho não apaga uma personalização explícita de sábado.
 - Restaurar o padrão de sábado remove a personalização, sem apagar a refeição padrão.
@@ -199,7 +201,7 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 
 - `PlanoAlimentar`
 - `VersaoPlano`
-- `RefeicaoPlanejada` e `ItemPlanejado`, com base diária padrão e personalizações recorrentes por dia da semana
+- `RefeicaoPlanejada` e `ItemPlanejado`, com base diária padrão e personalizações recorrentes por dia da semana; cada ocorrência planejada tem ID próprio e pode compartilhar categoria com outras refeições do mesmo dia
 - `ModeloRefeicao` e `ItemModelo` — com propriedade explicitamente diferenciada (usuário ou nutricionista)
 - `RefeicaoConsumida` e `ItemConsumido`
 - `Alimento` e dados nutricionais versionados / rastreáveis
