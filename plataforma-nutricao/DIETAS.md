@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 0.3
+> **Versão:** 0.4
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -70,7 +70,6 @@ O nutricionista poderá:
 - As observações são instruções em texto e não substituem alimento, quantidade ou dados nutricionais.
 - Pesquisar alimentos no catálogo e adicionar, remover ou ajustar suas quantidades.
 - Consultar automaticamente os valores nutricionais calculados por alimento, por refeição e no total do plano.
-- Adicionar substituições alimentares opcionais: para um item ou grupo, definir um alimento principal e uma ou mais alternativas, cada uma com sua própria quantidade. As alternativas são opções mutuamente exclusivas, não alimentos somados juntos.
 - Pesquisar, consultar, editar e excluir seus modelos.
 - Selecionar uma refeição da biblioteca e adicioná-la à dieta de um paciente.
 - Escolher o paciente e a dieta de destino. Se não houver dieta, iniciar a criação de um plano; se já existir um plano publicado, criar/usar um rascunho para a próxima versão.
@@ -90,6 +89,14 @@ O nutricionista poderá:
 - Ao copiar uma refeição da biblioteca para um rascunho, copiar também suas observações; o nutricionista pode ajustá-las na cópia.
 - A atualização do modelo na biblioteca não altera observações em dietas já publicadas.
 - Ao exibir uma refeição planejada no fluxo de registro do diário, as observações podem ser mostradas como referência, mas não devem ser tratadas como prova de que o alimento foi preparado/consumido daquela forma nem gerar alertas automáticos.
+
+**Composição fixa das refeições — decisão para o MVP:**
+- Cada refeição planejada contém uma composição fixa de alimentos e quantidades definida pelo usuário (em plano pessoal) ou pelo nutricionista (em plano profissional).
+- Não haverá funcionalidade para cadastrar alternativas de alimentos dentro de um mesmo item/refeição nem interface para o paciente escolher substituições alimentares.
+- Se o nutricionista desejar oferecer outra combinação, deverá criar uma segunda refeição fixa no plano (com identificação clara) ou atualizar o plano por uma nova versão.
+- Se o paciente não consumir exatamente o que foi planejado, poderá registrar no diário os alimentos e quantidades que realmente consumiu. Isso não altera a dieta prescrita.
+- Não sugerir substituições automáticas nem tratar a ausência de um alimento como autorização para o paciente escolher outro equivalente.
+- A possibilidade de substituições orientadas pelo nutricionista poderá ser reavaliada no futuro, caso haja evidência de necessidade e critérios nutricionais claros.
 
 **Cálculo nutricional:**
 - O cálculo é derivado dos alimentos, quantidades, unidades e dados de composição disponíveis na fonte nutricional.
@@ -182,7 +189,6 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 6. Observações vazias não são exibidas na interface.
 7. A apresentação das observações deve ser discreta e progressiva, sem aumentar desnecessariamente a densidade visual.
 5. Nutricionistas informam alimentos e quantidades, não macros manualmente; nutrientes são calculados pela aplicação a partir da fonte nutricional.
-6. Uma substituição representa uma opção alternativa mutuamente exclusiva, com alimento e quantidade próprios; o cálculo não soma todas as alternativas.
 7. Adicionar uma refeição a uma dieta de paciente modifica somente o rascunho/versionamento do plano escolhido; nunca registra consumo no diário.
 5. Valores e unidades de consumo são armazenados com referência à origem nutricional, para preservar histórico mesmo quando o catálogo for atualizado.
 6. Vínculo e permissões são validados no servidor a cada operação; profissional não pode acessar ou alterar dados de outro profissional/paciente.
@@ -216,7 +222,8 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Refeição da biblioteca é copiada para um plano | Observações são copiadas; alterações no rascunho não modificam o modelo original |
 | Nutricionista adiciona uma refeição da biblioteca à dieta de um paciente | A refeição entra no rascunho da dieta escolhida; não é registrada como consumo |
 | Nutricionista ajusta a cópia para um paciente | Biblioteca e planos de outros pacientes permanecem inalterados |
-| Paciente escolhe uma alternativa alimentar | O cálculo considera a opção selecionada, não soma as alternativas |
+| Dieta profissional apresenta uma refeição fixa | O paciente vê somente os alimentos e quantidades definidos na versão publicada, sem seletor de alternativas |
+| Paciente não consome um dos alimentos prescritos | Pode registrar o consumo real no diário; a prescrição permanece inalterada |
 | Nutricionista altera modelo profissional após publicar dietas | Versões publicadas de ambos os pacientes não mudam |
 | Nutricionista atualiza dieta de um paciente | Uma nova versão entra em vigor; anterior fica no histórico |
 | Paciente registra alimentação diferente do prescrito | O diário registra o ocorrido; plano publicado não muda |
@@ -232,4 +239,4 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 
 ## 11. Critérios de priorização
 
-No MVP, priorizar a criação e reutilização de modelos, registro de consumo, publicação de planos com histórico e isolamento de dados. Não incluir rede social, compartilhamento público ou recomendações automáticas de substituições sem validação nutricional.
+No MVP, priorizar a criação e reutilização de modelos, registro de consumo, publicação de planos com histórico e isolamento de dados. Não incluir rede social, compartilhamento público, seletor de alimentos alternativos ou recomendações automáticas de substituições.
