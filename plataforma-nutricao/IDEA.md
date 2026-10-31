@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.12  
+> **Versão:** 0.13  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -178,10 +178,13 @@ Regras detalhadas e critérios de aceitação em [DIETAS.md](./DIETAS.md).
 
 **Versionamento do plano:**
 - Um rascunho pode ser editado antes da publicação.
-- Ao atualizar um plano publicado, criar uma nova versão com data de início de vigência.
+- Ao atualizar um plano profissional publicado, criar uma nova versão e permitir escolher entre **vigência imediata** (ativa ao publicar) e **vigência programada** (ativa automaticamente na data futura escolhida).
+- Quando uma nova versão profissional for programada para uma data futura, a versão atual continua vigente até a transição; a versão futura não substitui a atual antes da data definida.
+- No início da vigência programada, a nova versão passa a ser a única vigente e a anterior permanece no histórico, com seu período de vigência encerrado.
+- A transição deve ocorrer automaticamente, sem exigir que o nutricionista ou paciente esteja conectado.
 - Cada versão deve preservar suas refeições planejadas, alimentos, quantidades, observações/instruções e composição nutricional de referência.
 - Registrar autor, data/hora e resumo ou motivo da atualização.
-- Cada plano possui uma única versão vigente por vez; versões antigas permanecem consultáveis, respeitando retenção de dados.
+- Cada plano possui uma única versão vigente por vez; versões antigas permanecem consultáveis, respeitando retenção de dados. Uma versão futura publicada fica em estado programado, não vigente, até sua data de início.
 - No MVP, um paciente não pode ter dois planos profissionais vigentes simultaneamente. A atualização da dieta vigente gera uma nova versão; o plano anterior permanece no histórico, sem coexistência de prescrições profissionais ativas.
 - Não substituir a versão anterior, pois precisamos reconstruir **qual plano estava vigente em determinado dia**.
 - Refeições do diário e seus nutrientes nunca são alterados por atualização de versão do plano.
@@ -266,6 +269,7 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 2. Como lidar com uma conta descoberta como pertencente a menor sem expor ou reter indevidamente seus dados?
 3. Como validar o registro profissional do nutricionista?
 4. Como calcular o saldo semanal/mensal, as médias e a tolerância de meta?
+5. O paciente poderá visualizar uma dieta futura já publicada antes do início da vigência? Quais ações permitirão cancelar ou reagendar uma versão programada?
 5. Quais recursos compõem o plano profissional pago? Haverá limites de pacientes?
 6. Quais dados ficam disponíveis depois do encerramento do vínculo profissional?
 7. Qual será o fluxo de exportação, portabilidade, retenção e exclusão dos dados?
