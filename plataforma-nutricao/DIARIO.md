@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (em andamento)
-> **Versão:** 0.8
+> **Versão:** 0.9
 > **Data:** 31/10/2026
 > **Fonte principal da visão:** [IDEA.md](./IDEA.md) e [DIETAS.md](./DIETAS.md)
 > **Convenção:** regras confirmadas estão separadas das decisões em aberto.
@@ -47,7 +47,12 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 - Usuários adultos poderão acompanhar metas calóricas, consumo de calorias e macronutrientes.
 - O consumo diário será comparado com a meta válida **na data correspondente**; metas posteriores não reescrevem o histórico.
-- Resumos por semana e mês fazem parte do objetivo do MVP; fórmulas de saldo, médias, tolerâncias e visualização ainda precisam de definição.
+- **Indicadores diários confirmados para o MVP:** apresentar energia total consumida (kcal), meta calórica efetiva da data, diferença em kcal **restantes** enquanto o consumo não ultrapassar a meta, ou **acima da meta** quando ultrapassar; apresentar também o total diário consumido de proteínas, carboidratos e gorduras totais (g).
+- Para uma data com meta positiva válida, usar a diferença entre a meta e o consumo sem arredondamento intermediário: **restantes = máximo(0, meta − consumo)** e **acima = máximo(0, consumo − meta)**. A interface privilegia o indicador contextual correto, em vez de exibir um saldo negativo como se fossem calorias restantes.
+- Na ausência de uma meta válida naquele dia, exibir calorias e macros consumidos e informar **sem meta definida**; não calcular restante/excedente sobre zero nem utilizar meta atual para datas passadas.
+- Atualizar cálculos e visualização após criar, editar ou excluir refeições, inclusive retroativas; agrupar pelo dia local do consumo e utilizar a meta efetiva daquela data, sem sobrescrever referências históricas.
+- Totais obtidos de nutrientes não arredondados e valores só formatados na apresentação, com kcal geralmente inteiras ou com uma casa conforme o contexto e macronutrientes com uma casa decimal, respeitando [ALIMENTOS.md](./ALIMENTOS.md).
+- **Ainda não definido:** metas individuais de proteína/carboidrato/gordura e visualizações de sua distribuição; resumos por semana e mês fazem parte do objetivo do MVP, mas suas fórmulas de saldo, médias, tolerâncias e visualização continuam em discussão.
 - Medidas corporais (peso, altura e IMC, com limitações explicadas) integram a visão do produto; o detalhamento de edição e históricos será tratado nesta etapa.
 - Metas e estimativas não são automaticamente prescrições clínicas.
 - **Mudança de meta profissional pelo paciente (confirmado no MVP):** permitir que o paciente altere a meta efetiva de acompanhamento de calorias e/ou macronutrientes, mesmo quando ela foi definida pelo nutricionista. Antes de aplicar, exibir mensagem explícita de origem profissional e solicitar confirmação. Cancelamento não modifica a meta.
@@ -66,7 +71,7 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 1. **Metas:** ajuste pessoal com confirmação, aviso discreto no painel profissional e aplicação automática de novas metas do nutricionista definidos. E-mail/push externos por ajuste de meta ficam fora do MVP; detalhes visuais do indicador vão para a etapa de implementação.
 2. **Períodos e fusos:** detectação do fuso do dispositivo, correção manual e preservação do fuso de cada refeição já definidas. Restam detalhes técnicos de horário de verão/conversões (etapa 9) e o cálculo/agrupamento de indicadores por semana e mês.
-3. **Indicadores:** quais totais, saldos, médias e critérios de cobertura de micronutrientes serão exibidos?
+3. **Indicadores:** painel diário de calorias consumidas, meta, restante/excedente e totais de proteínas, carboidratos e gorduras já confirmado. Restam resumos semanais/mensais, eventuais metas de macros e critérios de cobertura de micronutrientes.
 4. **Medidas corporais:** frequência, correção de registros e apresentação de peso/IMC ao longo do tempo.
 5. **Retenção e permissões da trilha de correções:** quais registros de auditoria podem persistir e quais atores poderão visualizá-los, respeitando privacidade e eliminação de dados? Resolver nas etapas 8 e 9.
 
@@ -106,11 +111,24 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 **Critério de UX:** permitir corrigir 200 g de arroz para 150 g dentro do mesmo registro, sem forçar exclusão e recadastro. As correções são explícitas; alterações futuras de catálogo, alimento ou dieta não são correções do diário.
 
-## 8. Casos de aceitação de referência
+## 8. Painel diário de acompanhamento (**Definido para o MVP**)
+
+Mostrar calorias consumidas, meta calórica efetiva da data e diferença contextual (restante ou excedente), além de proteínas, carboidratos e gorduras totais consumidos. Dados vêm do diário, não da dieta planejada; meta é a referência vigente para o dia analisado. Se não houver meta, não inventar um saldo.
+
+O painel recalcula automaticamente após salvar, editar ou excluir refeições, inclusive quando a alteração muda o dia do consumo. A visualização não deve tratar o excesso como diagnóstico nem penalizar o usuário.
+
+## 9. Casos de aceitação de referência
 
 | Cenário | Resultado esperado |
 | --- | --- |
 | Usuário sem dieta registra refeição avulsa | Consumo entra no diário normalmente |
+| Meta diária é 2.000 kcal e consumo registrado é 1.500 kcal | Exibir 1.500 kcal consumidas e 500 kcal restantes |
+| Meta diária é 2.000 kcal e consumo registrado é 2.200 kcal | Exibir 2.200 kcal consumidas e 200 kcal acima da meta, sem saldo restante negativo |
+| Meta diária é 2.000 kcal e consumo registrado é 2.000 kcal | Exibir meta atingida e diferença igual a zero, sem excedente |
+| Não há meta calórica efetiva na data consultada | Exibir consumo e macros, sinalizar ausência de meta e não calcular saldo com meta zero |
+| Usuário edita ou exclui uma refeição já registrada | Atualizar calorias, proteínas, carboidratos, gorduras e restante/excedente da data afetada |
+| Dia anterior recebe lançamento retroativo | Recalcular indicadores do dia do consumo e comparar com meta vigente naquele dia |
+| Usuário registra refeições com quantidades fracionárias | Somar nutrientes sem arredondamento intermediário; formatar apenas na interface |
 | Usuário abre o cadastro para registrar o almoço de agora | Formulário sugere data e hora atuais, que podem ser editadas |
 | Usuário registra hoje o jantar consumido ontem | Refeição entra no dia de ontem e atualiza os totais daquele dia, sem somar consumo extra no dia de hoje |
 | Usuário lança uma refeição de semana anterior | Resumos da semana e do mês correspondentes são recalculados usando a data do consumo |
@@ -150,4 +168,4 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 ---
 
-A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso do dispositivo com correção manual por refeição, histórico discreto de correções, ajustes de metas confirmados pelo paciente, aviso discreto no painel profissional e aplicação automática de novas metas profissionais foram aprovados para o MVP.** E-mails/push externos por ajuste de meta ficam fora do MVP; tratamento técnico de horário de verão, retenção e acesso à trilha serão definidos posteriormente.
+A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, ajustes confirmados de metas, aviso no painel profissional, aplicação automática de novas metas profissionais e indicadores diários de kcal/meta/restante/excedente e macronutrientes consumidos foram aprovados para o MVP.** Permanecem pendentes indicadores semanais/mensais, metas específicas de macros, detalhes técnicos de horário de verão, retenção e acesso à trilha.
