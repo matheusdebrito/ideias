@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.39  
+> **Versão:** 0.40  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -64,8 +64,11 @@ A validação das credenciais profissionais e os requisitos específicos para o 
 ### 3.1. Perfil e dados antropométricos
 
 - Cadastro de data de nascimento, sexo e altura, conforme a necessidade dos cálculos e do acompanhamento.
-- Registro de peso com data e histórico sem sobrescrita de medições anteriores.
-- Cálculo de IMC para adultos, acompanhado de explicação sobre suas limitações.
+- **Acompanhamento de peso no MVP (confirmado):** o usuário adulto pode registrar seu peso em kg quando quiser, informando a data da medição, sem frequência mínima ou obrigação de lançamento. Cada medição permanece como registro independente no histórico e aparece em um **gráfico de evolução de peso ao longo do tempo**.
+- **Correção de peso histórico (confirmado):** permitir corrigir o valor ou a data de uma medição anterior sem sobrescrever nem apagar as demais medições; alterações explícitas devem atualizar o gráfico de evolução. Regras de auditoria/retenção de correções de dados pessoais serão detalhadas nas etapas 8 e 9.
+- **IMC para adultos (confirmado):** calcular o IMC atual a partir do **peso mais recente registrado** e da **altura informada no perfil**: IMC = peso (kg) ÷ [altura (m)]². Somente calcular com dados válidos, positivos e disponíveis; se faltar peso ou altura, mostrar indicador indisponível, não zero.
+- **Limites do IMC:** apresentar como indicador geral, **não diagnóstico**, medida isolada de composição corporal, ou substituto de avaliação nutricional individualizada. Evitar linguagem de julgamento ou conclusões clínicas automatizadas.
+- Caso a altura do perfil seja alterada, a regra técnica para eventuais IMCs históricos deve considerar a altura aplicável a cada data, sem reescrever medições de peso originais; detalhamento na etapa 9.
 - O cadastro, o acompanhamento e o cálculo do IMC serão disponibilizados apenas para pessoas com **18 anos completos ou mais** no MVP.
 
 **Decisão de produto — escopo adulto:** a plataforma será exclusiva para maiores de idade na primeira versão. Não haverá cadastro de pacientes menores de 18 anos, inclusive por nutricionistas, nem perfis dependentes, nem recursos pediátricos. A data de nascimento informada deverá ser validada no servidor com base na data corrente; contas abaixo de 18 anos devem ter cadastro rejeitado.
