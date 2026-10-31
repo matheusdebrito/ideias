@@ -60,12 +60,26 @@ A mesma implementação de seleção de alimentos, medidas e cálculo nutriciona
 
 ## 4. Biblioteca de refeições do nutricionista (**Definido para o MVP**)
 
+O nutricionista cria a refeição selecionando **alimentos do catálogo** e informando as quantidades. Ele não cadastra manualmente calorias, proteínas, carboidratos, gorduras, vitaminas ou minerais: a aplicação calcula esses valores a partir da composição nutricional dos alimentos selecionados e das quantidades informadas.
+
 O nutricionista poderá:
-- Criar modelos reutilizáveis contendo nome, itens alimentares e quantidades.
+- Criar modelos reutilizáveis com nome, refeições/itens alimentares e quantidades.
+- Pesquisar alimentos no catálogo e adicionar, remover ou ajustar suas quantidades.
+- Consultar automaticamente os valores nutricionais calculados por alimento, por refeição e no total do plano.
+- Adicionar substituições alimentares opcionais: para um item ou grupo, definir um alimento principal e uma ou mais alternativas, cada uma com sua própria quantidade. As alternativas são opções mutuamente exclusivas, não alimentos somados juntos.
 - Pesquisar, consultar, editar e excluir seus modelos.
-- Selecionar um ou mais modelos para compor as refeições planejadas ao preparar planos de diferentes pacientes.
-- Ajustar livremente a cópia dentro do **rascunho** de cada plano, sem mudar o modelo da biblioteca ou outros pacientes.
-- Ver os valores nutricionais calculados da refeição ao montá-la.
+- Selecionar uma refeição da biblioteca e adicioná-la à dieta de um paciente.
+- Escolher o paciente e a dieta de destino. Se não houver dieta, iniciar a criação de um plano; se já existir um plano publicado, criar/usar um rascunho para a próxima versão.
+- Ajustar a cópia da refeição dentro do **rascunho** do plano daquele paciente, sem mudar o modelo da biblioteca ou planos de outros pacientes.
+- Criar uma refeição diretamente dentro do rascunho de uma dieta, com opção de também salvá-la na biblioteca profissional para reutilização futura.
+
+**Cálculo nutricional:**
+- O cálculo é derivado dos alimentos, quantidades, unidades e dados de composição disponíveis na fonte nutricional.
+- A aplicação apresenta calorias, macronutrientes e vitaminas/minerais disponíveis na fonte, sem pedir que o nutricionista digite macros.
+- Conversões de unidades e medidas caseiras precisam usar fatores definidos e rastreáveis; não presumir equivalência de gramas e mililitros.
+- Alimentos em estados diferentes (por exemplo, cru e cozido) devem ser selecionados como entradas distintas quando assim constarem no catálogo.
+- Dados ausentes na fonte devem ser apresentados como não disponíveis, nunca como zero inventado.
+- O cálculo e o arredondamento devem ser consistentes entre biblioteca, dieta e diário.
 
 **Isolamento:**
 - Modelos profissionais pertencem ao nutricionista que os criou.
@@ -74,7 +88,15 @@ O nutricionista poderá:
 - Refeições consumidas por pacientes não entram automaticamente na biblioteca do nutricionista.
 - Encerrar vínculo com um paciente não elimina registros históricos nem transfere propriedade da biblioteca profissional.
 
-**Persistência:** ao adicionar um modelo profissional a um plano, criar dados próprios daquela versão/rascunho. Atualizar ou excluir o modelo original **não muda** nenhum plano publicado e não altera planos de outros pacientes.
+**Fluxo de atribuição à dieta do paciente:**
+1. Nutricionista cria ou abre um modelo na biblioteca profissional.
+2. Seleciona **Adicionar à dieta de um paciente**.
+3. Escolhe o paciente e a dieta de destino (ou inicia uma nova).
+4. A aplicação copia a composição da refeição para o rascunho da dieta.
+5. O nutricionista pode ajustar a cópia para aquele paciente.
+6. A refeição só chega ao paciente quando a versão do plano for publicada.
+
+**Persistência:** ao adicionar um modelo profissional a um plano, criar dados próprios daquela versão/rascunho. Atualizar ou excluir o modelo original **não muda** nenhum plano publicado e não altera planos de outros pacientes. Atribuir uma refeição a uma dieta não significa registrar consumo no diário do paciente.
 
 ## 5. Dietas e versionamento (**Definido**)
 
@@ -127,6 +149,9 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 2. Uma refeição planejada pertence a uma versão específica do plano. A versão publicada é imutável.
 3. Exclusão ou edição de modelos pessoais/profissionais não reescreve consumos ou planos publicados.
 4. Copiar uma refeição jamais significa compartilhar o mesmo registro mutável.
+5. Nutricionistas informam alimentos e quantidades, não macros manualmente; nutrientes são calculados pela aplicação a partir da fonte nutricional.
+6. Uma substituição representa uma opção alternativa mutuamente exclusiva, com alimento e quantidade próprios; o cálculo não soma todas as alternativas.
+7. Adicionar uma refeição a uma dieta de paciente modifica somente o rascunho/versionamento do plano escolhido; nunca registra consumo no diário.
 5. Valores e unidades de consumo são armazenados com referência à origem nutricional, para preservar histórico mesmo quando o catálogo for atualizado.
 6. Vínculo e permissões são validados no servidor a cada operação; profissional não pode acessar ou alterar dados de outro profissional/paciente.
 7. O salvamento opcional como modelo deve ser explícito e separado do registro alimentar.
@@ -152,6 +177,10 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Usuário registra uma refeição avulsa e opta por reutilização | Diário recebe o consumo e biblioteca pessoal recebe modelo independente |
 | Usuário altera ou exclui modelo pessoal | Refeições já consumidas permanecem iguais |
 | Nutricionista usa um modelo em dois planos de pacientes distintos | Cada plano recebe uma cópia independente |
+| Nutricionista cria refeição com alimentos e quantidades | Sistema calcula automaticamente os nutrientes; não solicita macros manuais |
+| Nutricionista adiciona uma refeição da biblioteca à dieta de um paciente | A refeição entra no rascunho da dieta escolhida; não é registrada como consumo |
+| Nutricionista ajusta a cópia para um paciente | Biblioteca e planos de outros pacientes permanecem inalterados |
+| Paciente escolhe uma alternativa alimentar | O cálculo considera a opção selecionada, não soma as alternativas |
 | Nutricionista altera modelo profissional após publicar dietas | Versões publicadas de ambos os pacientes não mudam |
 | Nutricionista atualiza dieta de um paciente | Uma nova versão entra em vigor; anterior fica no histórico |
 | Paciente registra alimentação diferente do prescrito | O diário registra o ocorrido; plano publicado não muda |
@@ -161,7 +190,6 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 ## 10. Decisões em aberto — não presumir definição
 
 - Refeições programadas terão horário obrigatório, opcional ou apenas ordem?
-- Substituições de alimentos farão parte do MVP? Se sim, serão cadastradas manualmente pelo nutricionista?
 - Modelos pessoais e profissionais poderão ter categorias, favoritos ou tags desde o MVP?
 - Planos pessoais terão o mesmo detalhamento de histórico/versionamento dos profissionais?
 - Refeição registrada a partir de um modelo deverá armazenar um identificador de origem opcional (para análises) sem se tornar dependente do modelo?
