@@ -93,7 +93,7 @@ O nutricionista poderá:
 **Composição fixa das refeições — decisão para o MVP:**
 - Cada refeição planejada contém uma composição fixa de alimentos e quantidades definida pelo usuário (em plano pessoal) ou pelo nutricionista (em plano profissional).
 - Não haverá funcionalidade para cadastrar alternativas de alimentos dentro de um mesmo item/refeição nem interface para o paciente escolher substituições alimentares.
-- Se o nutricionista desejar oferecer outra combinação, deverá criar uma segunda refeição fixa no plano (com identificação clara) ou atualizar o plano por uma nova versão.
+- Se o nutricionista desejar mudar a composição, deverá editar a refeição no rascunho e publicar uma nova versão do plano (ou personalizar o cardápio de um dia específico conforme as regras semanais). Não apresentar várias combinações como alternativas para o paciente escolher.
 - Se o paciente não consumir exatamente o que foi planejado, poderá registrar no diário os alimentos e quantidades que realmente consumiu. Isso não altera a dieta prescrita.
 - Não sugerir substituições automáticas nem tratar a ausência de um alimento como autorização para o paciente escolher outro equivalente.
 - A possibilidade de substituições orientadas pelo nutricionista poderá ser reavaliada no futuro, caso haja evidência de necessidade e critérios nutricionais claros.
