@@ -3,7 +3,7 @@
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
 > **Etapa:** 4 de 10 — Base de alimentos e cálculos nutricionais (em andamento)
-> **Versão:** 0.5
+> **Versão:** 0.6
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Decisões confirmadas** são distintas de **propostas a validar**.
@@ -32,6 +32,10 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 - Alimento institucional com energia e os três macronutrientes completos pode ser usado mesmo sem dados de fibra, vitaminas ou minerais. Quando um relatório agregar nutrientes desconhecidos, sinalizar que o total não é completo.
 - A checagem de completude e o bloqueio devem ocorrer no backend, inclusive ao salvar uma refeição ou publicar uma dieta, não apenas na escolha visual. Não inferir nutrientes ausentes de outros componentes nem substituir lacuna por zero.
 - **Distinção:** para alimentos privados cadastrados manualmente os quatro campos essenciais são obrigatórios já no salvamento; para alimentos importados incompletos, a visualização é permitida, mas o uso em cálculos de refeições é bloqueado.
+- **Precisão e arredondamento dos cálculos (definido para o MVP):** usar valores de origem e razões de porção/conversão na precisão disponível, sem arredondar nutrientes a cada etapa da multiplicação ou soma. Aplicar arredondamento apenas para formatar resultados na interface; totais de refeição/dia devem ser obtidos dos valores não arredondados.
+- **Apresentação:** energia (kcal) normalmente sem casas decimais ou com uma casa, dependendo do contexto; proteínas, carboidratos e gorduras (g) com uma casa decimal; micronutrientes com casas adequadas à unidade (mg ou µg), magnitude e precisão da fonte.
+- Valores informados em rótulos ou tabelas têm precisão limitada; preservar valores/escala da fonte e não fabricar exatidão adicional. Divergência pequena entre a soma das linhas arredondadas visíveis e o total arredondado é admissível e não deve ser corrigida alterando os valores de origem.
+- O algoritmo de cálculo deve ser determinístico e uniforme entre catálogo, refeições, dietas e diário. **Recomendação técnica ainda sujeita à arquitetura:** aritmética decimal ou representação fixa para evitar erros de ponto flutuante em cálculos repetidos; definir explicitamente o modo de arredondamento usado na apresentação.
 - O alimento selecionado terá quantidade e unidade para o cálculo proporcional.
 - **Referências nutricionais aceitas no cadastro (definido para o MVP):** 100 g, 100 mL ou porção declarada, sempre com quantidade de referência positiva e unidade explícita. Para uma porção declarada, armazenar seu significado (por exemplo, porção de 30 g ou uma unidade), sem presumir que toda porção seja igual.
 - Os nutrientes de uma quantidade consumida são proporcionais aos nutrientes da quantidade de referência, após uma conversão autorizada. Exemplo: 120 kcal para uma porção de 30 g implicam 240 kcal para 60 g.
@@ -55,7 +59,7 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 
 1. Como sinalizar alimentos semelhantes, marcas, preparação (cru/cozido) e possíveis duplicidades?
 2. Qual é a base nutricional legalmente e operacionalmente disponível para uso comercial? Verificar cobertura da TBCA, formato, direitos de uso/redistribuição e possibilidade de TACO.
-3. Quais campos e regras de arredondamento serão usados na exibição, cálculos e comparação de nutrientes?
+3. Qual modo de arredondamento decimal e qual precisão interna serão usados pela implementação (a fechar na etapa de arquitetura)?
 4. Como tratar a permanência dos dados já publicados quando o criador apagar um alimento privado ou quando o vínculo profissional for encerrado?
 
 ## 5. Critérios de aceitação propostos
@@ -82,6 +86,10 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 | Cadastro usa 100 mL, mas usuário informa 50 g sem densidade do alimento | Conversão é recusada com orientação; não se presume 1 g = 1 mL |
 | Usuário tenta selecionar colher ou xícara sem equivalência específica | A medida não é oferecida como conversível; app sugere medida compatível |
 | Um fator de equivalência muda após registrar consumo | O histórico conserva o fator usado originalmente e seus valores calculados |
+| Três alimentos têm 12,46 g de proteínas cada | Total antes da apresentação é 37,38 g; interface mostra 37,4 g (não 37,5 g por somar parcelas arredondadas) |
+| Soma visual de itens arredondados difere ligeiramente do total apresentado | Total representa a soma original calculada; não distorcer valores para forçar igualdade visual |
+| Micronutriente vem com precisão limitada na fonte | Exibir apenas casas compatíveis com a unidade e a precisão do dado, sem falsa exatidão |
+| Mesmos alimentos e quantidades são usados em biblioteca, dieta e diário | Regra de cálculo e formatação é consistente em todas as áreas |
 
 ## 6. Dependências da etapa
 
