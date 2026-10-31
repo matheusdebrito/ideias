@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 7 de 10 — Monetização e assinaturas (em andamento)
-> **Versão:** 0.6
+> **Versão:** 0.7
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [ROADMAP.md](./ROADMAP.md), [PACIENTES.md](./PACIENTES.md), [DIARIO.md](./DIARIO.md), [DIETAS.md](./DIETAS.md)
 
@@ -55,7 +55,18 @@ Definir como a plataforma de nutrição se sustenta financeiramente **sem cobrar
 - **Histórico e integridade:** preservar autor, conteúdo e horário originalmente programado, encerrar a versão anterior sem sobreposição e registrar a ativação real. O usuário pode continuar consultando suas dietas sem depender da assinatura do profissional. Não criar versões ou alterar retrospectivamente dados do diário.
 - **Concorrência e falhas:** a etapa 9 deverá prever agendador **idempotente**, autorização e vínculo conferidos na transação que efetiva a ativação, proteção contra disputa com encerramento/troca e verificação da situação profissional segundo as regras de CRN definidas nas etapas 8/9. A expiração comercial isolada **não** é motivo para cancelar o agendamento.
 
-## 7. Questões a decidir na etapa 7
+## 7. Falha na renovação mensal e tolerância de 7 dias (**confirmado no MVP**)
+
+- **Aplicação restrita a renovações:** quando uma assinatura profissional **já paga e ativa** chega à renovação mensal e a cobrança **falha**, iniciar **7 dias corridos (168 horas)** de tolerância a partir do vencimento original do ciclo. A ausência de confirmação de pagamento não pode ser registrada como pagamento aprovado.
+- **Direitos durante a tolerância:** durante os sete dias, manter as funcionalidades profissionais normalmente disponíveis, sujeitas à validação de CRN e às autorizações/vínculos dos usuários. Mostrar na área de assinatura um **aviso claro** de falha na renovação, data/hora final da tolerância e opção de regularizar o pagamento; notificação por e-mail transacional ao nutricionista sem dados de pacientes. Não confundir **em tolerância por falha de cobrança** com **cancelamento voluntário da renovação**.
+- **Tentativas seguras de recuperar o pagamento:** a plataforma pode repetir a tentativa de cobrança conforme regras do provedor e permitir regularização pelo assinante, mas deve impedir **cobranças duplicadas e concessões duplicadas de período pago** em chamadas concorrentes, retentativas, webhooks e confirmações tardias. Detalhes de idempotência, respostas do gateway, frequência de tentativas e comunicação serão decididos na etapa 9.
+- **Se regularizar durante os sete dias:** encerrar o estado de tolerância e manter a assinatura ativa, com continuidade do ciclo e sem perda de acesso. Registrar o pagamento confirmado sem inventar créditos ou ciclos adicionais.
+- **Se não regularizar em até 168 horas:** terminado o prazo, **restringir as funcionalidades profissionais** conforme seção 5: manter conta pessoal, área de assinatura e **listagem administrativa mínima de vínculos**; bloquear dados nutricionais, convites e ações profissionais. O limite deve ser controlado pelo **servidor**, inclusive para sessões abertas. Vínculos, histórico e dados dos usuários permanecem preservados; dietas já publicadas e programadas seguem a regra da seção 6.
+- **Primeira contratação sem tolerância:** a criação de uma nova assinatura não habilita recursos profissionais apenas por tentar pagar; exigir **confirmação efetiva do primeiro pagamento** (e CRN válido). Período de teste promocional, se houver, será objeto de decisão separada e não deve ser tratado como pagamento confirmado.
+- **Sem vínculo automático com cancelamento:** o pedido expresso de cancelamento segue sua regra específica da seção 4 (acesso até fim do período pago, **sem adicionar sete dias automaticamente**). A tolerância é exclusiva para falha real de **renovação** de assinatura previamente paga.
+- **Estado e relógio verificáveis:** registrar vencimento do ciclo, falha, início/fim da tolerância, tentativas, confirmação de pagamento e mudança de acesso. A etapa 9 detalhará a transição idempotente de estados e concorrência entre pagamento confirmado no limite e processo de suspensão, evitando reativações/negações incorretas.
+
+## 8. Questões a decidir na etapa 7
 
 - **Estrutura da oferta — confirmada:** somente **um plano profissional mensal** no MVP, incluindo todas as ferramentas profissionais previstas; não criar níveis de assinatura diferentes no lançamento.
 - **Limite de pacientes — decisão adiada explicitamente:** avaliar mais adiante **se existirá limite** de usuários que um nutricionista poderá acompanhar, antes de determinar qualquer quantidade. **Plano único não equivale a pacientes ilimitados.** Outros limites e regras de uso justo também não foram decididos.
@@ -64,12 +75,12 @@ Definir como a plataforma de nutrição se sustenta financeiramente **sem cobrar
 - **Pagamento:** provedor, renovação recorrente, confirmação, comprovantes e comunicação de falhas.
 - **Cancelamento e acesso após vencimento — decididos:** renovação para, acesso profissional continua até o fim do período pago. Depois, ficam conta pessoal, assinatura e lista administrativa mínima; acesso nutricional e ações profissionais ficam bloqueados, preservando vínculos e dados.
 - **Versões futuras já publicadas — decidido:** a ativação automática na data agendada continua possível depois do vencimento da assinatura, **somente se vínculo e autorização do usuário continuarem válidos**, sem permitir novas ações profissionais.
-- **Inadimplência/falha de pagamento — decisão separada:** definir aviso, tentativas de cobrança, eventual período de tolerância e efeitos de suspensão, sem aplicar automaticamente a regra de cancelamento voluntário.
+- **Falha na renovação — decidida:** conceder **7 dias corridos (168 horas) de tolerância** apenas para renovação de assinatura anteriormente paga, com aviso, funcionalidade profissional mantida e tentativas de regularização sem cobranças duplicadas. Após o prazo sem pagamento, aplicar o acesso restrito da seção 5; a **primeira contratação requer pagamento confirmado**. Horários exatos de tentativas, integração e reconciliação ficam para a etapa 9.
 - **Estados de assinatura:** definição do ciclo de vida comercial e mensagens adequadas para o nutricionista.
 
 Regras técnicas de cobrança, idempotência, webhooks, segurança e integração serão detalhadas na etapa 9. Proteção de dados, retenção e responsabilidades na etapa 8.
 
-## 8. Critérios de aceitação iniciais
+## 9. Critérios de aceitação iniciais
 
 | Cenário | Resultado esperado |
 | --- | --- |
@@ -97,9 +108,16 @@ Regras técnicas de cobrança, idempotência, webhooks, segurança e integraçã
 | Nutricionista com assinatura vencida tenta reagendar versão anterior | Servidor rejeita alteração, ainda que a ativação automática original continue autorizada |
 | Vencimento comercial e ativação agendada coincidem | Processo de ativação aplica data programada e vínculo/autorização vigentes, sem confundir vencimento da assinatura com revogação de vínculo |
 | Usuário acessa conta depois que assinatura do nutricionista terminou | Próprios dados, histórico, diário e metas permanecem acessíveis sem custo |
-| Pagamento falha sem solicitação de cancelamento | Regras de inadimplência serão definidas separadamente; não tratar automaticamente como cancelamento voluntário |
+| Renovação mensal de assinatura previamente paga falha | Inicia tolerância de 7 dias/168h com aviso e mantém funcionalidades profissionais durante o prazo |
+| Nutricionista regulariza a cobrança durante a tolerância | Assinatura volta ao estado normal sem interrupção das funções nem cobranças duplicadas |
+| Pagamento de renovação permanece pendente por mais de 7 dias | Depois do prazo, servidor restringe acesso a dados nutricionais e ações profissionais, preservando conta, listagem mínima e vínculos |
+| Primeira tentativa de contratação tem pagamento não confirmado | Não libera funcionalidades profissionais por tolerância; precisa de pagamento confirmado e CRN válido |
+| Nutricionista cancelou voluntariamente a renovação | Não ganha automaticamente sete dias extras após fim do período pago; segue regra de cancelamento |
+| Gateway reenvia o mesmo evento ou duas tentativas concorrem | Não duplicar cobrança, extensão de ciclo nem evento de concessão de acesso |
+| Cobrança confirma no limite do prazo e suspensão é processada | Estado final deve refletir pagamento verificado de forma consistente, sem suspensão indevida |
+| Dieta agendada antes de suspensão por falta de pagamento | Continua elegível à ativação automática se vínculo e autorização estiverem válidos, conforme seção 6 |
 | Paciente encerra vínculo com nutricionista | Mantém conta e dados independentemente do estado comercial do profissional |
 
-**Próxima decisão:** como tratar uma **falha no pagamento da renovação mensal**: período de tolerância com avisos e tentativa de nova cobrança ou suspensão no vencimento. Diferenciar falha na renovação de cancelamento voluntário; não liberar o primeiro acesso profissional sem confirmação de cobrança. **Preço e existência/quantidade de limite de pacientes permanecem expressamente adiados.**
+**Próxima decisão:** decidir se haverá **período de teste gratuito para nutricionistas antes da primeira assinatura paga**, e, em caso afirmativo, quais condições serão simples e proporcionais. **Preço e existência/quantidade de limite de pacientes continuam expressamente adiados.**
 
 **Observação:** este arquivo registra requisitos aprovados; não representa implementação, testes ou cobrança em produção.
