@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.25  
+> **Versão:** 0.26  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -104,6 +104,11 @@ Requisitos importantes para a qualidade dos dados:
 - Adotar regras numéricas e de formatação consistentes entre biblioteca, dietas, diário e indicadores, inclusive ao preservar retratos históricos.
 
 **Fontes candidatas:** TBCA como fonte principal a ser avaliada e TACO como fonte complementar. A incorporação de dados em um produto comercial depende da confirmação das condições de uso, atribuição e redistribuição de cada fonte.
+
+**Risco de licenciamento identificado na pesquisa de 31/10/2026 (não é autorização de uso):**
+- A [página oficial da TBCA](https://www.tbca.net.br/index.html) informa que é necessário entrar em contato com os coordenadores para fins comerciais e apresenta restrições à reprodução e comercialização do material. Portanto, **não importar, replicar ou distribuir os dados TBCA comercialmente** com base apenas no acesso público à página. Buscar autorização expressa e definir exatamente as modalidades permitidas (armazenamento, API, exibição, cálculos, atualizações e atribuição).
+- A [TACO disponibilizada pelo NEPA/UNICAMP](https://nepa.unicamp.br/tabela-brasileira-de-composicao-de-alimentos-4a-edicao/) pode ser alternativa ou complemento, mas os termos específicos de reutilização e distribuição em aplicativo pago **ainda não foram confirmados** e requerem análise/contato com os responsáveis.
+- Até a regularização, o desenho do produto deve admitir troca de fonte e não pressupor acesso livre comercial à TBCA. A liberação jurídica é **condição para integrar qualquer base de terceiros ao produto comercial**; esse levantamento não substitui orientação jurídica.
 
 **Alimentos personalizados (confirmado para o MVP):**
 - Usuários comuns e nutricionistas poderão **cadastrar alimentos que não encontrem no catálogo de referência**, inclusive alimentos industrializados.
