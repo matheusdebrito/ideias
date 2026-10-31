@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 6 de 10 — Gestão de pacientes e permissões (em andamento)
-> **Versão:** 0.6
+> **Versão:** 0.7
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [DIETAS.md](./DIETAS.md), [DIARIO.md](./DIARIO.md)
 
@@ -73,7 +73,13 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 
 **Acesso e proteção:** o profissional autenticado só consulta os dados aprovados de paciente com **vínculo ativo e autorização vigente**. A API/banco rejeitam consulta de outras categorias e de outros pacientes, inclusive tentativas diretas a endpoints; o paciente não perde propriedade ou permissão de editar seus próprios registros. A autorização de acesso **não permite ao nutricionista editar refeições consumidas ou medidas do paciente por padrão**; suas ações de prescrição seguem permissões próprias já planejadas. O paciente deve conseguir identificar o profissional vinculado e encontrar o caminho para encerrar/revogar o vínculo; detalhes desse fluxo serão definidos nesta etapa.
 
-**Ponto ainda não decidido:** o período histórico que o novo nutricionista poderá consultar, especialmente **registros anteriores ao início do vínculo**, será definido separadamente; não conceder esse acesso de forma implícita a partir da regra geral de dados compartilháveis. Requisitos jurídicos de transparência/bases legais serão tratados na etapa 8.
+**Histórico anterior ao vínculo (confirmado no MVP):** o mesmo aceite explícito em tela única autoriza também consultar **o diário alimentar e consumo registrado, metas e indicadores relacionados, histórico de peso e IMC já existentes antes da ativação do vínculo**, sem exigir um segundo fluxo. A tela deve informar de forma simples: **"Seu nutricionista também poderá consultar seus registros anteriores ao início do acompanhamento"**, com detalhes opcionais. O paciente não precisa enviar relatórios ou recadastrar registros.
+
+- A consulta inclui dados registrados pelo próprio paciente nas categorias autorizadas, independentemente de terem sido criados antes ou depois da ativação do vínculo, inclusive lançamentos retroativos. Não estabelecer recorte arbitrário que prejudique a evolução histórica, sujeito à conservação efetiva de registros e à exclusão/retificação pelo titular.
+- **Não compartilhar automaticamente acervos privados de outros profissionais**: prontuários próprios, bibliotecas privadas, documentos ou materiais não pertencentes à conta do paciente continuam protegidos. Os planos e prescrições profissionais históricos do paciente mantêm suas autorias e sua visibilidade específica, a ser detalhada com o tratamento de dietas anteriores; não reatribuir os planos ao novo nutricionista.
+- A autorização é sempre condicionada a **vínculo ativo e permissão vigente**, verificada pelo servidor também em consultas históricas. Ao terminar o vínculo, o profissional deixa de poder consultar tanto dados novos quanto antigos pelo acompanhamento. Regras jurídicas de dados e eventuais obrigações de retenção ficam para a etapa 8.
+- O paciente segue titular do próprio histórico, independentemente da relação profissional. Histórico compartilhado não confere permissão de edição ao nutricionista.
+- A ação exata para revogar o vínculo com autonomia do paciente e o tratamento da dieta profissional vigente continuam em aberto nesta etapa.
 
 ## 7. Critérios de aceitação inicial
 
@@ -113,13 +119,17 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 | Nutricionista tenta editar refeição consumida pelo paciente só por possuir acesso de acompanhamento | Operação negada, pois leitura não concede edição automática |
 | Profissional tenta acessar dado fora das cinco categorias autorizadas | Acesso negado mesmo com vínculo ativo |
 | Paciente não visualiza detalhes opcionais e escolhe Recusar | Nenhum compartilhamento é criado; não obrigar leitura de telas adicionais para recusar |
+| Paciente possui registros alimentares anteriores ao convite e aceita | Nutricionista autorizado visualiza esses registros e seus indicadores históricos, sem nova solicitação de acesso |
+| Paciente possui histórico de pesagens anterior ao vínculo | Histórico de peso/IMC é consultável pelo nutricionista autorizado no acompanhamento |
+| Novo nutricionista tenta abrir biblioteca privada de nutricionista anterior | Acesso negado, apesar da autorização para histórico do paciente |
+| Vínculo profissional é encerrado | Nutricionista anterior não pode consultar nem os registros históricos nem os novos no painel, sem excluir o histórico pessoal |
 
 ## 8. Decisões ainda em aberto na etapa 6
 
 - **Entrega e retorno dos convites:** convite por e-mail, identificação do destinatário, validade de **7 dias**, reenvio invalidando o anterior e retorno no painel e por e-mail já confirmados. **Escopo de cinco categorias e aceite em tela única com resumo claro também confirmados**, sem múltiplos controles individuais no MVP. Pendem tratamento técnico de falha/repetição de envios e limites contra abuso. Não expor se determinada pessoa possui conta a usuários não autorizados.
 - **Troca:** quem pode iniciar, quando o vínculo anterior termina e como evitar janela com dois profissionais simultâneos.
 - **Planos profissionais antigos:** se uma dieta profissional vigente do nutricionista anterior deve encerrar automaticamente ou continuar apenas para consulta após a troca. Não alterar essa regra por suposição.
-- **Período dos dados e revogação:** decidir se o profissional autorizado poderá visualizar dados lançados **antes do início do vínculo**, e concluir o procedimento de revogação/encerramento pelo paciente. A lista das categorias visíveis já foi aprovada; a extensão temporal do acesso não foi.
+- **Revogação e encerramento:** o histórico pessoal **anterior ao início do vínculo será acessível ao profissional autorizado**, já confirmado com aviso claro no aceite. Falta definir o procedimento simples pelo qual o paciente encerra o vínculo e os efeitos sobre a dieta profissional vigente; acesso a dados privados de profissionais anteriores não decorre dessa autorização.
 - **Registro do nutricionista:** verificação do CRN e restrições de acesso antes da validação.
 - **Dados profissionais após encerramento:** guarda obrigatória, eliminação, portabilidade e outros requisitos da LGPD na etapa 8.
 
