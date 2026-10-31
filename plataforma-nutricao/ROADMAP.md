@@ -4,10 +4,12 @@
 > **Data de referência:** 31/10/2026
 > **Etapas de planejamento:** 10
 > **Concluídas (definições funcionais principais):** 6
-> **Em andamento:** etapa 7 — Monetização e assinaturas
+> **Em andamento:** etapa 7 — Monetização e assinaturas (modelo único aberto a qualquer gestor)
 > **Restantes:** 4, incluindo a etapa 7
 
 ## Convenções
+
+**Regra atualizada na etapa 7 — prevalece sobre terminologia legada:** a plataforma é uma ferramenta de **organização e comunicação de planos e dados alimentares**. Qualquer adulto pode contratar **um único plano mensal de gestão**, independentemente de CRN. O **selo CRN verificado** é apenas credencial opcional; não modifica funcionalidades nem permissões. **Meus acompanhados** é rótulo genérico; **Meus pacientes** apenas na visão de nutricionistas com CRN verificado. “Paciente” não é outra conta. A plataforma não presta atendimento ou prescrição clínica e deverá ter revisão jurídica de escopo/termos na etapa 8.
 
 **Terminologia transversal do MVP:** “usuário comum” e “paciente” não são dois cadastros nem planos diferentes. Todos os adultos usam a **mesma conta pessoal**; “paciente” é somente a denominação na **área do nutricionista** para os usuários que ele gerencia, mediante vínculo e autorização. O usuário não recebe uma conta ou papel de “paciente” ao aceitar convite. Essa distinção aplica-se aos documentos das etapas 1 a 7 e às futuras especificações de UX e arquitetura.
 
@@ -26,13 +28,13 @@
 | 3 | Criação e atribuição de dietas | Concluída | Fluxo profissional, atribuição, cardápio padrão com personalizações semanais, categorias, vigência imediata/programada, visualização antecipada, cancelamento/reagendamento |
 | 4 | Base de alimentos e cálculos nutricionais | Concluída | Cadastro, unidades, cálculos, dados incompletos, pesagem pós-preparo, marcas e aviso de duplicidade definidos; fonte TBCA/TACO/JSON adiada para etapa 9; retenção para etapas 8/9 |
 | 5 | Diário alimentar, metas e indicadores | Concluída | Diário, metas pessoais/profissionais, peso/IMC, gráficos semanais/mensais, comparação estrita e diferença acumulada; micronutrientes disponíveis em Detalhes nutricionais sem comparação a metas ou referências no MVP |
-| 6 | Gestão de pacientes e permissões | Concluída | Convites por e-mail, validade e reenvio, autorização simples, encerramento/troca, preservação de dados/metas/dietas, notificação ao ex-profissional, CRN validado antes de recursos profissionais e proteção contra abuso aprovados |
-| 7 | Monetização e assinaturas | Em andamento | Um plano mensal profissional; checkout e primeira cobrança só após CRN aprovado e contratação explícita; cancelamento preserva período pago, tolerância de 7 dias em falha de renovação; pendem efeitos comerciais de CRN irregular e provedor; custos/teste/preço/limites para etapas 9/10 |
+| 6 | Gestão de usuários acompanhados e permissões | Concluída (revista na etapa 7) | Convites por e-mail, autorização, encerramento/troca, preservação de dados e proteção contra abuso; um gestor ativo por titular; **CRN não é obrigatório para gerir**, apenas selo opcional |
+| 7 | Monetização e assinaturas | Em andamento | Um plano mensal de gestão para qualquer adulto, **sem CRN obrigatório**; selo CRN verificado opcional; cancelamento preserva ciclo pago, tolerância de 7 dias em falha de renovação; teste, preço e limites adiados para etapas 9/10 |
 | 8 | Requisitos não funcionais, segurança e privacidade | Pendente | LGPD, controle de acesso, riscos, retenção, portabilidade, observabilidade, desempenho, backup |
 | 9 | Arquitetura, banco e integrações | Pendente | Modelo de dados, TypeScript, APIs, integridade, infraestrutura e fontes de alimentos; **estimativa obrigatória de custos operacionais por cenários de uso**, com premissas, custo por usuário/nutricionista e despesas de pagamentos/e-mail |
 | 10 | Escopo final do MVP, cronograma e documentos para agentes de IA | Pendente | Finalizar MVP, critérios de aceite, `PLAN.md`, `AGENTS.md` e `ARCHITECTURE.md`; **retornar obrigatoriamente aos custos e decidir teste grátis/duração, preço profissional e limite de pacientes antes de concluir o planejamento** |
 
-**Aprovado na etapa 7:** nutricionista com CRN pendente ou não aprovado não pode contratar plano profissional nem ser cobrado. Aprovação do CRN apenas habilita contratação expressa, sem assinatura/cobrança automática. Se o CRN deixar de estar regular após a contratação, o comportamento comercial das cobranças será definido em decisão posterior; acesso profissional continua dependente de CRN regular.
+**Revisão aprovada na etapa 7, substituindo a regra anterior:** qualquer adulto pode contratar gestão com cobrança expressa, **sem CRN**. O registro verificado é **um selo opcional de nutricionista**, não altera permissões, preço ou assinatura e não autoriza acesso sem vínculo/consentimento. O produto organiza e compartilha planos e dados; não presta serviço próprio de prescrição clínica.
 
 ## Ponto de controle obrigatório — custos e decisões comerciais adiadas
 
