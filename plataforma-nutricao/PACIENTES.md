@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 6 de 10 — Gestão de pacientes e permissões (em andamento)
-> **Versão:** 0.8
+> **Versão:** 0.9
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [DIETAS.md](./DIETAS.md), [DIARIO.md](./DIARIO.md)
 
@@ -79,7 +79,7 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 - **Não compartilhar automaticamente acervos privados de outros profissionais**: prontuários próprios, bibliotecas privadas, documentos ou materiais não pertencentes à conta do paciente continuam protegidos. Os planos e prescrições profissionais históricos do paciente mantêm suas autorias e sua visibilidade específica, a ser detalhada com o tratamento de dietas anteriores; não reatribuir os planos ao novo nutricionista.
 - A autorização é sempre condicionada a **vínculo ativo e permissão vigente**, verificada pelo servidor também em consultas históricas. Ao terminar o vínculo, o profissional deixa de poder consultar tanto dados novos quanto antigos pelo acompanhamento. Regras jurídicas de dados e eventuais obrigações de retenção ficam para a etapa 8.
 - O paciente segue titular do próprio histórico, independentemente da relação profissional. Histórico compartilhado não confere permissão de edição ao nutricionista.
-- **Encerramento pelo paciente confirmado no MVP:** disponível na área **Meu nutricionista**, sem aprovação do nutricionista ou contato com suporte; requer confirmação simples. A vigência da dieta profissional após o encerramento continua pendente de decisão específica.
+- **Encerramento pelo paciente confirmado no MVP:** disponível na área **Meu nutricionista**, sem aprovação do nutricionista ou contato com suporte; requer confirmação simples. **Ao encerrar o vínculo, termina também a vigência da prescrição profissional atual e são cancelados agendamentos futuros do profissional anterior**, sem perder os planos publicados no histórico.
 
 ## 7. Encerramento de acompanhamento pelo paciente (**confirmado no MVP**)
 
@@ -88,10 +88,20 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 - **Efeito imediato após a confirmação no servidor:** encerrar o vínculo e a autorização para consulta de dados **atuais e históricos**, inclusive por sessões previamente abertas ou chamadas diretas à API. O servidor/banco valida vínculo e permissão em **cada operação**, independentemente de haver páginas abertas ou dados em cache na interface; não basta remover o paciente da lista visível.
 - O paciente mantém sua conta, seu histórico e seus recursos pessoais. A revogação **não exclui** registros alimentares, pesagens nem versões históricas de dietas. Eventuais responsabilidades legais de guarda de documentos profissionais serão analisadas na etapa 8, sem manter acesso ao painel de acompanhamento do ex-profissional por isso.
 - Após o encerramento, o paciente pode aceitar novo convite seguindo as regras existentes; o histórico pessoal não é automaticamente transferido para um profissional sem autorização própria. O sistema deve preservar quem era o nutricionista anterior e quando o vínculo se encerrou, com retenção proporcional.
-- **Ainda sem decisão:** se uma dieta profissional vigente ou programada deve continuar em vigência, deixar de ser atual ou ficar somente no histórico após o encerramento. A decisão de revogar acesso **não** define automaticamente o estado da prescrição. O eventual envio de um aviso por e-mail sobre encerramento do vínculo não foi definido.
+- **Planos profissionais após o encerramento (confirmado no MVP):** a dieta profissional que estava vigente deixa de ser apresentada como prescrição vigente e fica para consulta no histórico, com autor e período de vigência original preservados. Qualquer versão profissional publicada com ativação futura **não será ativada**, pois seu agendamento será cancelado por encerramento de vínculo; conteúdo e histórico do agendamento permanecem consultáveis. O eventual e-mail de aviso de encerramento ao nutricionista ainda não foi definido. Metas profissionais efetivas após encerramento são questão separada ainda pendente de definição.
 - **Técnica para etapa 9:** encerramento idempotente e atômico, prevenção de acesso residual no backend, coerência com convites pendentes e testes de autorização concorrente. O fluxo do MVP deve permanecer simples para o paciente.
 
-## 8. Critérios de aceitação inicial
+## 8. Dietas profissionais após o término do vínculo (**confirmado no MVP**)
+
+- No momento do encerramento do vínculo profissional, **a prescrição vigente deixa de ser vigente**. A versão publicada, suas refeições e quantidades permanecem imutáveis e disponíveis **somente para consulta no histórico do paciente**, identificadas pelo nutricionista autor e pelas datas reais de vigência.
+- **Versões profissionais futuras programadas** pelo nutricionista anterior têm sua ativação cancelada automaticamente em decorrência da revogação do vínculo; registrar o motivo e o momento do cancelamento no histórico. **Não apagar o conteúdo publicado nem agendamentos anteriores**, nem permitir que processos em segundo plano ativem uma versão após o encerramento.
+- Trata-se de **uma consequência do encerramento pelo próprio paciente**, e não da regra de cancelamento manual de agendamento por profissional. Por isso, é uma exceção explícita à regra da etapa 3 que proíbe o cancelamento automático de uma versão futura quando um nutricionista publica outra.
+- Não converter automaticamente a prescrição profissional anterior em plano pessoal do paciente e **não atribuí-la a um novo nutricionista**. O paciente segue podendo consultar o histórico; planos pessoais existentes e registros de consumo independentes não são modificados.
+- A confirmação de **Encerrar acompanhamento** deve explicar de forma breve que o plano profissional atual deixará de ser vigente e que a versão ficará disponível no histórico. Evitar múltiplas confirmações.
+- Na etapa 9, especificar transição atômica e idempotente entre vínculo, autorização, fim de vigência e cancelamento da versão futura; resolver concorrência com processadores de ativação agendada. Nunca exibir uma versão como ativa após o fim do vínculo.
+- **Pendente para decisão distinta:** impacto sobre metas nutricionais originalmente prescritas pelo profissional, que podem continuar referenciadas pelo acompanhamento pessoal; não presumir que a regra da dieta as elimina ou altera.
+
+## 9. Critérios de aceitação inicial
 
 | Cenário | Comportamento esperado |
 | --- | --- |
@@ -139,13 +149,19 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 | Paciente acessa o próprio diário após encerrar o acompanhamento | Conta e histórico continuam disponíveis, sem exigir assinatura profissional |
 | Paciente confirma encerramento duas vezes | Operação não causa novos efeitos ou exclusão de registros; fluxo idempotente |
 | Ex-nutricionista tenta consultar registros criados antes do vínculo | Acesso de acompanhamento negado, tal como para registros recentes |
+| Paciente encerra vínculo com dieta profissional vigente | Versão deixa de ser vigente e aparece para consulta no histórico, com autoria, conteúdo e período preservados |
+| Paciente encerra vínculo com próxima dieta profissional programada | Agendamento futuro é cancelado com motivo de encerramento; versão publicada permanece no histórico |
+| Paciente encerra vínculo tendo plano pessoal próprio | Plano pessoal e diário alimentar continuam inalterados |
+| Agendador tenta ativar dieta do profissional depois do encerramento | Ativação negada, sem restabelecer vínculo ou prescrição |
+| Agendamento e encerramento ocorrem ao mesmo tempo | Registros convergem para ausência de prescrição profissional vigente, mantendo trilha cronológica |
+| Paciente consulta dieta do nutricionista anterior após término | Pode ler a versão histórica, sem reativá-la nem editá-la como prescrição profissional |
 
-## 9. Decisões ainda em aberto na etapa 6
+## 10. Decisões ainda em aberto na etapa 6
 
 - **Entrega e retorno dos convites:** convite por e-mail, identificação do destinatário, validade de **7 dias**, reenvio invalidando o anterior e retorno no painel e por e-mail já confirmados. **Escopo de cinco categorias e aceite em tela única com resumo claro também confirmados**, sem múltiplos controles individuais no MVP. Pendem tratamento técnico de falha/repetição de envios e limites contra abuso. Não expor se determinada pessoa possui conta a usuários não autorizados.
 - **Troca:** quem pode iniciar, quando o vínculo anterior termina e como evitar janela com dois profissionais simultâneos.
-- **Planos profissionais antigos:** se uma dieta profissional vigente do nutricionista anterior deve encerrar automaticamente ou continuar apenas para consulta após a troca. Não alterar essa regra por suposição.
-- **Revogação e encerramento confirmados:** o histórico pessoal anterior ao vínculo será acessível ao profissional autorizado; o paciente poderá encerrar o acompanhamento em **Meu nutricionista**, com confirmação simples e revogação imediata de acesso profissional. **Pendente:** estado da dieta profissional vigente/programada depois do encerramento e eventual notificação de encerramento ao profissional. A autorização não inclui bibliotecas privadas anteriores.
+- **Planos profissionais antigos — decidido:** ao encerrar vínculo, a dieta profissional vigente vai para consulta no histórico e eventuais versões futuras programadas são canceladas, preservando conteúdo e autoria. Pendente detalhar o fluxo de **troca direta de profissional** e o comportamento das metas profissionais efetivas depois da desvinculação.
+- **Revogação e encerramento confirmados:** o histórico pessoal anterior ao vínculo será acessível ao profissional autorizado; o paciente poderá encerrar o acompanhamento em **Meu nutricionista**, com confirmação simples, revogação imediata do acesso, encerramento da dieta profissional vigente e cancelamento das versões futuras. **Pendente:** eventual notificação de encerramento ao profissional. A autorização não inclui bibliotecas privadas anteriores.
 - **Registro do nutricionista:** verificação do CRN e restrições de acesso antes da validação.
 - **Dados profissionais após encerramento:** guarda obrigatória, eliminação, portabilidade e outros requisitos da LGPD na etapa 8.
 
