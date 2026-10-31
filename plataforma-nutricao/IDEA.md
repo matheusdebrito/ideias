@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.66  
+> **Versão:** 0.67  
 > **Última atualização:** 31/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -365,9 +365,9 @@ O modelo de múltiplos nutricionistas simultâneos está **descartado no MVP**. 
 - **Plano profissional único no MVP (confirmado):** o nutricionista terá **uma única opção de assinatura mensal** reunindo todos os recursos profissionais previstos: convites/vínculos, painel e indicadores de usuários autorizados, criação/atribuição de dietas e metas profissionais, histórico e biblioteca profissional. **Preço e existência/quantidade de limite de pacientes ainda serão decididos**, sem concluir que o plano será ilimitado.
 - **Sem cobrança da plataforma ao paciente para ser acompanhado:** o paciente não precisa pagar assinatura para aceitar convite, visualizar dieta profissional atribuída nem registrar sua alimentação durante o acompanhamento.
 - **Papéis e controles continuam independentes da cobrança:** pagamento não substitui aprovação do CRN, vínculo ativo, autorização do paciente ou verificação de permissões no servidor. Os recursos pessoais continuam disponíveis ao nutricionista em sua própria conta mesmo sem plano profissional habilitado.
-- **Não atribuir consequências por suposição:** interrupção de assinatura profissional não autoriza apagar o histórico do paciente, revogar silenciosamente consentimentos, modificar dietas publicadas ou encerrar automaticamente vínculos; o comportamento exato das ações profissionais em inadimplência/cancelamento será aprovado separadamente.
+- **Cancelamento voluntário da assinatura aprovado:** ao cancelar, o nutricionista **interrompe a renovação automática, mas conserva o acesso profissional até a data/hora final do período já pago**, desde que também permaneçam válidos CRN e as autorizações exigidas. Depois desse prazo, o uso das funções profissionais pagas será restringido, preservando os recursos pessoais da própria conta. A interface informa o prazo restante e não confunde cancelamento programado com fim efetivo de acesso. **Não encerrar automaticamente vínculos, excluir dados ou dietas publicados, alterar metas ou apresentar a assinatura como vínculo com paciente.** O tratamento exato de permissões de consulta e agendamentos profissionais após o vencimento ainda será decidido; falha/inadimplência é evento comercial distinto, com regra própria.
 
-**Estrutura comercial já aprovada:** somente **um plano profissional mensal** no lançamento, incluindo as funcionalidades profissionais do MVP. **Decisões adiadas pelo produto:** preço e **se haverá ou não limite de pacientes** (e eventual quantidade); não inferir oferta ilimitada. **Ainda a decidir na etapa 7:** período de teste, cobrança/renovação, inadimplência, cancelamento e continuidade operacional de acompanhamentos existentes.
+**Estrutura comercial já aprovada:** somente **um plano profissional mensal** no lançamento. **Cancelamento voluntário aprovado:** renovação é desativada, acesso profissional mantido até o fim do período pago e restringido depois, sem encerrar vínculos automaticamente nem apagar dados. **Decisões adiadas:** preço e **se haverá ou não limite de pacientes** (e eventual quantidade), sem inferir oferta ilimitada. **Ainda a decidir na etapa 7:** funcionalidades disponíveis após expiração, programação de dietas futuras, período de teste, cobrança/renovação e inadimplência.
 
 **Especificação comercial em desenvolvimento:** [MONETIZACAO.md](./MONETIZACAO.md).
 
