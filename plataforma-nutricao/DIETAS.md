@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 1.2
+> **Versão:** 1.3
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -137,6 +137,9 @@ O nutricionista poderá:
 ## 5. Dietas e versionamento (**Definido**)
 
 - O plano pessoal pertence ao usuário; o profissional é criado pelo nutricionista e atribuído a um paciente.
+- **Planos pessoais também são versionados no MVP:** ao salvar alterações em um plano pessoal já salvo, criar uma nova versão e preservar a anterior para consulta histórica.
+- O fluxo pessoal é mais simples que o profissional: não exige agendamento de início, cancelamento ou reagendamento de vigência. A nova versão pessoal passa a ser a versão atual ao ser salva.
+- Permitir editar um rascunho sem criar uma versão publicada a cada alteração de campo; a nova versão é criada no momento de salvar/publicar a atualização.
 - **Regra do MVP:** cada paciente pode ter no máximo uma dieta profissional vigente por vez. O sistema deve impedir a publicação de uma segunda dieta profissional ativa para o mesmo paciente.
 - **Regra do MVP:** cada paciente pode ter no máximo uma versão profissional futura no estado `SCHEDULED` por vez. O backend e a persistência devem impedir um segundo agendamento enquanto houver um existente não cancelado ou ativado.
 - A primeira dieta profissional atribuída ao paciente também pode ser publicada com vigência imediata ou programada; não é obrigatório existir uma versão anterior.
@@ -169,7 +172,8 @@ O nutricionista poderá:
 - A versão futura não permite que o paciente edite a prescrição; dúvidas ou pedidos de alteração devem ser tratados com o nutricionista.
 - O histórico precisa registrar autor, momento da publicação, modalidade de vigência, data/hora efetiva e fuso usado.
 - O histórico de agendamento deve registrar cancelamentos e reagendamentos, incluindo autor, instante da ação, horário anterior e novo horário, além de motivo opcional.
-- Atualização de versão publicada cria nova versão do plano, preservando as anteriores.
+- Atualização de versão profissional publicada cria nova versão do plano, preservando as anteriores.
+- Atualização de plano pessoal salvo também cria uma nova versão, preservando a anterior; não é necessário agendamento de vigência para planos pessoais.
 - A publicação imediata encerra a vigência da versão anterior no momento da publicação; a publicação programada mantém a versão anterior vigente até a data/hora futura definida.
 - A transição programada encerra a vigência anterior e ativa a nova versão de forma atômica; não pode haver sobreposição de duas versões vigentes do mesmo plano.
 - Para cada paciente, não pode haver dois planos profissionais vigentes ao mesmo tempo.
@@ -274,6 +278,7 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Chega a data/hora de uma versão programada | A transição ocorre automaticamente, sem login ou ação manual; a versão anterior é encerrada |
 | Nutricionista tenta programar uma vigência que se sobrepõe a outra | Backend impede a publicação e informa o conflito |
 | Nutricionista atualiza dieta de um paciente | Uma nova versão entra em vigor imediatamente ou na data programada; anterior fica no histórico |
+| Usuário atualiza seu plano pessoal salvo | Nova versão pessoal é criada ao salvar; versão anterior continua disponível no histórico |
 | Nutricionista tenta publicar uma segunda dieta profissional vigente para o mesmo paciente | Operação é bloqueada ou direcionada para atualizar o plano vigente; nunca ficam dois planos profissionais ativos |
 | Paciente registra alimentação diferente do prescrito | O diário registra o ocorrido; plano publicado não muda |
 | Nutricionista tenta obter biblioteca de outro nutricionista | Servidor nega acesso |
@@ -282,7 +287,6 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 ## 10. Decisões em aberto — não presumir definição
 
 - Modelos pessoais e profissionais poderão ter categorias, favoritos ou tags desde o MVP?
-- Planos pessoais terão o mesmo detalhamento de histórico/versionamento dos profissionais?
 - Refeição registrada a partir de um modelo deverá armazenar um identificador de origem opcional (para análises) sem se tornar dependente do modelo?
 - Quais ações de correção de histórico permitirão auditoria apropriada?
 
