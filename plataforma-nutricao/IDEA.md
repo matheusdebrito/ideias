@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.47  
+> **Versão:** 0.48  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -236,7 +236,11 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - **Cobertura nutricional explícita:** para cada micronutriente, distinguir (a) valor conhecido, inclusive **zero informado**, (b) valor **desconhecido** em um ou mais itens e (c) ausência de qualquer dado conhecido no período. Se algum item consumido não tiver informação do micronutriente, qualquer soma dos valores conhecidos deve ser rotulada **total parcial / dados incompletos**, não total exato; se todos os itens estiverem sem dados, apresentar **sem dados para este nutriente**, não zero.
 - O total de micronutrientes deve considerar as quantidades registradas e as unidades de cada fonte (mg/µg, conforme aplicável), sem somar unidades incompatíveis nem arredondar durante o cálculo. A precisão mostrada deve respeitar a qualidade dos dados originais; corrigir/adicionar/excluir refeições recalcula os totais parciais e seus indicadores de cobertura.
 - **Sem diagnóstico automático:** a existência de uma soma parcial não permite concluir que houve ingestão adequada ou deficiência; dias sem refeições cadastradas não são dias com consumo zero. Os critérios de referência nutricional individual para vitaminas/minerais e o detalhamento visual da cobertura ficam para decisão posterior, sem introduzir recomendações clínicas presumidas.
-- **Ainda em aberto:** apresentação dos valores em diferentes unidades, visualização detalhada da cobertura dos micronutrientes e eventual comparação com referências nutricionais; a classificação de kcal/macros **na meta** já foi definida como igualdade estrita, sem tolerância.
+- **Organização do painel nutricional (confirmada para o MVP):** manter calorias, proteínas, carboidratos e gorduras em destaque na visão principal do diário e dos resumos. Disponibilizar vitaminas, minerais e outros micronutrientes informados na fonte em seção secundária **Detalhes nutricionais**, expansível/consultável sem sobrecarregar o painel principal.
+- **Explicação de dados incompletos:** ao consultar um micronutriente identificado como **total parcial / dados incompletos**, permitir abrir seus detalhes e ver **quais alimentos efetivamente registrados não têm valor informado para aquele nutriente**, com identificação clara do item/refeição de origem. Não sugerir que o alimento contém 0 do nutriente nem inventar valor; distinguir zero explicitamente informado de ausência.
+- Exibir quantidade conhecida com unidade apropriada e a indicação de cobertura; quando todos os itens estiverem sem dados, mostrar **sem dados disponíveis**, permitindo consultar quais registros não têm informação. A navegação deve funcionar em dispositivo móvel e ser acessível, sem depender exclusivamente de cores.
+- Os detalhes se referem aos alimentos do diário do titular, sem revelar dados de terceiros. As consultas por período respeitam os registros e as datas locais de consumo; editar, excluir ou cadastrar refeições recalcula informações e lista de lacunas.
+- **Ainda em aberto:** eventual comparação com valores de referência de vitaminas/minerais e detalhes de precisão/unidades para apresentações específicas; não inferir recomendações nutricionais personalizadas sem validação. Para calorias/macros, **na meta** continua sendo igualdade estrita, sem tolerância.
 
 **Adultos:** a aplicação poderá estimar uma meta energética por método validado e permitir ajustes manuais. O cálculo requer dados suficientes, explicação dos limites e revisão de profissionais antes do lançamento.
 
@@ -386,7 +390,7 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 1. Quais medidas proporcionais de aferição de idade se aplicam ao aplicativo 18+, conforme análise jurídica antes do lançamento?
 2. Como lidar com uma conta identificada como pertencente a menor sem reter ou expor indevidamente dados?
 3. Como validar o registro profissional de nutricionista?
-4. Como apresentar de forma simples a cobertura por micronutriente nos relatórios e quando (se for adequado) comparar vitaminas/minerais a referências nutricionais individualizadas? A regra de dados ausentes versus zero e de total parcial já foi definida.
+4. Os micronutrientes do MVP terão apenas quantidades conhecidas e seus detalhes de cobertura ou também comparação com valores de referência, que exigiria regras adicionais para interpretação? A seção Detalhes nutricionais e a lista de alimentos com dados ausentes já foram definidas.
 5. Quais recursos compõem o plano profissional pago? Haverá limites de pacientes?
 6. Quais dados ficam disponíveis depois do encerramento do vínculo profissional?
 7. Qual será o fluxo de exportação, portabilidade, retenção e exclusão dos dados?
