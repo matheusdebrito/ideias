@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.35  
+> **Versão:** 0.36  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -146,6 +146,10 @@ Detalhamento funcional e questões da etapa 4 em [ALIMENTOS.md](./ALIMENTOS.md).
 ### 3.3. Diário alimentar
 
 - Registro de refeições com data e horário e organização por café da manhã, almoço, jantar, lanches etc.
+- **Lançamento retroativo (confirmado no MVP):** permitir adicionar hoje uma refeição consumida em um dia anterior, escolhendo a data e o horário efetivos de consumo. O formulário sugere a data/hora atuais para evitar trabalho adicional, mas permite substituí-las antes de confirmar.
+- O lançamento deve compor os totais nutricionais, indicadores e consultas **do dia do consumo informado**, e não do dia em que o usuário digitou ou salvou a informação. Registrar separadamente data/hora declarada de consumo e instante de criação para rastreabilidade.
+- Para lançamentos retroativos, comparar o consumo à meta que estava efetivamente vigente **na data de consumo**, sem aplicar retroativamente a meta atual nem alterar prescrições e históricos anteriores. Recalcular agregados das datas atingidas quando o registro for criado, corrigido ou excluído.
+- **Pendente:** definição da referência de fuso horário para classificar dias próximos da meia-noite e regras técnicas para mudança de fuso; tratar na sequência da etapa 5/arquitetura.
 - Inclusão de alimentos, quantidades e unidades realmente consumidas.
 - Cálculo de calorias, proteínas, carboidratos, gorduras e outros nutrientes disponíveis.
 - Totalização por refeição e dia; consulta, correção explícita e histórico.
