@@ -3,7 +3,7 @@
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
 > **Etapa:** 4 de 10 — Base de alimentos e cálculos nutricionais (em andamento)
-> **Versão:** 0.8
+> **Versão:** 0.9
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Decisões confirmadas** são distintas de **propostas a validar**.
@@ -36,6 +36,11 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 - **Apresentação:** energia (kcal) normalmente sem casas decimais ou com uma casa, dependendo do contexto; proteínas, carboidratos e gorduras (g) com uma casa decimal; micronutrientes com casas adequadas à unidade (mg ou µg), magnitude e precisão da fonte.
 - Valores informados em rótulos ou tabelas têm precisão limitada; preservar valores/escala da fonte e não fabricar exatidão adicional. Divergência pequena entre a soma das linhas arredondadas visíveis e o total arredondado é admissível e não deve ser corrigida alterando os valores de origem.
 - O algoritmo de cálculo deve ser determinístico e uniforme entre catálogo, refeições, dietas e diário. **Recomendação técnica ainda sujeita à arquitetura:** aritmética decimal ou representação fixa para evitar erros de ponto flutuante em cálculos repetidos; definir explicitamente o modo de arredondamento usado na apresentação.
+- **Regra de consumo do MVP:** em dietas e diário, orientar pesagem e quantidade na **forma pronta para ser consumida**. Para alimentos preparados, apresentar por padrão as entradas nutricionais da forma efetivamente consumida, como arroz cozido, feijão cozido, frango grelhado/assado e massa cozida.
+- A regra não proíbe alimentos ingeridos crus: fruta, salada, castanhas e similares devem continuar disponíveis com sua composição correspondente.
+- Diferentes formas de preparo podem ter nutrientes por 100 g distintos; preservar a forma de preparo quando houver diferença nutricional relevante. A presença da versão crua de um alimento que normalmente é cozido na fonte não a torna a opção padrão no plano ou diário.
+- Nunca calcular a porção de alimento pronto usando valores nutricionais por 100 g da versão crua, nem assumir transformação entre pesos crus e cozidos com equivalência universal. Preparação que incorpora óleo ou outros ingredientes precisa de composição adequada para aquele preparo; cálculo a partir de ingredientes e rendimentos é evolução futura a avaliar.
+- Alimentos crus da base podem permanecer como dados de origem, sem aparecer como opções principais de consumo para alimentos que exigem cocção. Não excluir alimentos que efetivamente são consumidos crus.
 - O alimento selecionado terá quantidade e unidade para o cálculo proporcional.
 - **Referências nutricionais aceitas no cadastro (definido para o MVP):** 100 g, 100 mL ou porção declarada, sempre com quantidade de referência positiva e unidade explícita. Para uma porção declarada, armazenar seu significado (por exemplo, porção de 30 g ou uma unidade), sem presumir que toda porção seja igual.
 - Os nutrientes de uma quantidade consumida são proporcionais aos nutrientes da quantidade de referência, após uma conversão autorizada. Exemplo: 120 kcal para uma porção de 30 g implicam 240 kcal para 60 g.
@@ -63,7 +68,7 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 
 ## 4. Decisões em aberto — não presumir definição
 
-1. Como sinalizar alimentos semelhantes, marcas, preparação (cru/cozido) e possíveis duplicidades?
+1. Como identificar e diferenciar alimentos semelhantes, marcas e duplicidades na busca, priorizando a forma pronta para consumo?
 2. **Decisão postergada para a etapa 9:** avaliar TBCA, TACO ou arquivo JSON próprio; confirmar origem, licença, cobertura, formato e estratégia de importação antes da implementação definitiva.
 3. Qual modo de arredondamento decimal e qual precisão interna serão usados pela implementação (a fechar na etapa de arquitetura)?
 4. Como tratar a permanência dos dados já publicados quando o criador apagar um alimento privado ou quando o vínculo profissional for encerrado?
@@ -73,6 +78,11 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 | Cenário | Resultado esperado |
 | --- | --- |
 | Usuário ou nutricionista não encontra alimento no catálogo | Pode cadastrar um alimento próprio |
+| Usuário pesquisa arroz para prescrição | Exibir arroz preparado/cozido como opção padrão; orientar pesagem após preparo |
+| Usuário pesquisa frango para consumo | Oferecer formas de preparo correspondentes aos valores nutricionais; não calcular frango grelhado como se fosse cru |
+| Usuário seleciona banana ou alface crua | Permitir normalmente, pois o alimento é consumido nessa forma |
+| Fonte nutricional disponibiliza arroz cru | Manter como referência quando necessário, mas não sugerir como porção principal do prato pronto |
+| Usuário informa 100 g de arroz cozido | Não utilizar os dados por 100 g de arroz cru nem inferir conversão sem referência específica |
 | Usuário cadastra produto conforme rótulo | Fonte aparece como declarada pelo usuário, não como TBCA |
 | Usuário tenta consultar via API alimento privado de outra pessoa | Backend nega acesso |
 | Nutricionista usa alimento privado em dieta publicada | Paciente vê os dados incorporados na dieta, mas não obtém acesso ao catálogo privado do nutricionista |
