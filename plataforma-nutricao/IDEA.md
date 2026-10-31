@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.64  
+> **Versão:** 0.65  
 > **Última atualização:** 31/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -18,6 +18,10 @@ A plataforma é uma ferramenta de organização e acompanhamento alimentar, não
 
 ## 2. Públicos e perfis
 
+**Terminologia do MVP — confirmado:** a plataforma tem **um único tipo de usuário para o uso pessoal**, com ou sem vínculo com nutricionista. **“Paciente” não é outra conta, outro perfil, outro papel obrigatório nem um plano distinto:** é apenas a denominação contextual usada **pelo nutricionista em sua área de gestão** (ex.: **Meus pacientes**) para identificar os usuários que ele acompanha ou acompanhou conforme permissões e histórico. Um convite aceito cria um **vínculo autorizado** entre usuário e nutricionista; não converte a conta em um cadastro especial de paciente.
+
+**Linguagem de interface:** para a pessoa que usa o próprio diário e os recursos pessoais, usar **usuário**, **minha conta**, **minha alimentação**, **meus dados** ou **Meu nutricionista**, não exibir “paciente” como uma categoria de conta ou identificação própria. O termo “paciente” permanece adequado na **visão do nutricionista sobre as pessoas que gerencia**, sem ampliar acesso às contas. O profissional pode também utilizar os recursos pessoais na mesma conta, com capacidades profissionais condicionadas a CRN, assinatura e autorização pertinentes.
+
 ### 2.1. Usuário que acompanha a própria alimentação
 
 Pessoa que deseja registrar refeições, consultar informações nutricionais, acompanhar peso, organizar seus próprios planos alimentares e observar o consumo em relação a metas estimadas ou definidas por ela.
@@ -32,9 +36,9 @@ Possíveis necessidades:
 - Montar e atualizar livremente planos alimentares pessoais, com alimentos, porções e refeições.
 - Consultar estimativas nutricionais e energéticas com explicação de suas limitações.
 
-### 2.2. Paciente acompanhado por nutricionista
+### 2.2. Usuário com vínculo de acompanhamento (mesma conta pessoal)
 
-Usuário que autoriza um nutricionista a acessar todos os dados disponíveis na plataforma durante um vínculo profissional ativo. O produto permitirá um único nutricionista ativo por paciente de cada vez; o acesso depende de autorização vigente e deve cessar quando o vínculo ou a autorização terminar.
+É **o mesmo usuário da seção 2.1**, que opcionalmente aceita um convite e autoriza um nutricionista a consultar **somente as categorias de dados aprovadas** durante um vínculo profissional ativo. Não existe cadastro adicional, tipo de conta “paciente” ou mudança de identidade para receber acompanhamento. O nutricionista poderá chamar essa pessoa de **paciente** em sua própria área de gestão. No MVP, cada usuário poderá ter no máximo um nutricionista ativo; o acesso exige autorização vigente e cessa com o fim do vínculo.
 
 Possíveis necessidades:
 - Vincular-se a um nutricionista por convite e aceite explícito.
@@ -353,9 +357,11 @@ O modelo de múltiplos nutricionistas simultâneos está **descartado no MVP**. 
 
 ### 3.7. Assinaturas e monetização
 
+**Terminologia comercial:** “usuário comum” e “paciente” não são dois grupos de contas. Todo usuário possui a experiência pessoal gratuita; ser acompanhado por nutricionista só estabelece um vínculo, não altera o tipo de conta nem cria cobrança pessoal.
+
 **Modelo comercial confirmado para o MVP — etapa 7:**
 
-- **Pessoal e pacientes gratuitos:** usuários adultos, acompanhados ou não, acessam sem cobrança as funcionalidades pessoais já planejadas: diário alimentar, registro de consumo, metas próprias, indicadores, gráficos, peso/IMC, histórico e planos pessoais. **A conta do paciente não depende da assinatura do nutricionista para consultar seus próprios dados.**
+- **Usuários gratuitos, com ou sem nutricionista:** toda conta pessoal adulta acessa sem cobrança diário alimentar, registro de consumo, metas próprias, indicadores, gráficos, peso/IMC, histórico e planos pessoais. A conta e o acesso aos próprios dados não dependem de acompanhamento ou assinatura do nutricionista.
 - **Assinatura mensal do nutricionista:** o profissional paga uma mensalidade pelo acesso aos recursos de gestão e acompanhamento: convites/vínculos, painel e indicadores dos pacientes autorizados, criação/atribuição de dietas e metas profissionais, histórico e biblioteca de uso profissional.
 - **Sem cobrança da plataforma ao paciente para ser acompanhado:** o paciente não precisa pagar assinatura para aceitar convite, visualizar dieta profissional atribuída nem registrar sua alimentação durante o acompanhamento.
 - **Papéis e controles continuam independentes da cobrança:** pagamento não substitui aprovação do CRN, vínculo ativo, autorização do paciente ou verificação de permissões no servidor. Os recursos pessoais continuam disponíveis ao nutricionista em sua própria conta mesmo sem plano profissional habilitado.
