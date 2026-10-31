@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (em andamento)
-> **Versão:** 1.3
+> **Versão:** 1.4
 > **Data:** 31/10/2026
 > **Fonte principal da visão:** [IDEA.md](./IDEA.md) e [DIETAS.md](./DIETAS.md)
 > **Convenção:** regras confirmadas estão separadas das decisões em aberto.
@@ -66,7 +66,11 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 - Para cada dia/nutriente com meta válida, representar a **meta efetivamente vigente naquele dia** como referência. Metas pessoais e profissionais respeitam as regras de vigência e autoria; mudanças de meta não transformam uma meta atual em meta histórica de dias anteriores. Sem meta válida, não desenhar referência numérica presumida.
 - Um dia sem refeição registrada deve aparecer como **sem dados**, não como ponto/barras de valor zero nem como uma linha interpolada de consumo real. Um dia com registros pode estar incompleto; identificar os valores como **consumo registrado**.
 - Garantir alternativa textual consultável por data, com valores de consumo e referência quando presente, além de navegação utilizável em telas pequenas. Gráficos devem atualizar automaticamente após criar, corrigir ou excluir consumo, inclusive lançamentos retroativos e mudança de data/fuso.
-- **Ainda não definido:** como apresentar saldos agregados/tolerância em períodos com dias faltantes, modelo exato de gráfico, convenção do início da semana e critérios de completude do diário. Não supor que o total ou a média registrada represente a alimentação inteira do usuário.
+- **Contadores de dias por relação à meta (confirmado para o MVP):** no resumo semanal/mensal, para o **nutriente selecionado no gráfico**, exibir quantos dias com consumo registrado e meta válida ficaram **abaixo**, **acima** ou **na meta**. O gráfico já mostra os valores diários e a referência correspondente, de modo que a contagem complementa a visualização sem exigir saldo acumulado do período.
+- Calcular separadamente para calorias, proteínas, carboidratos e gorduras; classificar usando o **consumo registrado e a meta histórica efetiva daquela data**, considerando eventuais trocas pessoais/profissionais de meta.
+- Dias **sem qualquer refeição registrada** permanecem **sem dados** e não contam como abaixo/na meta/acima. Dias com refeições, mas **sem meta válida para o nutriente**, permanecem **sem meta** e também não entram nas três contagens. Exibir, se necessário, essas quantidades para que a soma dos contadores seja interpretável.
+- Dias com registros **podem estar incompletos**: descrever os estados como comparação entre **consumo registrado** e meta, não como constatação de cumprimento clínico/adesão. Uma refeição parcial pode gerar uma classificação abaixo da meta sem representar consumo total do dia.
+- **Critério pendente:** definição de **na meta** (igualdade exata versus faixa de tolerância); não escolher margem unilateralmente. O modelo gráfico exato, o início da semana e eventual saldo agregado de período também permanecem em aberto. Não supor que o total ou a média registrada represente a alimentação inteira do usuário.
 - **Registro de peso (confirmado no MVP):** permitir que o usuário adulto registre seu peso **quando quiser**, com data da medição e valor em kg, sem exigir frequência ou metas obrigatórias. Exibir a evolução em **gráfico cronológico**, preservando todas as medições distintas.
 - **Correções (confirmado):** permitir editar a data ou o valor de uma medição já registrada; a correção atualiza a série temporal sem apagar ou sobrescrever outras medições. Política de exclusão, retenção e acesso ao histórico de correção pertence às etapas 8 e 9.
 - **IMC atual (confirmado):** calcular com o **peso mais recente registrado** e a **altura válida do perfil**, por `IMC = pesoKg / (alturaMetros * alturaMetros)`. Sem peso ou altura válidos, exibir **IMC indisponível**, sem inventar valores. O MVP atende exclusivamente adultos (18+).
@@ -89,7 +93,7 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 1. **Metas:** ajuste pessoal com confirmação, aviso discreto no painel profissional e aplicação automática de novas metas do nutricionista definidos. E-mail/push externos por ajuste de meta ficam fora do MVP; detalhes visuais do indicador vão para a etapa de implementação.
 2. **Períodos e fusos:** fuso por refeição, correção manual e agrupamento dos registros por data local já definidos. A contagem de dias e média dos períodos semanal/mensal foi confirmada; resta definir a convenção de início da semana. Horário de verão/conversões continuam para a etapa 9.
-3. **Indicadores:** painel diário, resumos semanais/mensais e gráficos de consumo diário por nutriente com referência histórica de metas já confirmados. Restam saldos agregados em períodos incompletos, detalhes de visualização, convenção semanal e critérios de cobertura de micronutrientes.
+3. **Indicadores:** painel diário, resumos semanais/mensais, gráficos e contagens de dias abaixo, acima ou na meta por nutriente já confirmados. Falta definir a margem para classificar **na meta**, saldos agregados (se houver), convenção semanal e cobertura de micronutrientes.
 4. **Medidas corporais:** registro livre de peso com data, correção de medições, gráfico histórico e IMC atual pelo peso mais recente/altura do perfil foram aprovados. Restam regras técnicas de altura histórica e retenção de medições (etapas 8 e 9).
 5. **Retenção e permissões da trilha de correções:** quais registros de auditoria podem persistir e quais atores poderão visualizá-los, respeitando privacidade e eliminação de dados? Resolver nas etapas 8 e 9.
 
@@ -165,7 +169,9 @@ Atualizar esses resultados após inclusão, exclusão ou correção de registros
 - **Dia sem registros não pode aparecer como consumo zero**: sinalizar ausência de dados e não interpolar valores fictícios. Um dia com consumo lançado não é presumido completo.
 - Atualizar a série ao editar/adicionar/excluir refeições ou alterar data/fuso, inclusive retroativamente. A visualização precisa oferecer alternativa textual acessível dos valores por data e se adaptar ao celular.
 
-**Pendências:** o tipo gráfico definitivo, saldos comparativos agregados e critérios para períodos incompletos continuam no planejamento.
+**Contagem por meta confirmada:** em cada visualização de calorias ou macronutriente, a interface contabilizará dias com consumo registrado e meta válida **abaixo**, **na meta** e **acima** da referência histórica daquele dia. Dias sem consumo registrado não serão classificados; dias com consumo mas sem meta ficam fora da contagem. A classificação refere-se somente aos **dados lançados**, não à alimentação inteira.
+
+**Pendências:** decidir se **na meta** exige igualdade exata ou admite tolerância; tipo gráfico definitivo, saldos comparativos agregados e critérios para períodos incompletos continuam no planejamento.
 
 ## 13. Casos de aceitação de referência
 
@@ -173,6 +179,11 @@ Atualizar esses resultados após inclusão, exclusão ou correção de registros
 | --- | --- |
 | Usuário sem dieta registra refeição avulsa | Consumo entra no diário normalmente |
 | Usuário abre o resumo semanal | Gráfico exibe o consumo diário de calorias, com opção para visualizar proteínas, carboidratos e gorduras |
+| Semana contém 5 dias com calorias registradas e meta válida, 1 dia sem dados e 1 dia com registro mas sem meta | Contagens acima/abaixo/na meta somam 5, com 1 dia sem dados e 1 sem meta identificados separadamente |
+| Dia com registro parcial tem consumo abaixo da meta | Pode entrar como abaixo no comparativo de dados registrados, sem afirmar consumo insuficiente nem adesão à prescrição |
+| Paciente altera a meta durante o mês | Contagem de cada dia considera o consumo registrado e a meta efetiva naquele dia |
+| Usuário alterna gráfico de calorias para proteínas | Recalcular as contagens para a meta de proteínas, não reutilizar as classificações calóricas |
+| Usuário consulta status na meta antes da margem ser definida | Exige decisão explícita do critério (igualdade ou tolerância), sem aplicar percentual arbitrário |
 | Há meta de proteína apenas em parte do mês | Gráfico de proteína mostra referência somente nos dias em que houve meta válida |
 | Nutricionista altera meta de 2.000 para 2.100 kcal no meio da semana | Referência do gráfico acompanha os valores históricos corretos por data; não reescreve dias anteriores |
 | Um dos sete dias da semana não tem nenhuma refeição registrada | Marcar o dia como sem dados, sem ponto de consumo zero ou interpolação |
@@ -242,4 +253,4 @@ Atualizar esses resultados após inclusão, exclusão ou correção de registros
 
 ---
 
-A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, metas pessoais opcionais de kcal e macros mesmo sem nutricionista, ajustes confirmados de metas profissionais, aviso no painel profissional, novas metas profissionais automáticas, indicadores diários, resumos semanais/mensais por dias com registros, gráficos de consumo diário por período com referência histórica de metas, acompanhamento histórico de peso e cálculo do IMC atual foram aprovados para o MVP.** Permanecem pendentes saldos agregados por período, detalhes visuais, horário de verão e altura histórica, retenção e acesso à trilha.
+A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, metas opcionais pessoais/profissionais, novos objetivos profissionais automáticos, indicadores diários, resumos e gráficos semanais/mensais com contagem de dias acima, abaixo ou na meta, acompanhamento de peso e IMC atual foram aprovados para o MVP.** Permanecem pendentes o critério exato de **na meta**, saldos agregados por período, detalhes visuais, horário de verão e altura histórica, retenção e acesso à trilha.
