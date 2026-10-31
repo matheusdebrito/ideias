@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.28  
+> **Versão:** 0.29  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -93,6 +93,9 @@ Requisitos importantes para a qualidade dos dados:
 - **Não excluir todos os alimentos crus:** frutas, saladas, castanhas e outros alimentos efetivamente consumidos crus continuam válidos e calculados no estado de consumo.
 - Para alimentos normalmente preparados, a variante crua não será a opção padrão para montagem da refeição. Se a fonte a contiver, ela poderá ser preservada como dado de referência, sem oferecê-la como alternativa principal de porção pronta; uso de ingredientes crus para cálculo de receitas fica fora do fluxo padrão do MVP e é possibilidade futura.
 - **Não usar valores de alimento cru para calcular o peso do prato pronto.** A absorção/perda de água, óleo e outras mudanças no preparo precisam estar refletidas na entrada nutricional correspondente. Não converter automaticamente peso cru em peso cozido com fator genérico.
+- **Marca (confirmado no MVP):** alimentos comuns e genéricos, como arroz branco cozido ou banana, podem existir sem marca. Produtos industrializados podem ter marca identificada e exibida junto ao nome, especialmente quando ela diferencia a composição nutricional (por exemplo, diferentes iogurtes, pães ou suplementos).
+- A busca deve privilegiar descrições simples para alimentos comuns e diferenciar produtos industrializados por **nome, marca, apresentação/variante relevante e composição nutricional** quando disponíveis. Não misturar produtos de marcas diferentes como se tivessem os mesmos nutrientes; marca ausente não deve impedir o uso de alimento genérico.
+- A presença da marca é informação descritiva do alimento, não um campo universalmente obrigatório. A estratégia detalhada de identificação de possíveis duplicatas continua em aberto.
 - Registrar a fonte, a versão e a data de referência dos dados.
 - Não misturar valores de fontes diferentes sem identificar sua procedência.
 - Permitir conversão de quantidades e medidas caseiras com regras explícitas.
