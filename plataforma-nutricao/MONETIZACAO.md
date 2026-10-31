@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 7 de 10 — Monetização e assinaturas (em andamento)
-> **Versão:** 0.8
+> **Versão:** 0.9
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [ROADMAP.md](./ROADMAP.md), [PACIENTES.md](./PACIENTES.md), [DIARIO.md](./DIARIO.md), [DIETAS.md](./DIETAS.md)
 
@@ -21,6 +21,14 @@ Definir como a plataforma de nutrição se sustenta financeiramente **sem cobrar
 5. **Dados do paciente não dependem da cobrança do nutricionista.** Diário, metas, histórico, medições e versões de dietas publicadas para o paciente não podem ser apagados, sequestrados ou indisponibilizados ao titular devido a cancelamento ou falha de pagamento do profissional.
 6. **Pagamento não equivale a consentimento nem validação profissional.** A assinatura não dá acesso a dados de pacientes sem vínculo ativo e autorização, nem libera funções profissionais antes da aprovação do registro.
 7. **Sem monetização adicional presumida:** anúncios, cobranças por paciente, funcionalidades pessoais pagas e comissão sobre consultas não foram aprovados para este MVP.
+
+### 2.1. Contratação profissional somente depois de CRN aprovado (**confirmado no MVP**)
+
+- **Cadastro pessoal gratuito:** nutricionista cria conta e informa nome completo, número do CRN e conselho/região para validação, sem pagar pela verificação. Pode utilizar os recursos pessoais enquanto o registro estiver pendente.
+- **Bloqueio da contratação antecipada:** estados **Em validação** ou **Não aprovado** não permitem iniciar checkout, criar assinatura paga nem fazer a primeira cobrança. A contratação do único plano profissional mensal só pode ser oferecida após a **aprovação efetiva da titularidade e regularidade do CRN**, com feedback claro ao profissional.
+- **Aprovação não gera assinatura:** CRN aprovado é requisito de elegibilidade, não manifestação de vontade de contratar. **Não criar cobrança automática** nem liberar funcionalidades profissionais por mera validação do registro; exigir escolha explícita do nutricionista e confirmação das condições comerciais aplicáveis.
+- **Garantia no servidor:** tanto a página de contratação quanto a API de criação de cobrança/assinatura devem validar a situação do CRN. Informações fornecidas pelo navegador não substituem validação de titularidade e regularidade, inclusive sob requisições concorrentes.
+- **Permissões independentes:** após contratar, o acesso profissional depende também de assinatura válida, CRN ainda regular e autorizações específicas dos usuários vinculados. A situação de CRN que perca regularidade **após** contratação terá a consequência comercial (renovação, suspensão, eventual reembolso) definida separadamente, sem inferência.
 
 ## 3. Experiência de uso aprovada
 
@@ -91,7 +99,11 @@ Regras técnicas de cobrança, idempotência, webhooks, segurança e integraçã
 | Nutricionista compara ofertas de assinatura no MVP | Plataforma oferece somente um plano profissional, sem níveis comerciais múltiplos |
 | Limite de pacientes ainda não foi decidido | Produto não presume número máximo nem promete pacientes ilimitados |
 | Preço ainda não foi definido | Documentação e produto não inventam valor de assinatura nem condições de cobrança |
-| Nutricionista paga assinatura mas CRN ainda não foi validado | Pagamento não dispensa validação profissional nem concede acesso a dados de pacientes |
+| Nutricionista com CRN em validação ou não aprovado tenta contratar | Checkout e primeira cobrança ficam bloqueados; ferramentas pessoais seguem gratuitas |
+| Nutricionista com CRN em validação tenta criar assinatura via API | Servidor rejeita, sem gerar cobrança ou assinatura |
+| CRN do nutricionista é aprovado | Habilita possibilidade de contratação explícita, sem cobrança ou assinatura automática |
+| Nutricionista contrata após aprovação do CRN | Primeiro pagamento pode ser iniciado; ferramentas profissionais dependem também de assinatura válida e autorizações |
+| CRN torna-se irregular após contratação | Recursos profissionais exigem CRN regular; consequências comerciais para mensalidades já pagas/renovação serão decididas separadamente |
 | Nutricionista tem assinatura mas não possui vínculo autorizado com um paciente | API bloqueia acesso aos dados desse paciente |
 | Nutricionista cancela voluntariamente a assinatura durante período pago | Renovação automática é interrompida, mas funcionalidades profissionais seguem disponíveis até o fim do período já pago |
 | Nutricionista consulta vencimento após cancelar | Interface informa data/hora de término do acesso pago, distinguindo cancelamento agendado de período encerrado |
@@ -118,7 +130,7 @@ Regras técnicas de cobrança, idempotência, webhooks, segurança e integraçã
 | Dieta agendada antes de suspensão por falta de pagamento | Continua elegível à ativação automática se vínculo e autorização estiverem válidos, conforme seção 6 |
 | Paciente encerra vínculo com nutricionista | Mantém conta e dados independentemente do estado comercial do profissional |
 
-**Próxima decisão:** decidir se haverá **período de teste gratuito para nutricionistas antes da primeira assinatura paga**, e, em caso afirmativo, quais condições serão simples e proporcionais. **Preço e existência/quantidade de limite de pacientes continuam expressamente adiados.**
+**Próxima decisão:** tratamento comercial de um nutricionista cuja regularidade do CRN seja perdida **depois de já possuir assinatura**, sem supor cancelamento automático nem reembolso. **Teste gratuito, preço e existência/quantidade de limite de pacientes continuam expressamente adiados para revisão nas etapas 9/10.**
 
 **Pendência obrigatória:** na etapa 9, estimar custos operacionais. Antes de concluir a etapa 10, retomar e decidir explicitamente teste gratuito e duração, preço mensal e existência/quantidade de limite de pacientes. Ver o ponto de controle em [ROADMAP.md](./ROADMAP.md). Nenhuma dessas escolhas está aprovada.
 
