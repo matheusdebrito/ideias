@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.42  
+> **Versão:** 0.43  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -220,7 +220,11 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - Quando houver meta válida para o nutriente em um dia, apresentá-la como **referência visual** nessa data, usando a meta efetivamente vigente naquele dia, e não a meta atual aplicada retroativamente. Se o valor ou a origem da meta mudar durante a semana ou mês, a referência também muda na data correspondente; sem meta naquele dia, não inventar referência zero.
 - **Dias sem refeições registradas aparecem como _sem dados_**, e não como ingestão zero, tanto no gráfico quanto no detalhe acessível. Não traçar uma evolução contínua de consumo através desses dias de modo que pareçam medições reais. Dias com registros mostram apenas os nutrientes efetivamente cadastrados, sem presumir diário completo.
 - Incluir data e valores de consumo e meta (quando disponível) em descrição/consulta textual acessível; o gráfico deve funcionar em telas pequenas. Alterações e exclusões no diário, inclusive retroativas, atualizam as datas afetadas.
-- **Ainda em aberto:** saldo agregado e interpretação de metas semanais/mensais com dias não registrados, forma visual exata do gráfico, convenção do início da semana e critérios de completude do diário; nenhum gráfico implica diagnóstico clínico.
+- **Contagem semanal/mensal de dias em relação à meta (confirmada):** no gráfico diário de cada nutriente (kcal, proteínas, carboidratos e gorduras), permitir identificar quais **dias com registros e meta válida** ficaram **abaixo**, **acima** ou **na meta**, e mostrar quantos dias pertencem a cada categoria dentro da semana/mês.
+- **Contagens por nutriente selecionado:** os totais das categorias devem ser calculados separadamente para calorias e para cada macronutriente, sempre usando a **meta efetiva histórica do respectivo dia**. Uma troca de meta no meio do período não altera a referência de dias anteriores.
+- **Sem dados não é abaixo da meta:** dias sem refeições não entram nessas contagens; dias com registros, mas **sem meta** para o nutriente selecionado, ficam identificados como **sem meta**, fora das três categorias. Informar claramente o número de dias comparáveis e que registros parciais podem classificar um dia como abaixo sem comprovar ingestão insuficiente.
+- Não converter as contagens em **saldo acumulado de nutrientes ou calorias** do período. A classificação exata de **na meta** (igualdade estrita ou margem de tolerância) fica para a próxima decisão; não introduzir uma tolerância arbitrária nem rotular dias como sucesso/fracasso clínico.
+- **Ainda em aberto:** definição da margem para **na meta**, saldos agregados semanais/mensais e convenção do início da semana; nenhum gráfico implica diagnóstico clínico.
 
 **Adultos:** a aplicação poderá estimar uma meta energética por método validado e permitir ajustes manuais. O cálculo requer dados suficientes, explicação dos limites e revisão de profissionais antes do lançamento.
 
