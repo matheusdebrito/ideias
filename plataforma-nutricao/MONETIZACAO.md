@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 7 de 10 — Monetização e assinaturas (em andamento)
-> **Versão:** 0.7
+> **Versão:** 0.8
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [ROADMAP.md](./ROADMAP.md), [PACIENTES.md](./PACIENTES.md), [DIARIO.md](./DIARIO.md), [DIETAS.md](./DIETAS.md)
 
@@ -71,7 +71,7 @@ Definir como a plataforma de nutrição se sustenta financeiramente **sem cobrar
 - **Estrutura da oferta — confirmada:** somente **um plano profissional mensal** no MVP, incluindo todas as ferramentas profissionais previstas; não criar níveis de assinatura diferentes no lançamento.
 - **Limite de pacientes — decisão adiada explicitamente:** avaliar mais adiante **se existirá limite** de usuários que um nutricionista poderá acompanhar, antes de determinar qualquer quantidade. **Plano único não equivale a pacientes ilimitados.** Outros limites e regras de uso justo também não foram decididos.
 - **Preço — decisão adiada explicitamente:** definir posteriormente valor da mensalidade e condições comerciais, considerando custos e validação de mercado. Não fixar preço, moeda, desconto ou promoção por suposição.
-- **Período de teste — ainda sem decisão:** avaliar separadamente se existirá experiência gratuita por prazo limitado.
+- **Período de teste — em aberto:** decidir após estimativa dos custos da etapa 9 se haverá teste gratuito e sua duração. Os prazos de 14 e 30 dias não foram aprovados.
 - **Pagamento:** provedor, renovação recorrente, confirmação, comprovantes e comunicação de falhas.
 - **Cancelamento e acesso após vencimento — decididos:** renovação para, acesso profissional continua até o fim do período pago. Depois, ficam conta pessoal, assinatura e lista administrativa mínima; acesso nutricional e ações profissionais ficam bloqueados, preservando vínculos e dados.
 - **Versões futuras já publicadas — decidido:** a ativação automática na data agendada continua possível depois do vencimento da assinatura, **somente se vínculo e autorização do usuário continuarem válidos**, sem permitir novas ações profissionais.
@@ -119,5 +119,7 @@ Regras técnicas de cobrança, idempotência, webhooks, segurança e integraçã
 | Paciente encerra vínculo com nutricionista | Mantém conta e dados independentemente do estado comercial do profissional |
 
 **Próxima decisão:** decidir se haverá **período de teste gratuito para nutricionistas antes da primeira assinatura paga**, e, em caso afirmativo, quais condições serão simples e proporcionais. **Preço e existência/quantidade de limite de pacientes continuam expressamente adiados.**
+
+**Pendência obrigatória:** na etapa 9, estimar custos operacionais. Antes de concluir a etapa 10, retomar e decidir explicitamente teste gratuito e duração, preço mensal e existência/quantidade de limite de pacientes. Ver o ponto de controle em [ROADMAP.md](./ROADMAP.md). Nenhuma dessas escolhas está aprovada.
 
 **Observação:** este arquivo registra requisitos aprovados; não representa implementação, testes ou cobrança em produção.
