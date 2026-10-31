@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.33  
+> **Versão:** 0.34  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -186,7 +186,10 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - Sem ajuste pessoal posterior, uma meta profissional vigente pode ser a referência padrão no acompanhamento; sem meta profissional vigente, usar a meta pessoal disponível. Comparações históricas respeitam a meta efetiva e a origem aplicáveis ao período, sem reescrever metas ou prescrição anteriores.
 - **Visibilidade ao nutricionista confirmada para o MVP:** enquanto houver vínculo profissional ativo **e autorização vigente**, o nutricionista poderá consultar no painel do paciente (a) a meta originalmente prescrita, (b) a meta de acompanhamento efetivamente ajustada pelo paciente e (c) a data/hora e origem do ajuste. A interface deve distinguir claramente prescrição profissional e escolha pessoal, sem tratar a última como prescrição editada.
 - O acesso a esses dados deve ser autorizado pelo servidor e cessar quando o vínculo ou a permissão terminar, ressalvadas obrigações legais de retenção a definir na etapa 8.
-- **Ainda a decidir:** se o nutricionista receberá alguma notificação ativa da mudança (a visibilidade no painel não implica notificação automática) e como uma nova meta profissional publicada interage com o ajuste pessoal vigente.
+- **Nova meta profissional, sem trabalho adicional para o paciente (definido para o MVP):** quando uma nova meta de calorias ou macronutrientes definida pelo nutricionista entrar em vigor, ela se torna **automaticamente** a referência efetiva dos indicadores, mesmo se o paciente tiver ajustado a meta anterior. Não pedir aceitação ou confirmação do paciente para essa atualização profissional.
+- Caso a vigência seja futura, manter a referência atual até o instante programado; alterar automaticamente quando chegar a data/hora definida, sem reescrever metas nem indicadores históricos.
+- Apresentar apenas uma informação discreta e não bloqueante de que a meta foi atualizada pelo nutricionista. O paciente poderá ajustá-la novamente por iniciativa própria, com o aviso e a confirmação definidos anteriormente, sem alterar a prescrição original. Cada mudança preserva origem, vigência e autoria.
+- **Ainda a decidir:** se o nutricionista receberá alguma notificação ativa quando o paciente ajustar uma meta (visualização no painel não implica notificação automática).
 - Resumos semanais e mensais. Definições de saldo, média e tolerância em aberto.
 
 **Adultos:** a aplicação poderá estimar uma meta energética por método validado e permitir ajustes manuais. O cálculo requer dados suficientes, explicação dos limites e revisão de profissionais antes do lançamento.
