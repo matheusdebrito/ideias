@@ -94,7 +94,7 @@ Regras técnicas de cobrança, idempotência, webhooks, segurança e integraçã
 | Cenário | Resultado esperado |
 | --- | --- |
 | Adulto sem gestor cria conta | Consegue usar diário, metas, gráficos, histórico e planos pessoais sem pagar |
-| Usuário gratuito recebe convite válido de gestor | Aceita na mesma conta e acompanha dieta/indicadores sem checkout nem mudança para “conta de usuário acompanhado” |
+| Usuário gratuito recebe convite válido de gestor | Aceita na mesma conta e consulta planos/indicadores autorizados, sem checkout nem criação de perfil separado |
 | Usuário encerra acompanhamento e depois recebe novo convite | Mantém a mesma conta gratuita, dados e recursos pessoais; apenas o vínculo gestor muda |
 | Gestor deseja usar ferramentas de gestão | Há um único plano mensal incluindo as ferramentas de gestão definidas, sujeito a assinatura e autorização dos usuários |
 | Gestor compara ofertas de assinatura no MVP | Plataforma oferece somente um plano gestor, sem níveis comerciais múltiplos |
