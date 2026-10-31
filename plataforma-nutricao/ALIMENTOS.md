@@ -3,23 +3,25 @@
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
 > **Etapa:** 4 de 10 — Base de alimentos e cálculos nutricionais (planejamento funcional concluído; fonte adiada para etapa 9)
-> **Versão:** 1.1
+> **Versão:** 1.2
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Decisões confirmadas** são distintas de **propostas a validar**.
 
 ## 1. Objetivo
 
+**Regra transversal atualizada:** qualquer usuário pode cadastrar alimentos privados; **qualquer gestor assinante**, mesmo sem CRN, pode incorporar alimentos autorizados em planos compartilhados com usuários vinculados. O selo **CRN verificado** é opcional e não altera acesso a alimentos ou bibliotecas. A aplicação organiza dados nutricionais e não valida condutas clínicas.
+
 Permitir selecionar alimentos de um catálogo nutricional rastreável e registrar alimentos não encontrados, mantendo unidades de porção, fonte dos dados e histórico coerentes.
 
 ## 2. Decisões confirmadas para o MVP
 
-- Usuários comuns e nutricionistas poderão criar **alimentos personalizados**.
+- Usuários comuns e gestores poderão criar **alimentos personalizados**.
 - Isso inclui alimentos industrializados e produtos cujos dados sejam informados com base na tabela nutricional do rótulo.
-- **Cada alimento personalizado é privado ao criador** (usuário comum ou nutricionista), sem publicação ou descoberta em um catálogo comunitário no MVP.
+- **Cada alimento personalizado é privado ao criador** (usuário comum ou gestor), sem publicação ou descoberta em um catálogo comunitário no MVP.
 - O criador pode utilizar o alimento em suas refeições, dietas e diário alimentar, conforme suas demais permissões de domínio.
-- Quando o nutricionista utiliza um alimento privado em uma dieta profissional publicada para um paciente, este vê **os dados preservados na refeição planejada**, incluindo nome, porção, origem declarada e nutrientes disponíveis. Isso não compartilha o registro do alimento no catálogo nem permite acesso direto ao cadastro original.
-- Uma refeição copiada da dieta para o diário alimentar cria novos dados de consumo independentes; não transforma o alimento privado do profissional em alimento pessoal do paciente.
+- Quando o gestor utiliza um alimento privado em uma dieta compartilhada publicada para um usuário acompanhado, este vê **os dados preservados na refeição planejada**, incluindo nome, porção, origem declarada e nutrientes disponíveis. Isso não compartilha o registro do alimento no catálogo nem permite acesso direto ao cadastro original.
+- Uma refeição copiada da dieta para o diário alimentar cria novos dados de consumo independentes; não transforma o alimento privado do profissional em alimento pessoal do usuário acompanhado.
 - Um usuário não pode consultar, alterar, listar ou excluir alimentos privados de outro usuário pelo ID ou pela API. A autorização precisa ser garantida no servidor.
 - Distinguir alimento de catálogo (com sua referência e versão de origem) de alimento personalizado com dados declarados pelo usuário. O fato de ser cadastrado não implica validação por entidade oficial.
 - **No cadastro manual de alimento personalizado são obrigatórios:** nome, quantidade de referência (positiva), unidade de referência, energia (kcal), proteínas (g), carboidratos (g) e gorduras totais (g). É preciso informar explicitamente os quatro nutrientes essenciais; valor zero é permitido quando informado e coerente, mas ausência não é zero.
@@ -83,7 +85,7 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 
 | Cenário | Resultado esperado |
 | --- | --- |
-| Usuário ou nutricionista não encontra alimento no catálogo | Pode cadastrar um alimento próprio |
+| Usuário ou gestor não encontra alimento no catálogo | Pode cadastrar um alimento próprio |
 | Usuário pesquisa arroz branco cozido | Encontra alimento genérico sem marca obrigatória |
 | Usuário pesquisa iogurte industrializado | Resultados podem distinguir marca e variante/apresentação quando cadastradas |
 | Dois iogurtes possuem nomes semelhantes e marcas diferentes | Mantêm registros e composições nutricionais independentes; não são agrupados automaticamente |
@@ -92,15 +94,15 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 | Usuário confirma cadastro mesmo após alerta de possível duplicidade | O novo alimento é salvo sem alterar, apagar ou mesclar o registro anterior |
 | Dois usuários diferentes cadastram alimentos com nomes semelhantes | Nenhum vê alimentos privados do outro durante a verificação |
 | Alimentos têm nomes parecidos, mas marcas ou preparos diferentes | A sugestão não é tratada como prova de equivalência nutricional; cadastro distinto continua permitido |
-| Usuário pesquisa arroz para prescrição | Exibir arroz preparado/cozido como opção padrão; orientar pesagem após preparo |
+| Usuário pesquisa arroz para plano publicado | Exibir arroz preparado/cozido como opção padrão; orientar pesagem após preparo |
 | Usuário pesquisa frango para consumo | Oferecer formas de preparo correspondentes aos valores nutricionais; não calcular frango grelhado como se fosse cru |
 | Usuário seleciona banana ou alface crua | Permitir normalmente, pois o alimento é consumido nessa forma |
 | Fonte nutricional disponibiliza arroz cru | Manter como referência quando necessário, mas não sugerir como porção principal do prato pronto |
 | Usuário informa 100 g de arroz cozido | Não utilizar os dados por 100 g de arroz cru nem inferir conversão sem referência específica |
 | Usuário cadastra produto conforme rótulo | Fonte aparece como declarada pelo usuário, não como TBCA |
 | Usuário tenta consultar via API alimento privado de outra pessoa | Backend nega acesso |
-| Nutricionista usa alimento privado em dieta publicada | Paciente vê os dados incorporados na dieta, mas não obtém acesso ao catálogo privado do nutricionista |
-| Paciente registra no diário refeição de dieta com alimento privado do nutricionista | Diário recebe cópia independente sem dar acesso ao cadastro privado original |
+| Gestor usa alimento privado em dieta publicada | Usuário acompanhado vê os dados incorporados na dieta, mas não obtém acesso ao catálogo privado do gestor |
+| Usuário acompanhado registra no diário refeição de dieta com alimento privado do gestor | Diário recebe cópia independente sem dar acesso ao cadastro privado original |
 | Cadastro não informa determinado micronutriente | A ausência é preservada e não aparece como valor zero |
 | Usuário tenta salvar alimento personalizado sem kcal, proteínas, carboidratos ou gorduras totais | Sistema não salva e indica os campos essenciais faltantes |
 | Usuário informa valor zero em proteína, carboidrato ou gordura | Zero informado pode ser aceito; não confundir com campo vazio |
