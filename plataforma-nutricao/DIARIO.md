@@ -1,8 +1,8 @@
 # Diário alimentar, metas e indicadores — Especificação funcional
 
-> **Status:** planejamento funcional, não implementado
-> **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (em andamento)
-> **Versão:** 1.9
+> **Status:** planejamento funcional concluído para o MVP; software não implementado
+> **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (definições funcionais principais concluídas)
+> **Versão:** 2.0
 > **Data:** 31/10/2026
 > **Fonte principal da visão:** [IDEA.md](./IDEA.md) e [DIETAS.md](./DIETAS.md)
 > **Convenção:** regras confirmadas estão separadas das decisões em aberto.
@@ -92,11 +92,11 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 - Esse evento não gera e-mail, push nem mensagens externas no MVP; também não exige confirmação de leitura pelo nutricionista. Os detalhes visuais do indicador serão resolvidos na etapa de UX/implementação, sem transformar a alteração em alerta clínico ou sinal de descumprimento.
 - O aviso deve ter acesso protegido no servidor e não expor dados de pacientes sem vínculo/autorização. Prescrição original e meta efetiva ajustada continuam separadas.
 
-## 4. Decisões em aberto da etapa 5
+## 4. Decisões consolidadas e pendências encaminhadas a outras etapas
 
 1. **Metas:** ajuste pessoal com confirmação, aviso discreto no painel profissional e aplicação automática de novas metas do nutricionista definidos. E-mail/push externos por ajuste de meta ficam fora do MVP; detalhes visuais do indicador vão para a etapa de implementação.
 2. **Períodos e fusos:** fuso por refeição, correção manual e agrupamento dos registros por data local já definidos; **semana de segunda-feira a domingo** e contagem de dias e média dos períodos semanal/mensal confirmados. Horário de verão/conversões continuam para a etapa 9.
-3. **Indicadores:** painel diário, resumos, gráficos, contagens e diferença acumulada de kcal/macros confirmados, com comparação estrita e semana de segunda a domingo. Vitaminas/minerais disponíveis ficarão em **Detalhes nutricionais**, com total parcial sinalizado e opção de identificar os alimentos sem dados. Resta decidir eventual uso de valores de referência para micronutrientes.
+3. **Indicadores:** painel diário, resumos, gráficos, contagens e diferença acumulada de kcal/macros confirmados, com comparação estrita e semana de segunda a domingo. Vitaminas/minerais disponíveis ficarão em **Detalhes nutricionais**, com total parcial sinalizado e opção de identificar os alimentos sem dados. **No MVP não haverá metas, percentuais de adequação ou comparações com valores de referência para micronutrientes**; avaliação dessa funcionalidade será posterior ao MVP.
 4. **Medidas corporais:** registro livre de peso com data, correção de medições, gráfico histórico e IMC atual pelo peso mais recente/altura do perfil foram aprovados. Restam regras técnicas de altura histórica e retenção de medições (etapas 8 e 9).
 5. **Retenção e permissões da trilha de correções:** quais registros de auditoria podem persistir e quais atores poderão visualizá-los, respeitando privacidade e eliminação de dados? Resolver nas etapas 8 e 9.
 
@@ -196,7 +196,7 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 - **Total parcial:** se pelo menos um item tiver valor conhecido e outro não possuir o micronutriente, permitir mostrar a **soma dos dados conhecidos**, mas com destaque **parcial / dados incompletos**; não substituir o desconhecido por zero nem apresentar o resultado parcial como total nutricional exato.
 - **Sem dados:** quando nenhum item consumido tiver informação sobre determinado micronutriente, exibir **sem dados disponíveis**, sem mostrar 0 mg/µg. Um zero fornecido explicitamente pela fonte deve continuar sendo um zero conhecido.
 - Respeitar as unidades apropriadas (mg, µg etc.) e precisão dos dados-fonte, sem arredondamentos intermediários nem somas incompatíveis. Criar, editar, excluir ou registrar refeição retroativa deve atualizar os valores e a cobertura das datas e períodos afetados.
-- O diário não conclui automaticamente deficiência, excesso ou adequação clínica a partir desses dados, nem compara vitaminas/minerais a metas genéricas não aprovadas.
+- **Sem avaliação automática de adequação no MVP:** não exibir metas para vitaminas/minerais, percentuais em relação a recomendações, estados de suficiente/insuficiente/excessivo ou diagnóstico. Mostrar somente as quantidades conhecidas e o estado de cobertura; comparação com referências nutricionais fica para versão posterior ao MVP, mediante validação de critérios individuais.
 
 **Apresentação definida para o MVP:**
 
@@ -206,7 +206,7 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 - Um valor **zero explicitamente informado** é dado conhecido e não integra a lista de lacunas. Se nenhum item tiver valor, o sistema não exibe zero como total; pode mostrar quais itens não possuem a informação.
 - A seção deve ser legível e utilizável no celular e acessível sem depender apenas de cor; não revela registros de outros usuários. Edições, exclusões e lançamentos retroativos atualizam as somas parciais e as listas dos dias e períodos atingidos.
 
-**Em aberto:** apresentar ou não comparação com **valores de referência** de vitaminas/minerais no MVP, sem criar metas pessoais ou diagnósticos por suposição.
+**Decisão final do MVP:** não comparar vitaminas/minerais a valores de referência ou metas, nem classificar ingestão como adequada/inadequada. A seção apresenta valores disponíveis e lacunas de informação. Metas e referências para micronutrientes permanecem **fora do MVP**, a reavaliar depois da primeira versão.
 
 ## 15. Organização dos detalhes nutricionais (**Definida para o MVP**)
 
@@ -217,7 +217,14 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 5. Atualizar a lista após correção de alimento/quantidade, exclusão ou inclusão retroativa; manter a distinção entre ausência de nutriente na fonte e ausência de refeição cadastrada.
 6. Detalhamento com navegação acessível no celular e sem expor dados de outros usuários.
 
-## 16. Casos de aceitação de referência
+## 16. Exclusão de comparações de micronutrientes no MVP (**Definida**)
+
+- Valores de vitaminas/minerais aparecem na seção **Detalhes nutricionais** com as respectivas unidades e lacunas dos dados-fonte.
+- Não exibir meta individual de micronutrientes, percentual da recomendação diária, rótulos **abaixo/na meta/acima** para vitaminas ou minerais, nem alerta de deficiência/excesso no MVP.
+- Os indicadores **abaixo/na meta/acima** permanecem restritos a calorias e proteínas/carboidratos/gorduras que possuam uma meta efetiva definida.
+- Uma futura implementação de referências deverá validar fonte, interpretação, perfis elegíveis, dados individuais necessários e impacto da cobertura incompleta antes de oferecer conclusões.
+
+## 17. Casos de aceitação de referência
 
 | Cenário | Resultado esperado |
 | --- | --- |
@@ -289,6 +296,8 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 | Micronutriente não está disponível em alguns itens | Total do micronutriente é explicitamente sinalizado como incompleto |
 | Refeição contém alimento com ferro conhecido e outro sem dado de ferro | Exibir apenas a soma conhecida como **total parcial**, sinalizando informação ausente; não tratar dado faltante como 0 mg |
 | Usuário abre o painel principal | Encontrará kcal, proteínas, carboidratos e gorduras em destaque; micronutrientes na seção Detalhes nutricionais |
+| Usuário consulta ferro, vitamina C ou B12 no MVP | Exibir apenas valores conhecidos/total parcial e lacunas; sem meta, porcentagem da recomendação diária ou diagnóstico |
+| Usuário tenta interpretar o valor exibido como insuficiência nutricional | Interface não classifica adequação nem fornece alerta clínico automático |
 | Usuário seleciona detalhes de ferro parcial | Verá os alimentos registrados sem informação de ferro, com suas refeições de origem |
 | Fonte informa zero conhecido para vitamina C em um alimento | Esse alimento não é listado como dado faltante para vitamina C |
 | Usuário corrige retroativamente um alimento sem dado de cálcio | Os detalhes e a lista de lacunas do período afetado são recalculados |
@@ -320,4 +329,4 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 
 ---
 
-A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, metas opcionais pessoais/profissionais, novos objetivos profissionais automáticos, indicadores diários, resumos e gráficos semanais/mensais com contagem estrita dos dias acima, abaixo ou exatamente na meta (sem tolerância) e diferença acumulada sobre metas nos dias comparáveis, acompanhamento de peso/IMC e seção Detalhes nutricionais com micronutrientes, totais parciais e lista de alimentos com dados ausentes foram aprovados para o MVP.** Permanecem pendentes eventual referência de micronutrientes, horário de verão e altura histórica, retenção e acesso à trilha.
+**A etapa 5 está concluída em definições funcionais para o MVP, sem implementação de software.** Foram aprovados edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, metas opcionais pessoais/profissionais, novas metas profissionais automáticas, indicadores diários, resumos e gráficos semanais/mensais com contagem estrita de dias acima/abaixo/na meta (sem tolerância) e diferença acumulada nos dias comparáveis, acompanhamento de peso/IMC e seção **Detalhes nutricionais** com micronutrientes, totais parciais e lista de alimentos sem dados. **Metas, percentuais e comparação com referências de micronutrientes ficam fora do MVP.** Detalhes técnicos de horários/altura, precisão dos cálculos, privacidade, retenção e acesso às trilhas serão tratados nas etapas 8 e 9; escolhas visuais finais na implementação.
