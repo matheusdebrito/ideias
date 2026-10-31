@@ -3,7 +3,7 @@
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
 > **Etapa:** 4 de 10 — Base de alimentos e cálculos nutricionais (em andamento)
-> **Versão:** 0.9
+> **Versão:** 1.0
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Decisões confirmadas** são distintas de **propostas a validar**.
@@ -41,6 +41,10 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 - Diferentes formas de preparo podem ter nutrientes por 100 g distintos; preservar a forma de preparo quando houver diferença nutricional relevante. A presença da versão crua de um alimento que normalmente é cozido na fonte não a torna a opção padrão no plano ou diário.
 - Nunca calcular a porção de alimento pronto usando valores nutricionais por 100 g da versão crua, nem assumir transformação entre pesos crus e cozidos com equivalência universal. Preparação que incorpora óleo ou outros ingredientes precisa de composição adequada para aquele preparo; cálculo a partir de ingredientes e rendimentos é evolução futura a avaliar.
 - Alimentos crus da base podem permanecer como dados de origem, sem aparecer como opções principais de consumo para alimentos que exigem cocção. Não excluir alimentos que efetivamente são consumidos crus.
+- **Identificação por marca (confirmado no MVP):** alimentos comuns/genéricos podem ter marca ausente (arroz branco cozido, banana etc.); produtos industrializados podem identificar marca e variante/apresentação relevante, facilitando a escolha de composição nutricional correspondente.
+- **Pesquisa:** mostrar nome legível e, quando houver, marca e variante, sem poluir os resultados para alimentos não industrializados. Produtos de marcas distintas não devem ser tratados como nutricionalmente equivalentes apenas porque compartilham um nome genérico.
+- Marca é campo opcional no modelo de alimento; pode ser preenchida no cadastro manual de produtos industrializados. Não exigir marca de um alimento genérico nem presumir que uma marca, sozinha, identifique unicamente o produto.
+- **Duplicidade ainda a definir:** não fundir automaticamente registros com nomes parecidos nem bloquear alimentos legítimos de marcas/variações diferentes. A política de aviso ao cadastrar algo semelhante deve ser decidida separadamente.
 - O alimento selecionado terá quantidade e unidade para o cálculo proporcional.
 - **Referências nutricionais aceitas no cadastro (definido para o MVP):** 100 g, 100 mL ou porção declarada, sempre com quantidade de referência positiva e unidade explícita. Para uma porção declarada, armazenar seu significado (por exemplo, porção de 30 g ou uma unidade), sem presumir que toda porção seja igual.
 - Os nutrientes de uma quantidade consumida são proporcionais aos nutrientes da quantidade de referência, após uma conversão autorizada. Exemplo: 120 kcal para uma porção de 30 g implicam 240 kcal para 60 g.
@@ -68,7 +72,7 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 
 ## 4. Decisões em aberto — não presumir definição
 
-1. Como identificar e diferenciar alimentos semelhantes, marcas e duplicidades na busca, priorizando a forma pronta para consumo?
+1. Como avisar sobre possíveis alimentos duplicados no cadastro personalizado, sem fundir automaticamente produtos distintos?
 2. **Decisão postergada para a etapa 9:** avaliar TBCA, TACO ou arquivo JSON próprio; confirmar origem, licença, cobertura, formato e estratégia de importação antes da implementação definitiva.
 3. Qual modo de arredondamento decimal e qual precisão interna serão usados pela implementação (a fechar na etapa de arquitetura)?
 4. Como tratar a permanência dos dados já publicados quando o criador apagar um alimento privado ou quando o vínculo profissional for encerrado?
@@ -78,6 +82,10 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 | Cenário | Resultado esperado |
 | --- | --- |
 | Usuário ou nutricionista não encontra alimento no catálogo | Pode cadastrar um alimento próprio |
+| Usuário pesquisa arroz branco cozido | Encontra alimento genérico sem marca obrigatória |
+| Usuário pesquisa iogurte industrializado | Resultados podem distinguir marca e variante/apresentação quando cadastradas |
+| Dois iogurtes possuem nomes semelhantes e marcas diferentes | Mantêm registros e composições nutricionais independentes; não são agrupados automaticamente |
+| Usuário cadastra alimento genérico sem marca | Cadastro não é rejeitado por ausência de marca |
 | Usuário pesquisa arroz para prescrição | Exibir arroz preparado/cozido como opção padrão; orientar pesagem após preparo |
 | Usuário pesquisa frango para consumo | Oferecer formas de preparo correspondentes aos valores nutricionais; não calcular frango grelhado como se fosse cru |
 | Usuário seleciona banana ou alface crua | Permitir normalmente, pois o alimento é consumido nessa forma |
