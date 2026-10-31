@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 3.3
+> **Versão:** 3.4
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -193,7 +193,14 @@ O nutricionista poderá:
 - Uma nova versão de dieta não substitui retroativamente valores registrados no diário.
 - É proibido alterar automaticamente dietas de outros pacientes quando o nutricionista modifica um modelo em sua biblioteca.
 
-### 5.1. Encerramento da vigência quando termina o acompanhamento (**Confirmado no MVP**)
+### 5.1. Ativação de publicação já programada após vencimento da assinatura profissional (**Confirmado no MVP**)
+
+- A expiração da assinatura do nutricionista **não cancela, por si só**, uma dieta profissional que ele **já publicou e programou** enquanto possuía autorização profissional válida. A versão poderá ser ativada na data/hora marcada, desde que **vínculo com aquele mesmo nutricionista e autorização do usuário continuem válidos no instante da ativação**.
+- A ativação agendada é execução de uma publicação já registrada, não uma nova edição ou publicação profissional. Assinatura vencida continua impedindo novas versões, edições, agendamentos e reagendamentos iniciados pelo profissional e o acesso a dados nutricionais, conforme [MONETIZACAO.md](./MONETIZACAO.md).
+- **Prioridade do término de vínculo:** se o usuário encerrou acompanhamento, trocou de nutricionista ou revogou autorização, agendamentos antigos não podem ativar. O vínculo ativo e a autorização devem ser verificados junto com a atualização programada; a transição entre versões deve ser atômica e idempotente. A etapa 9 detalhará concorrência, tarefas e conferência de elegibilidade profissional independente da assinatura.
+- Preservar o conteúdo publicado, a autoria, o histórico e o instante real de vigência; a expiração comercial não modifica o diário do usuário nem altera prescrições retroativamente.
+
+### 5.2. Encerramento da vigência quando termina o acompanhamento (**Confirmado no MVP**)
 
 - Quando o paciente **encerrar o vínculo ou confirmar a troca direta por convite de outro nutricionista**, **a versão profissional vigente do vínculo anterior deixa de ser vigente no instante do encerramento**. Preservar a prescrição publicada sem edições retroativas, com autor e intervalo de vigência real identificáveis. Ela passa a ficar acessível **apenas no histórico do paciente**, para consulta.
 - **Agendamentos futuros do vínculo encerrado não podem mais entrar em vigor.** A versão programada é cancelada por encerramento do vínculo, mantendo conteúdo, autoria, programação original e motivo/data do cancelamento no histórico. Nenhum job de ativação pode ativá-la posteriormente.
@@ -201,7 +208,7 @@ O nutricionista poderá:
 - **O paciente não perde o conteúdo da dieta:** todas as versões profissionais publicadas para ele permanecem disponíveis para consulta histórica, com refeições, quantidades, autoria e vigência original. Preservar também diário de consumo e demais dados sem alterações retroativas. **Não converter a dieta antiga automaticamente em plano pessoal vigente** nem atribuí-la ao nutricionista seguinte; a referência permanece identificada como **dieta anterior, não vigente**. A manutenção da última meta efetiva para indicadores pessoais é independente do status da dieta (ver [DIARIO.md](./DIARIO.md)).
 - As dietas pessoais do paciente não são afetadas pelo término do vínculo profissional.
 - A etapa 9 deverá especificar **operação atômica e idempotente** para fim do vínculo, revogação de acesso, fim de vigência e cancelamento dos agendamentos, mesmo quando concorrer com a transição agendada. Registros de histórico permitem reconstruir qual versão esteve vigente em cada instante.
-- **Troca direta aprovada:** após aceite de convite válido e uma confirmação do paciente, encerrar dieta antiga, cancelar agendamentos futuros e ativar novo vínculo autorizado **na mesma transição atômica** que encerra o vínculo anterior. Falha reverte tudo, preservando dieta e vínculo anteriores. A dieta histórica não vira plano do novo profissional nem é automaticamente substituída por outra. **A última meta efetiva do paciente continua como referência pessoal** após desvinculação, com origem profissional histórica preservada; apenas a eventual notificação ao ex-profissional ainda aguarda decisão. Ver [PACIENTES.md](./PACIENTES.md).
+- **Troca direta aprovada:** após aceite de convite válido e uma confirmação do paciente, encerrar dieta antiga, cancelar agendamentos futuros e ativar novo vínculo autorizado **na mesma transição atômica** que encerra o vínculo anterior. Falha reverte tudo, preservando dieta e vínculo anteriores. A dieta histórica não vira plano do novo profissional nem é automaticamente substituída por outra. **A última meta efetiva do paciente continua como referência pessoal** após desvinculação, com origem profissional histórica preservada; o ex-profissional recebe notificação de encerramento do vínculo com o nome do usuário, conforme já aprovado na etapa 6. Ver [PACIENTES.md](./PACIENTES.md).
 
 ## 6. Categorias de refeições (**Definido para o MVP**)
 
@@ -317,6 +324,9 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Nutricionista reagenda uma versão programada antes do início | A data/hora é atualizada, o conteúdo publicado permanece igual e a alteração fica auditada |
 | Solicitação de cancelamento/reagendamento chega após o início da vigência | Backend recusa a operação; mudanças exigem uma nova versão |
 | Chega a data/hora de uma versão programada | A transição ocorre automaticamente, sem login ou ação manual; a versão anterior é encerrada |
+| Nutricionista publicou versão para ativação futura, mas assinatura venceu após publicar | Agendamento ativa na data prevista se o vínculo/autorização ainda forem válidos; assinatura expirada não cancela publicação |
+| Usuário encerra o vínculo depois da publicação e antes da ativação | Programação do profissional anterior não ativa, mesmo que sua assinatura estivesse vencida |
+| Assinatura profissional expirada e nutricionista tenta reagendar versão futura | API nega alteração manual; publicação original segue sujeita à ativação conforme vínculo e autorização |
 | Nutricionista tenta programar uma vigência que se sobrepõe a outra | Backend impede a publicação e informa o conflito |
 | Nutricionista atualiza dieta de um paciente | Uma nova versão entra em vigor imediatamente ou na data programada; anterior fica no histórico |
 | Usuário atualiza seu plano pessoal salvo | Nova versão pessoal é criada ao salvar; versão anterior continua disponível no histórico |
