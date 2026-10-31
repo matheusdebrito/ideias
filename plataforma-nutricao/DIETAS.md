@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 1.4
+> **Versão:** 1.5
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -61,7 +61,7 @@ A mesma implementação de seleção de alimentos, medidas e cálculo nutriciona
 
 ## 4. Biblioteca de refeições do nutricionista (**Definido para o MVP**)
 
-O nutricionista cria a refeição selecionando **alimentos do catálogo** e informando as quantidades. Ele não cadastra manualmente calorias, proteínas, carboidratos, gorduras, vitaminas ou minerais: a aplicação calcula esses valores a partir da composição nutricional dos alimentos selecionados e das quantidades informadas.
+O nutricionista cria a refeição selecionando **alimentos do catálogo**, inclusive os alimentos personalizados aos quais tenha acesso, e informando as quantidades. Ele não cadastra manualmente calorias, proteínas, carboidratos, gorduras, vitaminas ou minerais: a aplicação calcula esses valores a partir da composição nutricional dos alimentos selecionados e das quantidades informadas.
 
 O nutricionista poderá:
 - Criar modelos reutilizáveis com nome, refeições/itens alimentares e quantidades.
@@ -261,7 +261,7 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 - `RefeicaoPlanejada` e `ItemPlanejado`, com base diária padrão e personalizações recorrentes por dia da semana; cada ocorrência planejada tem ID próprio e pode compartilhar categoria com outras refeições do mesmo dia
 - `ModeloRefeicao` e `ItemModelo` — com propriedade explicitamente diferenciada (usuário ou nutricionista)
 - `RefeicaoConsumida` e `ItemConsumido`
-- `Alimento` e dados nutricionais versionados / rastreáveis
+- `Alimento` e dados nutricionais versionados / rastreáveis, incluindo alimentos personalizados cadastrados por usuários comuns e nutricionistas com fonte declarada (ex.: rótulo), controle de acesso e histórico de composição
 
 **Proposta de implementação:** compartilhar componentes de edição e serviço de cálculo, mas não utilizar uma única tabela genérica de refeições para todos os contextos sem avaliar cuidadosamente as permissões, integridade e históricos.
 
