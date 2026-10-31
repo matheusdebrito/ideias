@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.7  
+> **Versão:** 0.8  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -142,6 +142,13 @@ O nutricionista poderá cadastrar substituições opcionais, definindo alimento 
 
 **Plano profissional:** o nutricionista elabora e atribui planos a pacientes. O paciente pode consultar o plano profissional, mas não alterar sua prescrição.
 
+**Horários sugeridos (confirmado para o MVP):**
+- O horário de uma refeição planejada é opcional.
+- Quando informado pelo nutricionista ou usuário, representa apenas uma sugestão de organização.
+- Não é prazo, obrigação ou critério de validação da refeição.
+- Registrar ou consumir a refeição em horário diferente não gera erro, alerta, aviso de atraso ou penalização.
+- O horário planejado e o horário real de consumo são informações distintas: o primeiro pertence ao plano; o segundo, ao diário alimentar.
+
 **Organização do cardápio (confirmada para o MVP):**
 - Todo plano começa com um **cardápio diário padrão**, repetido nos sete dias da semana.
 - O usuário ou nutricionista pode personalizar refeições específicas para **dias da semana** sem precisar refazer todo o cardápio.
@@ -252,7 +259,7 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 5. Quais recursos compõem o plano profissional pago? Haverá limites de pacientes?
 6. Quais dados ficam disponíveis depois do encerramento do vínculo profissional?
 7. Qual será o fluxo de exportação, portabilidade, retenção e exclusão dos dados?
-8. Quais campos adicionais estarão disponíveis em uma refeição além de nome, alimentos, quantidades e substituições: horário, instruções e observações?
+8. Quais instruções e observações adicionais poderão ser cadastradas em uma refeição além de nome, alimentos, quantidades, substituições e horário opcional?
 9. Como será o processo de troca de nutricionista?
 10. O versionamento dos planos pessoais deverá ter o mesmo detalhamento do profissional?
 
