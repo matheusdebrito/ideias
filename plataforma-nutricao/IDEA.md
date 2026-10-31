@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.22  
+> **Versão:** 0.23  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -92,6 +92,11 @@ Requisitos importantes para a qualidade dos dados:
 - Registrar a fonte, a versão e a data de referência dos dados.
 - Não misturar valores de fontes diferentes sem identificar sua procedência.
 - Permitir conversão de quantidades e medidas caseiras com regras explícitas.
+- **Porções e unidades (confirmado no MVP):** aceitar composição nutricional com base em **100 g, 100 mL ou uma porção declarada**, com quantidade e unidade de referência explícitas. Uma porção declarada pode ter equivalência documentada em massa ou volume, quando conhecida; sem equivalência, somente cálculos proporcionais na própria unidade de porção.
+- Os cálculos são proporcionais à quantidade informada, respeitando a dimensão e a referência do alimento. Exemplo: um rótulo com 120 kcal em 30 g equivale a 240 kcal em 60 g.
+- Permitir medidas caseiras (colher, xícara, unidade etc.) **apenas quando houver equivalência conhecida para o alimento e sua forma de preparo**, com fonte registrada.
+- Não converter g em mL, ou unidades/medidas caseiras em massa ou volume, sem uma densidade ou equivalência explícita e aplicável àquele alimento. Nunca inventar equivalências universais.
+- Preservar a quantidade original, unidade, referência nutricional e fator de conversão aplicado nas versões publicadas e nos registros de consumo.
 - Preservar a rastreabilidade dos dados usados nos cálculos.
 
 **Fontes candidatas:** TBCA como fonte principal a ser avaliada e TACO como fonte complementar. A incorporação de dados em um produto comercial depende da confirmação das condições de uso, atribuição e redistribuição de cada fonte.
