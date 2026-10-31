@@ -4,7 +4,7 @@
 > **Data de referência:** 31/10/2026
 > **Etapas de planejamento:** 10
 > **Concluídas (definições funcionais principais):** 3
-> **Próxima:** etapa 4 — Base de alimentos e cálculos nutricionais
+> **Em andamento:** etapa 4 — Base de alimentos e cálculos nutricionais
 > **Restantes:** 7, incluindo a etapa 4
 
 ## Convenções
@@ -22,7 +22,7 @@
 | 1 | Visão de produto e público-alvo | Concluída | Dois públicos, proposta de valor, monetização inicial, MVP adulto |
 | 2 | Modelo de dietas e refeições | Concluída | Plano versus diário, versionamento, bibliotecas, horários/observações, composição fixa |
 | 3 | Criação e atribuição de dietas | Concluída | Fluxo profissional, atribuição, cardápio padrão com personalizações semanais, categorias, vigência imediata/programada, visualização antecipada, cancelamento/reagendamento |
-| 4 | Base de alimentos e cálculos nutricionais | Pendente — próxima | Uso/licença da TBCA, fontes, unidades/porções, alimentos industrializados, valores ausentes, precisão e importação |
+| 4 | Base de alimentos e cálculos nutricionais | Em andamento | Alimentos personalizados para usuários e nutricionistas confirmados; pendem visibilidade/compartilhamento, uso/licença da TBCA, fontes, unidades/porções, dados ausentes e importação |
 | 5 | Diário alimentar, metas e indicadores | Pendente | Registro do consumo real, histórico, metas datadas, saldo diário/semanal/mensal, peso e IMC |
 | 6 | Gestão de pacientes e permissões | Pendente | Convites, vínculo único, revogação, acesso aos dados, histórico profissional, validação CRN |
 | 7 | Monetização e assinaturas | Pendente | Recursos gratuitos e pagos, planos, limites, cobrança, cancelamento e continuidade do acesso |
@@ -60,6 +60,8 @@ Estas pendências ficam registradas, não são decisões tomadas por omissão.
 
 ## Critério para avançar na etapa 4
 
-Antes de especificar o armazenamento definitivo dos alimentos, confirmar: cobertura/licenciamento comercial e formato da TBCA, possibilidade de fontes complementares, regras de porção e medidas caseiras, alimentos industrializados e comportamento para valores nutricionais ausentes.
+**Confirmado para o MVP:** usuários comuns e nutricionistas poderão cadastrar alimentos personalizados, inclusive industrializados com dados declarados de rótulos. Ver [ALIMENTOS.md](./ALIMENTOS.md).
+
+**Pendente:** definir visibilidade/compartilhamento desses registros, cobertura/licenciamento comercial e formato da TBCA, fontes complementares, porções e medidas caseiras, valores nutricionais ausentes e regras de validação.
 
 **Importante:** conclusão das 10 etapas encerra o planejamento, não significa que o software foi desenvolvido, validado ou colocado em produção.
