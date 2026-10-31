@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.3  
+> **Versão:** 0.4  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -66,11 +66,11 @@ A validação das credenciais profissionais e os requisitos específicos para o 
 - Cadastro de data de nascimento, sexo e altura, conforme a necessidade dos cálculos e do acompanhamento.
 - Registro de peso com data e histórico sem sobrescrita de medições anteriores.
 - Cálculo de IMC para adultos, acompanhado de explicação sobre suas limitações.
-- Crianças e adolescentes poderão ter acompanhamento profissional dentro do produto, mas a aplicação não interpretará automaticamente o IMC deles.
+- O cadastro, o acompanhamento e o cálculo do IMC serão disponibilizados apenas para pessoas com **18 anos completos ou mais** no MVP.
 
-**Decisão de produto:** não criar perfis dependentes nem exigir uma conta de responsável como funcionalidade de produto. Para menores admitidos na plataforma, considerar contas individuais. O produto não tem como público prioritário crianças muito pequenas; a idade mínima e o modo de ingresso de menores ainda precisam ser definidos.
+**Decisão de produto — escopo adulto:** a plataforma será exclusiva para maiores de idade na primeira versão. Não haverá cadastro de pacientes menores de 18 anos, inclusive por nutricionistas, nem perfis dependentes, nem recursos pediátricos. A data de nascimento informada deverá ser validada no servidor com base na data corrente; contas abaixo de 18 anos devem ter cadastro rejeitado.
 
-**Ressalva obrigatória:** a opção por não criar perfis dependentes não dispensa a análise jurídica de proteção de crianças e adolescentes, mecanismos proporcionais de aferição de idade e eventuais medidas de participação/autorização de responsáveis. Essas obrigações precisam ser verificadas antes do lançamento, considerando LGPD e ECA Digital.
+**Ressalva jurídica:** informar que o produto é 18+ e coletar data de nascimento não transfere automaticamente ao usuário toda a responsabilidade caso ele forneça dados falsos. Avaliar os riscos de acesso provável por menores conforme ECA Digital, Decreto nº 12.880/2026 e orientações vigentes da ANPD. Definir controles proporcionais e tratamento de contas identificadas como pertencentes a menores. Isso não implica exigir documentos de todos os usuários sem necessidade.
 
 ### 3.2. Base de alimentos e composição nutricional
 
@@ -117,7 +117,7 @@ Cada item consumido deve preservar quantidade, unidade, data/hora, composição 
 
 **Adultos:** a aplicação poderá estimar uma meta energética por método validado e permitir ajustes manuais. O cálculo requer dados suficientes, explicação dos limites e revisão de profissionais antes do lançamento.
 
-**Crianças e adolescentes:** a aplicação **não calcula nem recomenda automaticamente necessidades energéticas ou metas calóricas**, nem interpreta IMC infantil. As metas, quando necessárias, serão definidas pelo nutricionista; o app poderá apresentar o acompanhamento dos valores informados pelo profissional. Não sugerir emagrecimento por conta própria para menores.
+**Faixa etária:** o MVP atende apenas adultos (18 anos ou mais), sem cálculo, prescrição, metas ou acompanhamento pediátrico, inclusive nos painéis profissionais. O cálculo automático de metas energéticas para menores fica fora do escopo.
 
 ### 3.5. Planos alimentares e dietas
 
@@ -162,7 +162,7 @@ A independência do diário preserva **o que a pessoa comeu**; o versionamento p
 - Criação e atribuição de planos alimentares.
 - Histórico de alterações nos planos.
 
-O modelo de múltiplos nutricionistas simultâneos foi descartado: haverá um único vínculo profissional ativo por paciente. Ainda precisam ser definidos os detalhes de autorização, a transferência entre profissionais, o acesso a dados históricos após o encerramento e os fluxos para pacientes menores de idade.
+O modelo de múltiplos nutricionistas simultâneos foi descartado: haverá um único vínculo profissional ativo por paciente. Apenas pacientes adultos poderão ser vinculados no MVP. Ainda precisam ser definidos os detalhes de autorização, a transferência entre profissionais e o acesso a dados históricos após o encerramento.
 
 ### 3.7. Assinaturas e monetização
 
@@ -184,8 +184,8 @@ Ainda precisam ser definidos: limites de pacientes, planos comerciais, período 
 6. **Dados rastreáveis:** fonte, unidade e contexto de preparo dos alimentos devem estar identificáveis.
 7. **Permissões explícitas:** nutricionista visualiza dados autorizados somente durante vínculo ativo, com exceções legais de retenção a avaliar.
 8. **Direitos dos pacientes:** dados pessoais e diário alimentar não ficam condicionados à assinatura do nutricionista.
-9. **Proteção de dados e menores:** LGPD e ECA Digital considerados desde o projeto; sem criar perfis dependentes por padrão.
-10. **Cálculos pediátricos fora da automação:** metas e avaliação infantil serão realizadas por nutricionistas.
+9. **Escopo 18+:** apenas adultos podem se cadastrar ou ser acompanhados por nutricionistas na primeira versão; sem perfis dependentes ou módulos pediátricos.
+10. **Proteção proporcional:** a restrição 18+ não é uma dispensa automática das obrigações da LGPD e do ECA Digital quando aplicáveis; revisar risco de acesso por menores e aferição de idade antes do lançamento.
 11. **Sem diagnósticos automatizados:** indicadores não substituem avaliação profissional.
 
 ## 5. Escopo futuro — não priorizar no primeiro lançamento
@@ -205,8 +205,8 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 
 - **Privacidade:** dados alimentares e de saúde exigem minimização, proteção e autorização apropriada.
 - **Acesso de profissionais:** vínculo com um único nutricionista ativo e autorização não dispensam controle servidor/banco contra acesso indevido a dados de outros pacientes.
-- **Menores:** não haverá perfis dependentes, mas obrigações legais sobre idade, privacidade, segurança e responsável devem ser avaliadas. A exigência de vinculação de conta de até 16 anos no ECA Digital está no capítulo de redes sociais; não presumir aplicação automática de todas essas regras a um diário nutricional sem análise.
-- **Público pediátrico:** a aplicação não calculará automaticamente metas ou recomendações para menores, que ficarão a cargo de nutricionistas. Definir faixa etária mínima e forma de ingresso.
+- **Restrição etária:** o produto será 18+, com informação clara no cadastro e nos termos. A idade deve ser validada no backend, sem confiar apenas no frontend. A autodeclaração não garante automaticamente que não haverá acesso por menores; revisar o enquadramento de acesso provável, riscos e controles proporcionais à luz de orientações da ANPD, em especial o guia publicado em 28/10/2026.
+- **Entrada indevida de menores:** planejar um fluxo seguro para denúncia/identificação, restrição ou encerramento de contas que violem a idade mínima, com atenção à proteção dos dados e direitos aplicáveis. A política não é uma transferência automática de responsabilidade para o usuário.
 - **Qualidade nutricional:** fontes podem conter dados ausentes, unidades diferentes e informações específicas de preparo.
 - **Histórico:** atualizações em TBCA, dietas e metas não podem alterar retrospectivamente informações antigas.
 - **Custos do gratuito:** estimar armazenamento e uso médio antes do lançamento.
@@ -214,8 +214,8 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 
 ## 7. Questões em aberto para a descoberta
 
-1. Qual idade mínima será admitida na aplicação? Menores ingressarão apenas mediante convite de nutricionista?
-2. Como satisfazer exigências aplicáveis de aferição de idade e participação/autorização de responsáveis **sem perfis dependentes**? Requer validação jurídica.
+1. Quais medidas proporcionais de aferição de idade são aplicáveis ao aplicativo de nutrição 18+, considerando o guia da ANPD sobre acesso provável por menores? Requer análise jurídica antes do lançamento.
+2. Como lidar com uma conta descoberta como pertencente a menor sem expor ou reter indevidamente seus dados?
 3. Como validar o registro profissional do nutricionista?
 4. Como calcular o saldo semanal/mensal, as médias e a tolerância de meta?
 5. Quais recursos compõem o plano profissional pago? Haverá limites de pacientes?
@@ -234,6 +234,8 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 - [LGPD — Lei nº 13.709/2018, art. 14 (crianças e adolescentes)](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm)
 - [ECA Digital — Lei nº 15.211/2025](https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/l15211.htm)
 - [ANPD — Informações oficiais sobre o ECA Digital](https://www.gov.br/anpd/pt-br/assuntos/noticias/eca-digital)
+- [ANPD — Guia sobre escopo e obrigações gerais do ECA Digital, publicado em 28/10/2026](https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-publica-guia-que-esclarece-quem-deve-cumprir-e-quais-sao-as-responsabilidades-das-plataformas-na-protecao-de-criancas-e-adolescentes)
+- [Decreto nº 12.880/2026 — Regulamentação do ECA Digital](https://www2.camara.leg.br/legin/fed/decret/2026/decreto-12880-18-marco-2026-798813-publicacaooriginal-178481-pe.html)
 - [ANPD — Enunciado CD/ANPD nº 1/2023 sobre bases legais e melhor interesse](https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-divulga-enunciado-sobre-o-tratamento-de-dados-pessoais-de-criancas-e-adolescentes)
 - [Ministério da Saúde — Orientações para avaliação antropométrica](https://www.gov.br/saude/pt-br/composicao/saps/vigilancia-alimentar-e-nutricional/arquivos/orientacoes-para-a-coleta-e-analise-de-dados-antropometricos-em-servicos-de-saude)
 - [National Academies — Dietary Reference Intakes for Energy (2023)](https://www.nationalacademies.org/read/26818/chapter/2) — referência técnica que demonstra a necessidade de equações distintas por idade, sexo e atividade; não deve ser adotada automaticamente como padrão clínico brasileiro.
