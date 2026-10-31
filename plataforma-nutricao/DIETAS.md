@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 1.5
+> **Versão:** 1.6
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -110,6 +110,9 @@ O nutricionista poderá:
 - Modelos profissionais pertencem ao nutricionista que os criou.
 - Um nutricionista não acessa a biblioteca privada de outro.
 - A biblioteca profissional não é automaticamente compartilhada com pacientes, nem copiada para a biblioteca pessoal deles.
+- Alimentos personalizados usados em refeições profissionais são privados ao nutricionista que os cadastrou. O paciente vê apenas a cópia de nome, porção e informações nutricionais incluída na versão publicada de sua dieta, não o registro original no catálogo profissional.
+- Registrar no diário uma refeição da dieta pode copiar os valores nutricionais da versão publicada para um novo registro independente; não autoriza acessar, editar ou incorporar o alimento privado do profissional ao catálogo pessoal.
+- A leitura de registros privados deve ser autorizada no servidor, nunca apenas pela ocultação da interface.
 - Refeições consumidas por pacientes não entram automaticamente na biblioteca do nutricionista.
 - Encerrar vínculo com um paciente não elimina registros históricos nem transfere propriedade da biblioteca profissional.
 
