@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 1.8
+> **Versão:** 1.9
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -105,6 +105,7 @@ O nutricionista poderá:
 - Um alimento não pode ser selecionado em medida incompatível sem fator de conversão rastreável. Uma refeição planejada/consumida deve preservar a referência nutricional e o fator usados em seus totais históricos.
 - Alimentos em estados diferentes (por exemplo, cru e cozido) devem ser selecionados como entradas distintas quando assim constarem no catálogo.
 - Dados ausentes na fonte devem ser apresentados como não disponíveis, nunca como zero inventado. Alimentos personalizados cadastrados manualmente exigem kcal, proteínas, carboidratos e gorduras totais completos; micronutrientes podem permanecer desconhecidos, e relatórios agregados desses nutrientes devem sinalizar cobertura incompleta.
+- Alimentos importados de bases nutricionais podem aparecer na consulta mesmo sem os quatro dados essenciais, mas **não podem ser adicionados** a uma dieta, modelo de refeição ou diário enquanto faltar energia, proteínas, carboidratos ou gorduras totais. O backend deve validar a completude antes de aceitar o registro; ausência apenas de micronutrientes não bloqueia o uso.
 - O cálculo e o arredondamento devem ser consistentes entre biblioteca, dieta e diário.
 
 **Isolamento:**
