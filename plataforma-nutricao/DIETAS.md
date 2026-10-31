@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 2.9
+> **Versão:** 3.0
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -40,7 +40,7 @@ A mesma implementação de seleção de alimentos, medidas e cálculo nutriciona
 2. Seleciona uma das refeições da versão vigente do seu plano alimentar.
 3. O sistema prepara uma **cópia independente** dos alimentos e das quantidades para revisão.
 4. O usuário pode ajustar porções, remover ou adicionar alimentos segundo o consumo real.
-5. Ao confirmar, a refeição é registrada no diário com a data, o horário real do consumo (quando informado ou capturado pelo fluxo) e os nutrientes calculados. O horário sugerido no plano não é copiado como se fosse o horário real. **Lançamentos retroativos são permitidos:** sugerir data/hora atuais, mas permitir editar para o dia/hora efetivos da refeição; contabilizar no dia declarado de consumo, preservando também o instante separado de cadastro e a meta vigente na data do consumo.
+5. Ao confirmar, a refeição é registrada no diário com a data, o horário real do consumo (quando informado ou capturado pelo fluxo) e os nutrientes calculados. O horário sugerido no plano não é copiado como se fosse o horário real. **Lançamentos retroativos são permitidos:** sugerir data/hora atuais, mas permitir editar para o dia/hora efetivos da refeição; contabilizar no dia declarado de consumo, preservando também o instante separado de cadastro e a meta vigente na data do consumo. **Fuso:** o diário sugere o fuso IANA configurado no navegador, com correção manual por refeição; preservar data/hora local e fuso escolhidos, sem reclassificar refeições antigas quando o aparelho mudar de fuso.
 6. Isso não edita a dieta e não cria um modelo pessoal automaticamente.
 
 ### 3.2. A partir de uma refeição pessoal salva
