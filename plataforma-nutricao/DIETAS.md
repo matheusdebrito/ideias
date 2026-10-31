@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 0.6
+> **Versão:** 0.7
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -141,9 +141,18 @@ O nutricionista poderá:
 - Alterar a prescrição vigente cria uma nova versão do mesmo plano lógico, com início de vigência definido. A versão anterior é encerrada e permanece consultável no histórico.
 - Não criar uma segunda dieta profissional paralela para contornar o versionamento. Se futuramente houver necessidade de planos paralelos (por exemplo, estratégias distintas), isso será uma evolução de produto fora do MVP.
 - Uma versão em rascunho pode ser editada antes da publicação.
+- Ao publicar uma versão profissional, o nutricionista escolhe uma das modalidades: **vigência imediata** ou **vigência programada** para data e horário futuros.
+- Na vigência imediata, a versão passa a ser vigente no momento da publicação e encerra a vigência da versão anterior.
+- Na vigência programada, a versão é publicada com estado `SCHEDULED`; a versão atualmente vigente permanece ativa até a data/hora programada.
+- Na data/hora programada, a transição ocorre automaticamente: a versão programada passa a `ACTIVE` e a anterior tem sua vigência encerrada. Não depender de login, ação manual ou abertura do aplicativo.
+- Datas/horários programados devem ser interpretados no fuso horário definido para o paciente e armazenados de forma inequívoca (por exemplo, instante UTC mais identificador IANA do fuso), evitando ativação no horário errado por diferenças de fuso ou horário de verão.
+- A versão programada não pode ter início no passado. O backend valida a data/hora e a ausência de sobreposição de vigências antes de publicar.
 - A publicação fixa alimentos, quantidades, observações/instruções da refeição e dos itens, valores de referência e início da vigência.
+- Uma versão profissional programada é uma publicação válida, mas não é a versão vigente até chegar sua data/hora de início.
+- O histórico precisa registrar autor, momento da publicação, modalidade de vigência, data/hora efetiva e fuso usado.
 - Atualização de versão publicada cria nova versão do plano, preservando as anteriores.
-- A publicação da nova versão encerra a vigência da versão anterior no instante definido para a transição; não pode haver sobreposição de duas versões vigentes do mesmo plano.
+- A publicação imediata encerra a vigência da versão anterior no momento da publicação; a publicação programada mantém a versão anterior vigente até a data/hora futura definida.
+- A transição programada encerra a vigência anterior e ativa a nova versão de forma atômica; não pode haver sobreposição de duas versões vigentes do mesmo plano.
 - Para cada paciente, não pode haver dois planos profissionais vigentes ao mesmo tempo.
 - O histórico deve permitir identificar a versão vigente em determinada data.
 - O paciente pode registrar consumo diferente do plano sem alterar a versão prescrita.
@@ -233,7 +242,11 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Dieta profissional apresenta uma refeição fixa | O paciente vê somente os alimentos e quantidades definidos na versão publicada, sem seletor de alternativas |
 | Paciente não consome um dos alimentos prescritos | Pode registrar o consumo real no diário; a prescrição permanece inalterada |
 | Nutricionista altera modelo profissional após publicar dietas | Versões publicadas de ambos os pacientes não mudam |
-| Nutricionista atualiza dieta de um paciente | Uma nova versão entra em vigor; anterior fica no histórico |
+| Nutricionista publica nova versão com vigência imediata | A nova versão fica vigente imediatamente e a anterior é encerrada no histórico |
+| Nutricionista publica nova versão com vigência futura | A versão atual continua vigente até a data/hora programada; a futura aparece como programada |
+| Chega a data/hora de uma versão programada | A transição ocorre automaticamente, sem login ou ação manual; a versão anterior é encerrada |
+| Nutricionista tenta programar uma vigência que se sobrepõe a outra | Backend impede a publicação e informa o conflito |
+| Nutricionista atualiza dieta de um paciente | Uma nova versão entra em vigor imediatamente ou na data programada; anterior fica no histórico |
 | Nutricionista tenta publicar uma segunda dieta profissional vigente para o mesmo paciente | Operação é bloqueada ou direcionada para atualizar o plano vigente; nunca ficam dois planos profissionais ativos |
 | Paciente registra alimentação diferente do prescrito | O diário registra o ocorrido; plano publicado não muda |
 | Nutricionista tenta obter biblioteca de outro nutricionista | Servidor nega acesso |
@@ -243,6 +256,9 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 
 - Modelos pessoais e profissionais poderão ter categorias, favoritos ou tags desde o MVP?
 - Planos pessoais terão o mesmo detalhamento de histórico/versionamento dos profissionais?
+- Paciente poderá visualizar a versão futura já publicada antes da vigência, ou somente a versão atual?
+- Como cancelar ou reagendar uma versão profissional programada antes de sua ativação?
+- O MVP permitirá apenas uma versão futura programada por paciente por vez ou uma sequência de versões futuras sem sobreposição?
 - Refeição registrada a partir de um modelo deverá armazenar um identificador de origem opcional (para análises) sem se tornar dependente do modelo?
 - Quais ações de correção de histórico permitirão auditoria apropriada?
 
