@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 0.9
+> **Versão:** 1.0
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -149,12 +149,19 @@ O nutricionista poderá:
 - A ativação automática é responsabilidade do backend, nunca de um temporizador no navegador ou de o paciente abrir o aplicativo. O processamento deve ser idempotente e transacional, suportar retomada após indisponibilidade e não ativar duas versões simultaneamente.
 - A data/hora de vigência é a fonte de verdade. Mesmo que um processo em segundo plano execute com atraso, a leitura do plano vigente deve considerar o instante atual e a linha do tempo de vigência; o processamento em segundo plano não pode deixar o paciente vendo uma versão expirada como atual.
 - A versão programada não pode ter início no passado. O backend valida a data/hora e a ausência de sobreposição de vigências antes de publicar.
+- Antes do início da vigência, o nutricionista autorizado poderá **cancelar** uma versão programada. O estado passa para `CANCELLED`, a versão permanece no histórico de auditoria e a versão atual continua vigente sem interrupção.
+- Antes do início, o nutricionista autorizado poderá **reagendar** a data/hora de início da versão programada. O conteúdo nutricional publicado permanece imutável; apenas os metadados de agendamento mudam.
+- Cancelamento e reagendamento exigem validação no backend e registro de autor, data/hora, ação, data/hora anterior e nova data/hora (quando aplicável), e motivo opcional.
+- Se a data/hora de início for alcançada antes de a solicitação de cancelamento/reagendamento ser confirmada, a operação deve ser recusada; após a ativação, qualquer alteração exige uma nova versão.
+- Cancelar uma versão programada não cancela nem encerra a dieta atualmente vigente.
+- A disputa entre o processo automático de ativação e uma ação manual de cancelar/reagendar deve ser resolvida de forma transacional e idempotente, impedindo que uma versão seja ativada e cancelada simultaneamente.
 - A publicação fixa alimentos, quantidades, observações/instruções da refeição e dos itens, valores de referência e início da vigência.
 - Uma versão profissional programada é uma publicação válida, mas não é a versão vigente até chegar sua data/hora de início.
 - O paciente pode consultar a versão futura publicada antes do início em uma seção claramente identificada como **Próxima dieta**, com data/hora prevista de início.
 - A próxima dieta é apresentada em modo de consulta, sem substituir visualmente a dieta vigente e sem ser selecionada automaticamente no fluxo de registro de consumo antes de sua ativação.
 - A versão futura não permite que o paciente edite a prescrição; dúvidas ou pedidos de alteração devem ser tratados com o nutricionista.
 - O histórico precisa registrar autor, momento da publicação, modalidade de vigência, data/hora efetiva e fuso usado.
+- O histórico de agendamento deve registrar cancelamentos e reagendamentos, incluindo autor, instante da ação, horário anterior e novo horário, além de motivo opcional.
 - Atualização de versão publicada cria nova versão do plano, preservando as anteriores.
 - A publicação imediata encerra a vigência da versão anterior no momento da publicação; a publicação programada mantém a versão anterior vigente até a data/hora futura definida.
 - A transição programada encerra a vigência anterior e ativa a nova versão de forma atômica; não pode haver sobreposição de duas versões vigentes do mesmo plano.
@@ -250,6 +257,9 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Nutricionista publica nova versão com vigência imediata | A nova versão fica vigente imediatamente e a anterior é encerrada no histórico |
 | Nutricionista publica nova versão com vigência futura | A versão atual continua vigente até a data/hora programada; a futura aparece como programada |
 | Paciente consulta a próxima dieta antes da vigência | Vê a versão futura em seção identificada, com início previsto, sem confundi-la com a atual nem usá-la automaticamente no diário |
+| Nutricionista cancela uma versão programada antes do início | A versão recebe estado cancelado, permanece no histórico e a dieta atual continua vigente |
+| Nutricionista reagenda uma versão programada antes do início | A data/hora é atualizada, o conteúdo publicado permanece igual e a alteração fica auditada |
+| Solicitação de cancelamento/reagendamento chega após o início da vigência | Backend recusa a operação; mudanças exigem uma nova versão |
 | Chega a data/hora de uma versão programada | A transição ocorre automaticamente, sem login ou ação manual; a versão anterior é encerrada |
 | Nutricionista tenta programar uma vigência que se sobrepõe a outra | Backend impede a publicação e informa o conflito |
 | Nutricionista atualiza dieta de um paciente | Uma nova versão entra em vigor imediatamente ou na data programada; anterior fica no histórico |
@@ -262,7 +272,6 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 
 - Modelos pessoais e profissionais poderão ter categorias, favoritos ou tags desde o MVP?
 - Planos pessoais terão o mesmo detalhamento de histórico/versionamento dos profissionais?
-- Como cancelar ou reagendar uma versão profissional programada antes de sua ativação?
 - O MVP permitirá apenas uma versão futura programada por paciente por vez ou uma sequência de versões futuras sem sobreposição?
 - Refeição registrada a partir de um modelo deverá armazenar um identificador de origem opcional (para análises) sem se tornar dependente do modelo?
 - Quais ações de correção de histórico permitirão auditoria apropriada?
