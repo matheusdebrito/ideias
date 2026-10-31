@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 6 de 10 — Gestão de pacientes e permissões (em andamento)
-> **Versão:** 0.4
+> **Versão:** 0.5
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [DIETAS.md](./DIETAS.md), [DIARIO.md](./DIARIO.md)
 
@@ -36,7 +36,9 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 12. **Reenvio aprovado no MVP:** o nutricionista pode reenviar um convite ainda pendente ou expirado, gerando **um novo convite com novo prazo de 7 dias** e invalidando o link/convite anterior de forma atômica. Links antigos, expirados ou substituídos não podem ser aceitos. Um convite já aceito não pode ser reenviado como se o vínculo estivesse pendente; nova solicitação após recusa é outro convite, sujeito a controles contra abuso.
 13. **Retorno ao nutricionista aprovado:** o profissional que enviou o convite poderá consultar no **painel profissional** seu estado atual: **pendente**, **aceito**, **recusado**, **expirado** ou **substituído por reenvio**, com data/hora da decisão quando houver. Aceite corresponde à ativação efetiva do vínculo, após verificação de identidade, autorização e exclusividade; falhas de ativação não podem aparecer como aceitas.
 14. **Privacidade da recusa:** o profissional pode ver que o convite foi recusado, **sem justificativa obrigatória**, sem acesso a dados privados do paciente e sem saber se o destinatário possui conta apenas pelo ato de enviar o convite. Não confundir estado enviado com entrega confirmada do e-mail.
-15. **Em aberto:** envio de avisos adicionais **por e-mail ao nutricionista** para aceite/recusa (o status no painel já está confirmado), tratamento de falhas de entrega, limites e prevenção de reenvios abusivos, granularidade da autorização e regras de troca. Detalhes técnicos de identidade, tokens e persistência ficarão para a etapa 9.
+15. **Notificação por e-mail ao nutricionista confirmada para o MVP:** após a decisão **aceito ou recusado** ser registrada, enviar uma mensagem ao e-mail verificado da conta profissional **que originou o convite**, com resultado e acesso à área de convites no painel. A mensagem não deve conter valores nutricionais, peso, metas, histórico de saúde ou justificativa de recusa. O status no painel permanece a fonte de verdade.
+16. **Consistência e falhas:** a notificação só pode refletir um estado efetivamente confirmado no servidor: **aceito** exige autorização e vínculo ativado; **recusado** exige recusa real. Falha no envio não reverte a decisão, não impede o paciente de concluir o fluxo e não apresenta sucesso de entrega não confirmado. Processamento assíncrono, retries e prevenção de e-mails duplicados serão especificados na etapa 9.
+17. **Em aberto:** detalhes do provedor de e-mail, falhas de entrega, limites/prevenção de reenvios abusivos, granularidade da autorização e regras de troca. Não ampliar automaticamente o envio de e-mails para outros eventos (ex.: mudança de metas) fora das decisões já aprovadas.
 
 ## 4. Convite por e-mail para pacientes com ou sem conta (**confirmado no MVP**)
 
@@ -55,7 +57,8 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 - O nutricionista vê no próprio painel, para convites enviados por ele, os estados **Pendente**, **Aceito**, **Recusado**, **Expirado** e **Substituído** (este último para convites invalidados por reenvio), e o momento de atualização quando aplicável. Estados devem corresponder ao estado real no servidor.
 - O estado **Aceito** só é apresentado se o paciente correto tiver aceitado/autorizado e o vínculo estiver efetivamente ativado. A recusa mostra **Recusado**, sem exigir nem mostrar motivo e sem dar acesso a dados privados.
 - Convites antigos não podem alterar um estado terminal nem criar vínculo depois de expirar ou ser substituídos. Registrar transições apenas uma vez e proteger contra aceite/recusa concorrentes.
-- **Não aprovado ainda:** aviso adicional via e-mail ao profissional sobre aceite/recusa; até decisão, o retorno confirmado é **dentro do painel**.
+- **Aviso adicional por e-mail aprovado:** após **aceite com vínculo efetivamente ativado** ou **recusa registrada**, enviar ao nutricionista que convidou uma mensagem transacional com o resultado e referência ao painel profissional. O e-mail não deve expor dados nutricionais ou de saúde, conteúdo do diário nem motivos da recusa.
+- **Fonte de verdade:** a resposta no painel é mantida mesmo se o serviço de e-mail falhar. Envios e retentativas não podem criar novo vínculo nem modificar o estado do convite.
 
 ## 6. Critérios de aceitação inicial
 
@@ -84,10 +87,15 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 | Paciente recusa o convite | Painel do nutricionista mostra **Recusado** sem exigir justificativa nem liberar dados privados |
 | Paciente não responde e prazo termina | Painel mostra **Expirado**, sem presumir recusa |
 | Aceite e recusa são enviados concorrentemente | Um único resultado terminal prevalece, sem vínculo inconsistente ou dupla ativação |
+| Paciente aceita convite com sucesso e vínculo é ativado | Nutricionista convidador recebe e-mail informando aceite e encontra status Aceito no painel |
+| Paciente recusa convite | Nutricionista convidador recebe e-mail informando recusa, sem justificativa ou dados de saúde |
+| Convite expira sem resposta | Não disparar e-mail de aceite/recusa; status Expirado permanece no painel |
+| Falha na entrega de notificação por e-mail | Decisão registrada permanece válida e consultável no painel; falha pode ser tratada por processo de reenvio |
+| Requisição de aceite ou recusa é repetida | Não duplicar eventos de decisão ou criar notificações contraditórias; regras de idempotência na etapa 9 |
 
 ## 7. Decisões ainda em aberto na etapa 6
 
-- **Entrega dos convites:** canal por e-mail, identificação do destinatário, validade de **7 dias**, reenvio invalidando o convite anterior e retorno de aceite/recusa no **painel profissional** já confirmados. Pendem se haverá também e-mail de notificação ao nutricionista, falha de envio, limites de reenvio contra abuso e granularidade da autorização. Não expor se determinada pessoa possui conta a usuários não autorizados.
+- **Entrega e retorno dos convites:** convite por e-mail, identificação do destinatário, validade de **7 dias**, reenvio invalidando o anterior, retorno pelo **painel profissional e por e-mail ao nutricionista quando houver aceite ou recusa** já confirmados. Pendem tratamento técnico de falha/repetição de envios, limites contra abuso e granularidade da autorização. Não expor se determinada pessoa possui conta a usuários não autorizados.
 - **Troca:** quem pode iniciar, quando o vínculo anterior termina e como evitar janela com dois profissionais simultâneos.
 - **Planos profissionais antigos:** se uma dieta profissional vigente do nutricionista anterior deve encerrar automaticamente ou continuar apenas para consulta após a troca. Não alterar essa regra por suposição.
 - **Permissões específicas:** quais informações de diário, peso, metas e planos podem ser acessadas pelo profissional autorizado; revogação pelo paciente.
