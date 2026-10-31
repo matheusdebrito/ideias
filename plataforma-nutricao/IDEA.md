@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.24  
+> **Versão:** 0.25  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -98,6 +98,10 @@ Requisitos importantes para a qualidade dos dados:
 - Não converter g em mL, ou unidades/medidas caseiras em massa ou volume, sem uma densidade ou equivalência explícita e aplicável àquele alimento. Nunca inventar equivalências universais.
 - Preservar a quantidade original, unidade, referência nutricional e fator de conversão aplicado nas versões publicadas e nos registros de consumo.
 - Preservar a rastreabilidade dos dados usados nos cálculos.
+- **Precisão e arredondamento (confirmado para o MVP):** usar os valores nutricionais de referência e fatores de porção/conversão sem arredondamentos intermediários; somar valores não arredondados ao calcular item, refeição e dia e **arredondar somente para apresentação**.
+- Exibir calorias geralmente sem casas decimais ou com uma casa quando o contexto justificar; macronutrientes em gramas com uma casa decimal; micronutrientes com precisão adequada à unidade (mg/µg) e aos dados originais, evitando apresentar precisão artificial.
+- Preservar os valores e a precisão disponíveis na fonte, de modo que cálculo numérico mais preciso **não signifique maior exatidão nutricional**. O total calculado a partir dos valores integrais poderá diferir em alguns décimos da soma de parcelas já arredondadas na tela.
+- Adotar regras numéricas e de formatação consistentes entre biblioteca, dietas, diário e indicadores, inclusive ao preservar retratos históricos.
 
 **Fontes candidatas:** TBCA como fonte principal a ser avaliada e TACO como fonte complementar. A incorporação de dados em um produto comercial depende da confirmação das condições de uso, atribuição e redistribuição de cada fonte.
 
