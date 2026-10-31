@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 1.3
+> **Versão:** 1.4
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -182,6 +182,24 @@ O nutricionista poderá:
 - Uma nova versão de dieta não substitui retroativamente valores registrados no diário.
 - É proibido alterar automaticamente dietas de outros pacientes quando o nutricionista modifica um modelo em sua biblioteca.
 
+## 6. Categorias de refeições (**Definido para o MVP**)
+
+- Categorias padrão: **Café da manhã, Lanche da manhã, Almoço, Lanche da tarde, Jantar e Ceia**.
+- O nutricionista poderá criar categorias personalizadas e utilizá-las na biblioteca profissional ou nas dietas dos seus pacientes.
+- Cada refeição planejada tem um identificador independente da categoria; **não existe restrição de unicidade por dia + categoria**.
+- Duas ou mais refeições podem utilizar a mesma categoria no mesmo dia. Nome, ordem de exibição e horário sugerido opcional podem diferenciá-las visualmente.
+- A categoria serve para organização, não para limitar quantidade de refeições nem para aplicar regras nutricionais diferentes.
+- Categorias personalizadas de um nutricionista não ficam disponíveis automaticamente na biblioteca de outro profissional.
+- Renomear ou arquivar uma categoria personalizada não deve alterar nomes/classificações já preservados em versões publicadas de dietas; a versão mantém os dados necessários para exibição histórica.
+- Excluir uma categoria em uso não pode causar desaparecimento de refeições ou quebra de planos já publicados. Preferir arquivamento em vez de exclusão destrutiva.
+- A possibilidade de o usuário comum criar categorias personalizadas permanece em aberto; usuários comuns contam com as categorias padrão.
+
+**Critérios de aceitação:**
+1. Nutricionista cria uma categoria personalizada e a aplica a refeições de diferentes pacientes.
+2. Uma segunda refeição com a categoria Café da manhã na segunda-feira é aceita.
+3. A categoria personalizada de um nutricionista não aparece na biblioteca de outro.
+4. Arquivar ou renomear a categoria não altera a classificação histórica das dietas já publicadas.
+
 ## 6. Organização semanal: padrão diário com personalização (**Definido para o MVP**)
 
 **Modelo escolhido:** cada plano possui um **cardápio diário padrão**, que se repete nos sete dias da semana. Quem monta o plano (usuário comum ou nutricionista) pode **personalizar refeições em dias específicos da semana**, sem precisar preencher sete cardápios completos.
@@ -218,7 +236,7 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 - Publicar nova versão com mudanças semanais preserva a visualização de versões anteriores.
 - Os totais nutricionais de sábado refletem a personalização, não a combinação padrão substituída.
 
-## 7. Invariantes de domínio
+## 8. Invariantes de domínio
 
 1. Refeições consumidas e itens consumidos não dependem da existência de plano ativo ou modelo salvo.
 2. Um paciente tem no máximo um plano profissional vigente no MVP; a regra deve ser garantida no domínio e na persistência, não apenas escondendo botões na interface.
@@ -236,7 +254,7 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 7. O salvamento opcional como modelo deve ser explícito e separado do registro alimentar.
 8. Requisições repetidas de confirmação não devem registrar o mesmo consumo duas vezes sem intenção explícita.
 
-## 8. Proposta de entidades (não é o esquema final)
+## 9. Proposta de entidades (não é o esquema final)
 
 - `PlanoAlimentar`
 - `VersaoPlano`
@@ -247,7 +265,7 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 
 **Proposta de implementação:** compartilhar componentes de edição e serviço de cálculo, mas não utilizar uma única tabela genérica de refeições para todos os contextos sem avaliar cuidadosamente as permissões, integridade e históricos.
 
-## 9. Cenários de aceitação do MVP
+## 10. Cenários de aceitação do MVP
 
 | Cenário | Resultado esperado |
 | --- | --- |
@@ -257,6 +275,8 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Usuário altera ou exclui modelo pessoal | Refeições já consumidas permanecem iguais |
 | Nutricionista usa um modelo em dois planos de pacientes distintos | Cada plano recebe uma cópia independente |
 | Nutricionista cria refeição com alimentos e quantidades | Sistema calcula automaticamente os nutrientes; não solicita macros manuais |
+| Nutricionista usa uma categoria personalizada | A categoria é aplicada à refeição sem impor unicidade por dia |
+| Nutricionista renomeia categoria após publicação da dieta | A dieta publicada continua mostrando sua classificação histórica |
 | Nutricionista adiciona observação à refeição | A observação aparece discretamente abaixo do nome da refeição |
 | Nutricionista adiciona observação a um alimento | A observação aparece discretamente abaixo do nome do alimento |
 | Refeição/alimento não possui observação | Nenhum espaço ou rótulo vazio é exibido |
@@ -284,12 +304,13 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Nutricionista tenta obter biblioteca de outro nutricionista | Servidor nega acesso |
 | Usuário envia duas confirmações iguais por erro de rede | Sistema evita consumo duplicado por repetição da mesma operação |
 
-## 10. Decisões em aberto — não presumir definição
+## 11. Decisões em aberto — não presumir definição
 
-- Modelos pessoais e profissionais poderão ter categorias, favoritos ou tags desde o MVP?
+- Usuários comuns também poderão criar categorias personalizadas no MVP ou usarão apenas as categorias padrão?
+- Favoritos e etiquetas adicionais (tags) nas bibliotecas pessoal e profissional agregam valor suficiente para o MVP?
 - Refeição registrada a partir de um modelo deverá armazenar um identificador de origem opcional (para análises) sem se tornar dependente do modelo?
 - Quais ações de correção de histórico permitirão auditoria apropriada?
 
-## 11. Critérios de priorização
+## 12. Critérios de priorização
 
 No MVP, priorizar a criação e reutilização de modelos, registro de consumo, publicação de planos com histórico e isolamento de dados. Não incluir rede social, compartilhamento público, seletor de alimentos alternativos ou recomendações automáticas de substituições.
