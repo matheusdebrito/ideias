@@ -23,7 +23,7 @@
 | 2 | Modelo de dietas e refeições | Concluída | Plano versus diário, versionamento, bibliotecas, horários/observações, composição fixa |
 | 3 | Criação e atribuição de dietas | Concluída | Fluxo profissional, atribuição, cardápio padrão com personalizações semanais, categorias, vigência imediata/programada, visualização antecipada, cancelamento/reagendamento |
 | 4 | Base de alimentos e cálculos nutricionais | Concluída | Cadastro, unidades, cálculos, dados incompletos, pesagem pós-preparo, marcas e aviso de duplicidade definidos; fonte TBCA/TACO/JSON adiada para etapa 9; retenção para etapas 8/9 |
-| 5 | Diário alimentar, metas e indicadores | Em andamento | Registro do consumo real, histórico/correções, metas datadas, saldo diário/semanal/mensal, peso e IMC |
+| 5 | Diário alimentar, metas e indicadores | Em andamento | Edição/exclusão de refeições e histórico discreto aprovados; pendem metas pessoais/profissionais, saldos, períodos, peso/IMC e privacidade de auditoria |
 | 6 | Gestão de pacientes e permissões | Pendente | Convites, vínculo único, revogação, acesso aos dados, histórico profissional, validação CRN |
 | 7 | Monetização e assinaturas | Pendente | Recursos gratuitos e pagos, planos, limites, cobrança, cancelamento e continuidade do acesso |
 | 8 | Requisitos não funcionais, segurança e privacidade | Pendente | LGPD, controle de acesso, riscos, retenção, portabilidade, observabilidade, desempenho, backup |
@@ -84,6 +84,6 @@ Estas pendências ficam registradas, não são decisões tomadas por omissão.
 
 **Etapa 4 concluída funcionalmente:** as regras aprovadas estão detalhadas em [ALIMENTOS.md](./ALIMENTOS.md). A escolha da fonte (TBCA/TACO/JSON), licença/autorização aplicável, cobertura, importação, algoritmo de similaridade e aritmética decimal/modo técnico de arredondamento ficam na etapa 9. Regras de exclusão/retenção e preservação de dados pessoais serão detalhadas nas etapas 8 e 9, sem retroceder o planejamento funcional.
 
-**Etapa 5 iniciada:** definir ações de correção do diário alimentar e detalhar metas/indicadores, mantendo a separação entre consumo real e prescrição. Ver [DIARIO.md](./DIARIO.md).
+**Etapa 5 em andamento:** aprovado editar ou excluir refeições já registradas, recalcular totais e manter histórico discreto de correções sem justificativa obrigatória. A privacidade, a retenção e o acesso à trilha são pendentes das etapas 8/9. Próximas decisões: metas e indicadores, mantendo a separação entre consumo real e prescrição. Ver [DIARIO.md](./DIARIO.md).
 
 **Importante:** conclusão das 10 etapas encerra o planejamento, não significa que o software foi desenvolvido, validado ou colocado em produção.
