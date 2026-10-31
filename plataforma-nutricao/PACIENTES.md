@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 6 de 10 — Gestão de pacientes e permissões (em andamento)
-> **Versão:** 1.1
+> **Versão:** 1.2
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [DIETAS.md](./DIETAS.md), [DIARIO.md](./DIARIO.md)
 
@@ -99,7 +99,7 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 - Não converter automaticamente a prescrição profissional anterior em plano pessoal do paciente e **não atribuí-la a um novo nutricionista**. O paciente segue podendo consultar o histórico; planos pessoais existentes e registros de consumo independentes não são modificados.
 - A confirmação de **Encerrar acompanhamento** deve explicar de forma breve que o plano profissional atual deixará de ser vigente e que a versão ficará disponível no histórico. Evitar múltiplas confirmações.
 - Na etapa 9, especificar transição atômica e idempotente entre vínculo, autorização, fim de vigência e cancelamento da versão futura; resolver concorrência com processadores de ativação agendada. Nunca exibir uma versão como ativa após o fim do vínculo.
-- **Pendente para decisão distinta:** impacto sobre metas nutricionais originalmente prescritas pelo profissional, que podem continuar referenciadas pelo acompanhamento pessoal; não presumir que a regra da dieta as elimina ou altera.
+- **Continuidade das metas já aprovada:** a última meta efetiva por nutriente continua como referência pessoal dos indicadores após o encerramento, preservando origem e histórico, sem ser prescrição profissional vigente. Ver a seção 11 e [DIARIO.md](./DIARIO.md).
 
 ## 9. Troca direta de nutricionista por convite (**confirmado no MVP**)
 
@@ -109,7 +109,7 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 4. **Atomicidade obrigatória:** servidor e banco realizam em uma única transação lógica: encerrar vínculo antigo e suas autorizações, encerrar a vigência da dieta profissional antiga, cancelar agendamentos futuros da prescrição antiga, registrar o aceite do convite e ativar o novo vínculo com autorização própria. **Jamais podem coexistir dois nutricionistas ativos.** Se houver erro, reverter tudo e manter vínculo, permissões e dieta anteriores; o convite não aparece como Aceito.
 5. **Histórico e limites:** o paciente mantém diário, medições, metas pessoais, histórico de dietas e conta. Os planos antigos continuam consultáveis com autoria original; não os converter em plano pessoal ou atribuir ao novo profissional. A nova autorização não inclui bibliotecas privadas do nutricionista antigo nem publica automaticamente uma nova dieta.
 6. **Concorrência e estado desatualizado:** impedir confirmação simultânea de convites diferentes ou aceite de convite vencido. Se o vínculo ativo mudar desde a abertura da tela, pedir para revisar a situação atual antes de confirmar; não substituir silenciosamente um terceiro profissional.
-7. **Notificações:** somente confirmar **Aceito** no painel e e-mail ao nutricionista convidador depois de ativação real. Eventual notificação de encerramento ao profissional anterior e destino de metas nutricionais profissionais estão em aberto. Detalhes transacionais, locks/constraints e testes ficam na etapa 9.
+7. **Notificações:** somente confirmar **Aceito** no painel e e-mail ao nutricionista convidador depois de ativação real. **Quando a troca for concluída, o profissional anterior receberá aviso por e-mail com o nome do paciente que saiu e o estado encerrado**, sem motivo ou dados nutricionais. A meta efetiva pessoal continua conforme a seção 11. Detalhes de transações, restrições e envio ficam na etapa 9.
 
 ## 10. Critérios de aceitação inicial
 
@@ -177,8 +177,21 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 | Paciente troca de nutricionista e novo profissional não definiu metas | Última meta efetiva persiste até ajuste pessoal ou nova meta profissional válida |
 | Ex-profissional tem mudança de meta agendada para após desligamento | Alteração futura não entra em vigor sem vínculo ativo |
 | Paciente edita meta pessoal preservada após desvinculação | Edição livre, sem aviso de prescrição vigente do ex-profissional, preservando histórico |
+| Paciente encerra vínculo diretamente | Enviar e-mail ao ex-nutricionista com nome do paciente e confirmação de encerramento, sem motivo ou dados de saúde |
+| Paciente confirma troca por convite de outro nutricionista | Após transação concluída, ex-nutricionista recebe e-mail identificando apenas pelo nome o paciente desvinculado; novo profissional recebe notificação de aceite |
+| Troca é recusada, cancelada ou falha | Não enviar e-mail de vínculo encerrado ao profissional anterior |
+| Envio do e-mail de encerramento falha | Encerramento permanece válido e aparece no histórico profissional restrito; acesso a dados do paciente segue revogado |
+| Nutricionista anterior abre link do e-mail após desvinculação | Visualiza apenas o evento de encerramento, nunca o painel ou dados privados do paciente |
 
-## 11. Continuidade das metas e propriedade dos dados (**confirmado no MVP**)
+## 11. Notificação de encerramento ao nutricionista anterior (**confirmada no MVP**)
+
+- **Eventos:** enviar e-mail ao nutricionista anterior quando o paciente confirmar **Encerrar acompanhamento** ou concluir **Aceitar e trocar de nutricionista**. Mostrar também o encerramento na área profissional de histórico de vínculos, sem manter acesso ao painel de acompanhamento daquele paciente.
+- **Identificação mínima útil:** a mensagem conterá **o nome do paciente que teve seu vínculo encerrado**, já conhecido do profissional por sua relação anterior, e o resultado **acompanhamento encerrado**; poderá indicar a data/hora e o acesso à área de vínculos encerrados na plataforma. Não exigir justificativa do paciente nem informar o motivo; **não incluir valores nutricionais, refeições, peso, metas, dietas, prontuário, nome do novo profissional ou seus dados**.
+- **Destinatário restrito:** enviar **somente ao e-mail verificado associado à conta do nutricionista que possuía o vínculo imediatamente anterior**, e apenas quando essa relação realmente existia. Não notificar outros nutricionistas, convidados sem vínculo nem endereços fornecidos por terceiros.
+- **Consistência e privacidade:** criar o evento de notificação **somente depois da confirmação persistida do encerramento ou troca**. Falha de entrega não reabre vínculo, não devolve acesso e não impede a operação concluída; o estado permanece disponível no histórico profissional restrito. Não abrir acesso aos dados privados do paciente por meio de link de notificação.
+- **Fluxo simples:** paciente não precisa escrever motivo nem decidir se o nutricionista será avisado; essa consequência poderá ser apresentada discretamente na confirmação única já aprovada. A etapa 9 tratará entrega assíncrona, idempotência de eventos, duplicidade e falhas.
+
+## 12. Continuidade das metas e propriedade dos dados (**confirmado no MVP**)
 
 - **Regra geral:** o paciente não perde seus registros de acompanhamento ao encerrar ou trocar de nutricionista: diário, pesagens, metas, indicadores e conteúdo das versões de dietas profissionais publicadas para ele permanecem consultáveis em sua conta, sujeitos a direitos de exclusão/retificação e obrigações de guarda (etapa 8). Isso não inclui automaticamente bibliotecas internas e prontuários privados do profissional.
 - **Metas sem interrupção:** conservar a última meta efetiva para cada nutriente que já possua valor (calorias, proteínas, carboidratos, gorduras). Tanto a meta definida pelo profissional quanto um ajuste posterior do paciente podem ser a última referência. Não zerar, apagar, inventar nova meta ou alterar indicadores de períodos anteriores.
@@ -188,12 +201,12 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 - **Sem comandos futuros do ex-profissional:** atualização de meta agendada pelo nutricionista anterior não pode modificar a referência após revogação do vínculo. A etapa 9 detalhará garantias de transação e concorrência.
 - **Dieta preservada, vigência encerrada:** o paciente conserva o conteúdo publicado e pode consultá-lo, mas conforme aprovação anterior a prescrição profissional deixa de ser vigente e suas futuras ativações são canceladas. Preservar dados não significa manter uma prescrição como ativa.
 
-## 12. Decisões ainda em aberto na etapa 6
+## 13. Decisões ainda em aberto na etapa 6
 
 - **Entrega e retorno dos convites:** convite por e-mail, identificação do destinatário, validade de **7 dias**, reenvio invalidando o anterior e retorno no painel e por e-mail já confirmados. **Escopo de cinco categorias e aceite em tela única com resumo claro também confirmados**, sem múltiplos controles individuais no MVP. Pendem tratamento técnico de falha/repetição de envios e limites contra abuso. Não expor se determinada pessoa possui conta a usuários não autorizados.
 - **Troca direta aprovada:** paciente pode aceitar convite de outro profissional com uma única confirmação, encerrando o vínculo antigo e ativando o novo atomicamente, sem dois profissionais simultâneos.
 - **Planos profissionais antigos — decidido:** ao encerrar vínculo, a dieta profissional vigente vai para consulta no histórico e eventuais versões futuras programadas são canceladas, preservando conteúdo e autoria. Troca direta por convite já definida; **última meta efetiva preservada como referência pessoal após desvinculação**, com origem profissional registrada.
-- **Revogação e encerramento confirmados:** o histórico pessoal anterior ao vínculo será acessível ao profissional autorizado; o paciente poderá encerrar o acompanhamento em **Meu nutricionista**, com confirmação simples, revogação imediata do acesso, encerramento da dieta profissional vigente e cancelamento das versões futuras. **Pendente:** eventual notificação de encerramento ao profissional. A autorização não inclui bibliotecas privadas anteriores.
+- **Revogação e encerramento confirmados:** o histórico pessoal anterior ao vínculo será acessível ao profissional autorizado; o paciente poderá encerrar o acompanhamento em **Meu nutricionista**, com confirmação simples, revogação imediata do acesso, encerramento da dieta profissional vigente e cancelamento das versões futuras. **Aviso com nome do paciente ao ex-profissional por e-mail e no histórico de vínculos já aprovado**; não inclui motivo nem dados nutricionais, e não restabelece acesso. A autorização não inclui bibliotecas privadas anteriores.
 - **Registro do nutricionista:** verificação do CRN e restrições de acesso antes da validação.
 - **Dados profissionais após encerramento:** guarda obrigatória, eliminação, portabilidade e outros requisitos da LGPD na etapa 8.
 
