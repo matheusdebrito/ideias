@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.61  
+> **Versão:** 0.62  
 > **Última atualização:** 31/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -57,7 +57,7 @@ Possíveis necessidades:
 - Atualizar planos e consultar versões anteriores.
 - Acompanhar a diferença entre o plano prescrito e a alimentação registrada pelo paciente.
 
-A validação das credenciais profissionais e os requisitos específicos para o perfil de nutricionista ainda precisam ser definidos.
+**Validação profissional confirmada no MVP:** no cadastro profissional solicitar **nome completo, número do CRN e Conselho Regional/região do registro**. A conta pode ser criada com status **Em validação**, mas convites, criação de vínculos, acesso profissional aos dados de pacientes, publicação de dietas e definição de metas profissionais só serão liberados após conferência da **titularidade e regularidade do CRN**. O usuário poderá usar os recursos pessoais enquanto aguarda. Meio de conferência, revalidação e tratamento de irregularidades serão especificados nas etapas 8/9; não presumir integração automática oficial.
 
 ## 3. Módulos funcionais propostos
 
@@ -336,6 +336,7 @@ A independência do diário preserva **o que a pessoa comeu**; o versionamento p
 - **Planos profissionais após encerrar vínculo (confirmado no MVP):** a dieta profissional vigente deixa de ser a prescrição atual e permanece consultável no histórico do paciente, sem perder autoria, conteúdo e vigência histórica. Qualquer versão futura programada pelo nutricionista anterior tem sua ativação **cancelada por encerramento do vínculo**, permanecendo registrada, sem excluir o histórico ou modificar o diário alimentar. A aplicação informará isso brevemente na confirmação de encerramento, sem etapas extras. O bloqueio de ativações tardias será garantido no servidor e a regra é diferente do cancelamento manual de agendamento durante um vínculo ativo.
 - **Continuidade da meta efetiva após encerramento ou troca (confirmada no MVP):** manter a última meta efetiva de cada nutriente definido (kcal e macronutrientes) nos indicadores pessoais do paciente; se a meta tinha origem profissional, manter sua autoria e valor original no histórico, mas sem apresentá-la como prescrição profissional vigente. O paciente pode ajustar livremente a referência pessoal; quando houver novo nutricionista autorizado, a referência continua até ajuste pessoal ou publicação efetiva de nova meta profissional. O encerramento não apaga diário, medições, dietas antigas nem metas. **Aviso ao ex-profissional confirmado:** enviar e-mail ao nutricionista anterior, incluindo **nome do paciente** e confirmação de encerramento após término ou troca de vínculo, sem motivo nem dados nutricionais.
 - **Notificação de encerramento ou troca (confirmada no MVP):** quando o paciente encerrar o acompanhamento ou a troca para outro nutricionista for concluída, o **nutricionista anterior** será avisado no histórico profissional e por **e-mail contendo o nome do paciente que encerrou o vínculo**. Não enviar justificativa, dados alimentares, peso, metas, dietas ou informações sobre o novo profissional. Envio ao endereço verificado da conta do ex-profissional, apenas após conclusão da operação. Falha no envio não desfaz a desvinculação nem devolve acesso ao paciente.
+- **Validação de nutricionista para o MVP:** cadastro simples com nome completo, número e região do **CRN**. Permitir conta **Em validação**, mas não enviar convites, ativar vínculos, acessar dados privados de pacientes como profissional, definir metas profissionais ou publicar/programar dietas antes da **aprovação da conferência da titularidade e regularidade do registro**. Situação pendente, validada ou não aprovada deve ter feedback claro, sem bloquear uso pessoal comum. Validar privilégios no servidor e persistência, não por campos editáveis do frontend; vínculo e consentimento do paciente continuam obrigatórios mesmo após aprovação.
 - **Autorização para novo profissional:** o vínculo com o novo nutricionista e o acesso aos dados do paciente exigem autorização válida; não transferir automaticamente o acesso concedido ao profissional anterior. O novo vínculo pode ser ativado por confirmação única de troca, em operação atômica com encerramento do anterior, sem autorização herdada. Detalhes técnicos ficam para a etapa 9.
 - **Garantia de integridade:** a regra de vínculo único deverá ser aplicada no servidor e banco, inclusive contra convites aceitos simultaneamente; detalhes de transação/constraint ficam para a etapa 9.
 - Lista de pacientes vinculados.
@@ -347,7 +348,7 @@ A independência do diário preserva **o que a pessoa comeu**; o versionamento p
 - Criação e atribuição de planos alimentares.
 - Histórico de alterações nos planos.
 
-O modelo de múltiplos nutricionistas simultâneos está **descartado no MVP**. O paciente permanece titular de seus registros pessoais ao trocar de nutricionista, e o acesso ativo do antigo profissional é encerrado com o vínculo. **Pendências da etapa 6:** prevenção de abuso nos convites e validação CRN. **Aviso de encerramento/troca ao ex-profissional com o nome do paciente, por e-mail e no histórico restrito, confirmado para o MVP**. **Permanência da última meta efetiva e dos dados do paciente após o fim do vínculo já confirmada**, com origem profissional histórica preservada. **Troca direta com confirmação única e transição atômica, fim da dieta antiga e cancelamento de futuras versões** já aprovados, preservando histórico; retenção e documentos ficam para etapa 8. Ver [PACIENTES.md](./PACIENTES.md).
+O modelo de múltiplos nutricionistas simultâneos está **descartado no MVP**. O paciente permanece titular de seus registros pessoais ao trocar de nutricionista, e o acesso ativo do antigo profissional é encerrado com o vínculo. **Pendências da etapa 6:** prevenção de abuso nos convites. **Cadastro com nome/CRN/regional e bloqueio das funcionalidades profissionais até verificação efetiva já aprovados**; método de consulta, rechecagem e tratamento de irregularidades ficam para etapas 8/9. **Aviso de encerramento/troca ao ex-profissional com o nome do paciente, por e-mail e no histórico restrito, confirmado para o MVP**. **Permanência da última meta efetiva e dos dados do paciente após o fim do vínculo já confirmada**, com origem profissional histórica preservada. **Troca direta com confirmação única e transição atômica, fim da dieta antiga e cancelamento de futuras versões** já aprovados, preservando histórico; retenção e documentos ficam para etapa 8. Ver [PACIENTES.md](./PACIENTES.md).
 
 ### 3.7. Assinaturas e monetização
 
