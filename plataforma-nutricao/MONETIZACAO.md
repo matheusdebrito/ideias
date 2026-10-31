@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 7 de 10 — Monetização e assinaturas (em andamento)
-> **Versão:** 0.4
+> **Versão:** 0.5
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [ROADMAP.md](./ROADMAP.md), [PACIENTES.md](./PACIENTES.md), [DIARIO.md](./DIARIO.md), [DIETAS.md](./DIETAS.md)
 
@@ -33,25 +33,34 @@ Definir como a plataforma de nutrição se sustenta financeiramente **sem cobrar
 - O nutricionista poderá **cancelar a renovação automática** de sua assinatura mensal. O cancelamento **não interrompe imediatamente** as funções profissionais: a assinatura permanece com direito de uso **até a data/hora de término do período já pago**.
 - A interface deve exibir de forma clara a **data/hora até quando o acesso profissional permanecerá habilitado**, sem cobrar outro ciclo após a solicitação de cancelamento. O estado comercial deve distinguir **renovação cancelada, período pago ainda vigente** de **período encerrado**.
 - Durante o período já pago, as funções profissionais permanecem disponíveis conforme as mesmas condições de **CRN validado, vínculo e autorização do usuário**. O cancelamento não concede direitos extras nem dispensa as verificações existentes.
-- **Após terminar o período pago, restringir o uso das funcionalidades profissionais pagas**, mas manter o acesso às funcionalidades pessoais da própria conta do nutricionista. **Quais funções profissionais de consulta poderão permanecer disponíveis, se alguma, e o tratamento operacional dos agendamentos futuros serão definidos separadamente**; não presumir acesso irrestrito aos dados sensíveis.
+- **Após terminar o período pago, aplicar o acesso restrito da seção 5:** manter conta pessoal, área de assinatura e lista administrativa mínima de vínculos, mas **bloquear acesso a dados nutricionais, novos convites e ações profissionais de dietas/metas**. O tratamento de versões de dietas já publicadas com ativação futura será decidido separadamente.
 - **Não confundir assinatura com vínculo:** o pedido de cancelamento ou o fim do período pago **não encerra automaticamente os vínculos de acompanhamento**, não comunica falsamente que o usuário encerrou o vínculo e **não exclui dietas publicadas, diário, metas, histórico ou outras informações do usuário**. O titular permanece com acesso aos próprios dados. Isso é diferente do encerramento de vínculo solicitado pelo usuário, que revoga permissões e encerra a vigência da prescrição conforme [PACIENTES.md](./PACIENTES.md).
 - **Sem efeitos retroativos ou mudanças silenciosas:** cancelar a renovação por si só não despublica uma dieta vigente, não altera metas efetivas do usuário nem cancela agendamentos futuros de prescrição; o que deve acontecer **quando o período pago terminar** será decidido explicitamente, preservando integridade e histórico.
 - A etapa 9 especificará verificação confiável de período pago no servidor, referência temporal inequívoca, idempotência de cancelamentos, eventos de cobrança e processamento de webhooks. Não confiar apenas na interface ou numa data fornecida pelo cliente.
 
-## 5. Questões a decidir na etapa 7
+## 5. Acesso após fim do período pago (**confirmado no MVP**)
+
+- **Acesso mantido:** própria conta pessoal e seus recursos gratuitos; área de assinatura/pagamentos para visualizar e regularizar o estado comercial; listagem administrativa **Meus pacientes** com **nome e estado do vínculo** dos usuários vinculados, sem dados nutricionais, indicadores, detalhes das dietas ou acesso a perfil completo do usuário.
+- **Acesso profissional bloqueado:** leitura de diário alimentar, calorias, macronutrientes, peso/IMC, metas, indicadores, histórico nutricional e prescrições de usuários; edição/publicação/programação de dietas e metas profissionais; envio de convites e ativação de novos vínculos; uso da biblioteca profissional paga. Deve bloquear também as respectivas chamadas da API, inclusive em sessões já abertas, sem depender de controles do frontend.
+- **Não confundir assinatura e vínculo:** o fim do período pago **não encerra automaticamente os vínculos existentes**, nem dispara e-mail afirmando que o usuário encerrou o acompanhamento. Conteúdo das dietas publicadas, registros, metas e históricos continuam preservados e acessíveis ao próprio usuário.
+- **Após reativar a assinatura:** as capacidades profissionais só retornam quando **CRN estiver validado** e cada vínculo e autorização do usuário ainda forem válidos. Não reabrir autorização revogada, relação encerrada nem prescrição que perdeu sua vigência por término do vínculo.
+- **Dietas futuras publicadas antes da expiração:** ainda **não está decidido** se agendamentos já publicados devem ativar enquanto a assinatura estiver expirada. Não confundir a execução de uma publicação anterior com a criação de nova prescrição após bloqueio.
+- **Verificação no servidor:** período pago, autorização, vínculo, CRN e papel devem ser validados antes de permitir ações profissionais; testes negativos, idempotência e invalidação de acesso/caches serão detalhados na etapa 9.
+
+## 6. Questões a decidir na etapa 7
 
 - **Estrutura da oferta — confirmada:** somente **um plano profissional mensal** no MVP, incluindo todas as ferramentas profissionais previstas; não criar níveis de assinatura diferentes no lançamento.
 - **Limite de pacientes — decisão adiada explicitamente:** avaliar mais adiante **se existirá limite** de usuários que um nutricionista poderá acompanhar, antes de determinar qualquer quantidade. **Plano único não equivale a pacientes ilimitados.** Outros limites e regras de uso justo também não foram decididos.
 - **Preço — decisão adiada explicitamente:** definir posteriormente valor da mensalidade e condições comerciais, considerando custos e validação de mercado. Não fixar preço, moeda, desconto ou promoção por suposição.
 - **Período de teste — ainda sem decisão:** avaliar separadamente se existirá experiência gratuita por prazo limitado.
 - **Pagamento:** provedor, renovação recorrente, confirmação, comprovantes e comunicação de falhas.
-- **Cancelamento voluntário — parte decidida:** renovar automaticamente deixa de ocorrer quando solicitado; funções profissionais persistem até o fim do período já pago, depois são restringidas, com dados e vínculos preservados. **Em aberto:** funções precisas ainda disponíveis após o vencimento e tratamento de agendas de prescrição após essa data.
+- **Cancelamento e acesso após vencimento — decididos:** renovação para, acesso profissional continua até o fim do período pago. Depois, ficam conta pessoal, assinatura e lista administrativa mínima; acesso nutricional e ações profissionais ficam bloqueados, preservando vínculos e dados. **Em aberto:** versões de dietas já publicadas com ativação futura após expiração.
 - **Inadimplência/falha de pagamento — decisão separada:** definir aviso, tentativas de cobrança, eventual período de tolerância e efeitos de suspensão, sem aplicar automaticamente a regra de cancelamento voluntário.
 - **Estados de assinatura:** definição do ciclo de vida comercial e mensagens adequadas para o nutricionista.
 
 Regras técnicas de cobrança, idempotência, webhooks, segurança e integração serão detalhadas na etapa 9. Proteção de dados, retenção e responsabilidades na etapa 8.
 
-## 6. Critérios de aceitação iniciais
+## 7. Critérios de aceitação iniciais
 
 | Cenário | Resultado esperado |
 | --- | --- |
@@ -66,13 +75,18 @@ Regras técnicas de cobrança, idempotência, webhooks, segurança e integraçã
 | Nutricionista tem assinatura mas não possui vínculo autorizado com um paciente | API bloqueia acesso aos dados desse paciente |
 | Nutricionista cancela voluntariamente a assinatura durante período pago | Renovação automática é interrompida, mas funcionalidades profissionais seguem disponíveis até o fim do período já pago |
 | Nutricionista consulta vencimento após cancelar | Interface informa data/hora de término do acesso pago, distinguindo cancelamento agendado de período encerrado |
-| Período pago termina após cancelamento | Funções profissionais pagas passam a ser restringidas; recursos pessoais do nutricionista permanecem disponíveis |
+| Período pago termina após cancelamento | Nutricionista mantém conta pessoal, área de assinatura e lista administrativa de vínculos existentes, sem acesso nutricional nem ações profissionais |
+| Assinatura expirada, nutricionista abre Meus pacientes | Somente nomes e estados dos vínculos, sem acesso aos diários, indicadores, dietas ou dados privados |
+| Assinatura expirada, nutricionista tenta consultar dados por API ou criar nova dieta | Servidor bloqueia requisição mesmo com CRN verificado e vínculo anteriormente autorizado |
+| Assinatura expirada, nutricionista tenta enviar novo convite | Ação é negada, sem criar convite nem vínculo |
+| Assinatura reativada e vínculo/autorização ainda válidos | Acesso profissional pode voltar após conferir assinatura, CRN e permissões, sem reviver vínculos encerrados |
+| Usuário encerrou o vínculo durante a suspensão comercial | A reativação de assinatura não restaura a autorização revogada nem a dieta profissional anteriormente encerrada |
 | Nutricionista cancela assinatura com usuários vinculados | Vínculos não são encerrados automaticamente, nem enviada mensagem falsa de fim de acompanhamento; dados e prescrições publicadas permanecem preservados |
 | Nutricionista cancela enquanto existe dieta profissional programada | Cancelar renovação não cancela por si só o agendamento; regra de execução após vencimento continua pendente |
 | Usuário acessa conta depois que assinatura do nutricionista terminou | Próprios dados, histórico, diário e metas permanecem acessíveis sem custo |
 | Pagamento falha sem solicitação de cancelamento | Regras de inadimplência serão definidas separadamente; não tratar automaticamente como cancelamento voluntário |
 | Paciente encerra vínculo com nutricionista | Mantém conta e dados independentemente do estado comercial do profissional |
 
-**Próxima decisão:** definir **o que exatamente fica acessível ao nutricionista após terminar o período pago** — por exemplo, apenas conta pessoal, assinatura e lista administrativa de vínculos sem dados nutricionais, ou também alguma consulta profissional limitada. Regras de falha de pagamento serão discutidas separadamente. **Preço e existência/quantidade de limite de pacientes continuam expressamente adiados.**
+**Próxima decisão:** uma versão de dieta **já publicada e programada antes do vencimento** poderá ativar na data prevista se a assinatura profissional estiver expirada? Novas publicações seguem bloqueadas. Inadimplência será discutida separadamente. **Preço e existência/quantidade de limite de pacientes permanecem expressamente adiados.**
 
 **Observação:** este arquivo registra requisitos aprovados; não representa implementação, testes ou cobrança em produção.
