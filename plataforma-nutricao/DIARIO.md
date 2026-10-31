@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (em andamento)
-> **Versão:** 0.7
+> **Versão:** 0.8
 > **Data:** 31/10/2026
 > **Fonte principal da visão:** [IDEA.md](./IDEA.md) e [DIETAS.md](./DIETAS.md)
 > **Convenção:** regras confirmadas estão separadas das decisões em aberto.
@@ -25,7 +25,11 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 - O formulário oferece a data e a hora atuais como valores iniciais para minimizar a digitação, mas ambos podem ser editados antes da confirmação.
 - Preservar distintamente o instante do **consumo declarado** e o instante do **cadastro no sistema**; nenhum deve sobrescrever o outro.
 - Nutrientes, indicadores e totais devem ser contabilizados no **dia do consumo**, inclusive quando o registro foi feito depois, recalculando os agregados dos períodos afetados. O consumo retroativo deve ser comparado com a meta efetiva naquela data, e não com a meta vigente no dia do cadastro.
-- O método para classificar a data local do consumo perto da meia-noite ou após mudanças de fuso ainda será definido; não presumir que a data UTC do salvamento determina o dia nutricional.
+- **Fuso horário por refeição (confirmado para o MVP):** sugerir automaticamente o fuso IANA configurado no navegador/dispositivo no momento de abrir o formulário; não usar GPS, localização física ou API externa.
+- O usuário pode **corrigir manualmente o fuso** para a refeição (inclusive ao lançar consumo retroativo), caso a configuração do dispositivo seja incorreta ou o consumo tenha ocorrido em outro fuso. Se o navegador não fornecer fuso válido, solicitar escolha manual em vez de adivinhar.
+- Preservar data/hora **locais de consumo**, fuso IANA escolhido, instante UTC equivalente (quando inequívoco) e instante de cadastro em campos conceitualmente separados. A data nutricional pertence ao calendário **local do consumo informado**; perto da meia-noite não deve ser determinada pelo UTC do cadastro.
+- Em viagens ou alterações do fuso do dispositivo, novos registros usam o fuso atual, mas os anteriores conservam seu fuso e dia originais. Somente uma edição explícita autorizada altera data, horário ou fuso do registro antigo, com recálculo das datas afetadas e histórico de correção.
+- **Etapa 9:** especificar formato de persistência e conversão, validação IANA e tratamento de instantes ambíguos/inexistentes durante transições de horário de verão; não deduzir fuso histórico a partir do aparelho atual.
 - Cada refeição/ingrediente consumido preserva nome, quantidade, unidade, nutrientes calculados, origem e referências aplicáveis ao momento do registro (retrato histórico).
 - Recalcular ou substituir os dados de uma dieta, modelo ou alimento não pode reescrever o consumo histórico.
 - Usar o alimento no estado em que foi consumido; para preparações, a quantidade é normalmente pesada após o preparo.
@@ -61,7 +65,7 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 ## 4. Decisões em aberto da etapa 5
 
 1. **Metas:** ajuste pessoal com confirmação, aviso discreto no painel profissional e aplicação automática de novas metas do nutricionista definidos. E-mail/push externos por ajuste de meta ficam fora do MVP; detalhes visuais do indicador vão para a etapa de implementação.
-2. **Períodos e fusos:** registros retroativos e padrão de data/hora atual estão aprovados. Falta decidir o fuso usado para classificar refeições perto da meia-noite e o que acontece quando o usuário muda de fuso.
+2. **Períodos e fusos:** detectação do fuso do dispositivo, correção manual e preservação do fuso de cada refeição já definidas. Restam detalhes técnicos de horário de verão/conversões (etapa 9) e o cálculo/agrupamento de indicadores por semana e mês.
 3. **Indicadores:** quais totais, saldos, médias e critérios de cobertura de micronutrientes serão exibidos?
 4. **Medidas corporais:** frequência, correção de registros e apresentação de peso/IMC ao longo do tempo.
 5. **Retenção e permissões da trilha de correções:** quais registros de auditoria podem persistir e quais atores poderão visualizá-los, respeitando privacidade e eliminação de dados? Resolver nas etapas 8 e 9.
@@ -88,7 +92,9 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 4. Contabilizar os nutrientes no dia do consumo declarado e recalcular o total e os indicadores dos períodos afetados, comparando-os à meta que vigorava nessa data.
 5. Não criar uma segunda refeição pelo reenvio da mesma confirmação. Alterações no registro continuam seguindo as regras de edição e exclusão já definidas.
 
-**Pendência de fuso:** definir como interpretar a data/hora local do consumo e tratar mudanças de fuso, sem confundir horário de cadastro com horário de refeição.
+**Regra de fuso aprovada:** predefinir o fuso detectado do dispositivo, permitir ajuste manual por refeição e preservar fuso e data/hora locais do consumo no histórico. O dia de consumo é definido pela data local da refeição no fuso selecionado, não pela data do salvamento ou pelo fuso atual em consulta.
+
+**Detalhe técnico postergado:** resolver ambiguidades de horário de verão e serialização UTC/IANA na etapa 9.
 
 ## 7. Fluxo de correção do diário (**Definido para o MVP**)
 
@@ -110,6 +116,12 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 | Usuário lança uma refeição de semana anterior | Resumos da semana e do mês correspondentes são recalculados usando a data do consumo |
 | Meta mudou entre o dia do consumo e o dia do lançamento | O consumo retroativo é comparado com a meta que vigorava no dia informado, preservando o histórico de metas |
 | Consulta distingue consumo do instante de cadastro | Registro preserva os dois instantes para rastreabilidade |
+| Usuário abre formulário no Brasil com fuso America/Sao_Paulo configurado | Fuso é sugerido automaticamente sem solicitar localização/GPS |
+| Usuário lança hoje uma refeição feita em Lisboa em outra data | Pode selecionar Europe/Lisbon para o consumo retroativo, independentemente do fuso atual do aparelho |
+| Pessoa viaja e o dispositivo muda de fuso | Novos registros usam o fuso detectado naquele momento; históricos não mudam de dia |
+| Consumo ocorre perto da meia-noite local | Totalização usa a data local de consumo e o fuso selecionado, não a data UTC do cadastro |
+| Dispositivo não fornece um fuso válido | Aplicação oferece seleção manual em vez de supor uma localização |
+| Usuário corrige o fuso de uma refeição antiga | Salva correção explícita e recalcula dias envolvidos, preservando trilha autorizada |
 | Usuário registra alimento diferente do prescrito | Diário reflete o consumo real; dieta permanece igual |
 | Dieta é atualizada depois do consumo | Valores do diário já salvo permanecem os mesmos |
 | Modelo pessoal é editado após o consumo | Registro antigo permanece independente |
@@ -138,4 +150,4 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 ---
 
-A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos com data/hora de consumo editável, histórico discreto de correções, ajustes de metas confirmados pelo paciente, aviso discreto no painel do nutricionista autorizado e aplicação automática de novas metas profissionais foram aprovados para o MVP.** E-mails/push externos por ajuste de meta ficam fora do MVP; fusos, retenção e acesso à trilha serão definidos posteriormente.
+A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso do dispositivo com correção manual por refeição, histórico discreto de correções, ajustes de metas confirmados pelo paciente, aviso discreto no painel profissional e aplicação automática de novas metas profissionais foram aprovados para o MVP.** E-mails/push externos por ajuste de meta ficam fora do MVP; tratamento técnico de horário de verão, retenção e acesso à trilha serão definidos posteriormente.
