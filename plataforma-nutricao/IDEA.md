@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.5  
+> **Versão:** 0.6  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -138,6 +138,17 @@ Em qualquer fluxo, o usuário poderá ajustar a refeição antes de confirmá-la
 
 **Plano profissional:** o nutricionista elabora e atribui planos a pacientes. O paciente pode consultar o plano profissional, mas não alterar sua prescrição.
 
+**Organização do cardápio (confirmada para o MVP):**
+- Todo plano começa com um **cardápio diário padrão**, repetido nos sete dias da semana.
+- O usuário ou nutricionista pode personalizar refeições específicas para **dias da semana** sem precisar refazer todo o cardápio.
+- As refeições não personalizadas em determinado dia continuam herdando o padrão diário.
+- Substituir, adicionar ou retirar uma refeição de um dia não altera os outros dias.
+- É possível restaurar o padrão de uma refeição removendo sua personalização. Retirar intencionalmente uma refeição daquele dia é diferente de restaurar o padrão.
+- Os totais nutricionais diários consideram as personalizações aplicáveis. Padrão e personalizações pertencem à versão publicada do plano, preservando seu histórico.
+- Exceções para **datas isoladas**, além dos dias da semana, continuam fora do escopo confirmado.
+
+Regras detalhadas e critérios de aceitação em [DIETAS.md](./DIETAS.md).
+
 **Separação entre planejamento, modelos reutilizáveis e consumo:**
 - Refeições previstas em uma dieta representam **o plano**.
 - Modelos pessoais e profissionais representam **refeições reutilizáveis** na criação de registros ou de planos.
@@ -202,6 +213,7 @@ Ainda precisam ser definidos: limites de pacientes, planos comerciais, período 
 10. **Proteção proporcional:** a restrição 18+ não é uma dispensa automática das obrigações da LGPD e do ECA Digital quando aplicáveis; revisar risco de acesso por menores e aferição de idade antes do lançamento.
 11. **Sem diagnósticos automatizados:** indicadores não substituem avaliação profissional.
 12. **Bibliotecas independentes:** modelos pessoais e profissionais não alteram registros históricos de consumo ou dietas publicadas.
+13. **Padrão semanal previsível:** personalizações de refeições para dias da semana não modificam o cardápio dos demais dias nem as versões anteriores.
 
 ## 5. Escopo futuro — não priorizar no primeiro lançamento
 
@@ -239,7 +251,6 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 8. Quais campos e alternativas estarão disponíveis em um plano: horários, substituições, orientações?
 9. Como será o processo de troca de nutricionista?
 10. O versionamento dos planos pessoais deverá ter o mesmo detalhamento do profissional?
-11. A organização das dietas será diária fixa, semanal ou padrão diário com personalização por dia da semana?
 
 ## 8. Referências iniciais
 
