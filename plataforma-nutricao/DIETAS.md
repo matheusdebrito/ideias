@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 2.7
+> **Versão:** 2.8
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -18,7 +18,7 @@ Permitir que usuários adultos organizem seus próprios planos alimentares e reg
 - O nutricionista dispõe de uma **biblioteca de refeições profissionais**, reutilizável ao criar dietas de diferentes pacientes.
 - Toda dieta publicada tem versões: novas publicações não sobrescrevem versões históricas.
 - Diário alimentar, bibliotecas de refeições e planos versionados são conceitos independentes.
-- O paciente pode consultar o plano profissional, mas não alterar a prescrição de seu nutricionista. **Exceção conceitual distinta:** o paciente pode, após aviso e confirmação, ajustar a **meta de acompanhamento usada nos seus próprios indicadores**, ainda que a meta original tenha sido definida pelo profissional. Esse ajuste não modifica a prescrição publicada nem atribui uma decisão do paciente ao nutricionista. O nutricionista com vínculo ativo e autorização vigente poderá visualizar no painel do paciente a meta original, a meta ajustada e data/hora/autoria da alteração, sem que isso gere notificação automática presumida. Quando o nutricionista publicar uma nova meta, ela passa a ser utilizada automaticamente nos indicadores na sua data de vigência, sem pedir aceite ao paciente; ajustes pessoais futuros seguem permitidos mediante confirmação e sem alterar a prescrição. Ver [DIARIO.md](./DIARIO.md).
+- O paciente pode consultar o plano profissional, mas não alterar a prescrição de seu nutricionista. **Exceção conceitual distinta:** o paciente pode, após aviso e confirmação, ajustar a **meta de acompanhamento usada nos seus próprios indicadores**, ainda que a meta original tenha sido definida pelo profissional. Esse ajuste não modifica a prescrição publicada nem atribui uma decisão do paciente ao nutricionista. O nutricionista com vínculo ativo e autorização vigente poderá visualizar no painel do paciente a meta original, a meta ajustada e data/hora/autoria da alteração, com aviso discreto no painel, sem exigir confirmação de leitura nem enviar e-mail, push ou mensagens externas no MVP. Quando o nutricionista publicar uma nova meta, ela passa a ser utilizada automaticamente nos indicadores na sua data de vigência, sem pedir aceite ao paciente; ajustes pessoais futuros seguem permitidos mediante confirmação e sem alterar a prescrição. Ver [DIARIO.md](./DIARIO.md).
 
 ## 2. Conceitos separados
 
