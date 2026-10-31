@@ -190,12 +190,12 @@ Definir vínculos e autorização entre **usuários adultos e gestores**, preser
 | Troca é recusada, cancelada ou falha | Não enviar e-mail de vínculo encerrado ao profissional anterior |
 | Envio do e-mail de encerramento falha | Encerramento permanece válido e aparece no histórico profissional restrito; acesso a dados do usuário acompanhado segue revogado |
 | Gestor anterior abre link do e-mail após desvinculação | Visualiza apenas o evento de encerramento, nunca o painel ou dados privados do usuário acompanhado |
-| Usuário cadastra nome e CRN ainda não conferido | Conta criada com estado Em validação, sem enviar convites, consultar usuários acompanhados ou publicar metas/dietas profissionais |
-| Número do CRN tem formato válido mas não foi verificado | Permissões profissionais permanecem bloqueadas; não confiar no valor digitado |
+| Gestor contrata gestão sem CRN | Assinatura pode ser contratada; poderá convidar/gerir terceiros somente com vínculo e autorização válidos |
+| Gestor informa CRN mas credencial não foi verificada | Não exibir selo CRN verificado; assinatura e permissões de gestão não mudam |
 | Profissional com registro verificado e aprovado envia convite | Convite permitido, sujeito às regras de autorização, prazo e controles contra abuso |
-| Cadastro CRN tem número/regional divergente ou pertence a outra pessoa | Solicitação não aprovada e opção clara de corrigir os dados; não criar permissões de gestor |
+| Dados do CRN são divergentes ou pertencem a outra pessoa | Negar selo CRN verificado; permitir correção sem restringir assinatura de gestão já autorizada |
 | Conta Em validação tenta chamar API de plano alimentar publicado diretamente | Servidor bloqueia ação sem depender da interface |
-| Usuário com CRN em validação deseja usar diário e plano pessoal | Recursos pessoais continuam utilizáveis, sem capacidades profissionais |
+| Gestor com CRN em validação já possui assinatura | Recursos pessoais e de gestão seguem disponíveis conforme assinatura e consentimentos; selo continua pendente |
 | Gestor tenta reenviar convites várias vezes ao mesmo e-mail em curto período | Servidor aplica limite por destinatário e por emissor, evitando spam; não criar convites extras |
 | Profissional válido envia convites moderados a usuários acompanhados diferentes | Uso legítimo permitido sem desafios adicionais ou bloqueio indiscriminado |
 | Convite ou reenvio é bloqueado por frequência excessiva | Apresentar mensagem simples de limite temporário, sem informar se destinatário tem conta e sem afirmar envio |
@@ -247,4 +247,4 @@ Definir vínculos e autorização entre **usuários adultos e gestores**, preser
 - **Selo CRN opcional — decidido:** solicitar registro somente de quem desejar obter a identificação CRN verificado; esta verificação nunca condiciona a assinatura e a gestão. Etapas 8/9: forma de conferência, rechecagem e apresentação da credencial.
 - **Dados profissionais após encerramento:** guarda obrigatória, eliminação, portabilidade e outros requisitos da LGPD na etapa 8.
 
-**Revisão transversal aprovada na etapa 7:** qualquer adulto com assinatura válida pode atuar como gestor; o selo CRN é opcional e separado das permissões. Os fluxos de vínculo e autorização da etapa 6 permanecem válidos. **Encerramento funcional da etapa 6:** convites, autorização, compartilhamento, encerramento/troca de gestor, preservação dos dados/metas/dietas, aviso ao ex-profissional, verificação do CRN e proteção contra abuso estão definidos para o MVP. Requisitos técnicos e jurídicos identificados serão detalhados nas etapas 8/9. Esta especificação não representa software implementado ou testado.
+**Revisão transversal aprovada na etapa 7:** qualquer adulto com assinatura válida pode atuar como gestor; o selo CRN é opcional e separado das permissões. Os fluxos de vínculo e autorização da etapa 6 permanecem válidos. **Encerramento funcional da etapa 6:** convites, autorização, compartilhamento, encerramento/troca de gestor, preservação dos dados/metas/dietas, aviso ao ex-profissional, verificação opcional do CRN para selo e proteção contra abuso estão definidos para o MVP. Requisitos técnicos e jurídicos identificados serão detalhados nas etapas 8/9. Esta especificação não representa software implementado ou testado.
