@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.45  
+> **Versão:** 0.46  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -199,7 +199,7 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - **Painel diário confirmado no MVP:** mostrar **calorias consumidas**, **meta calórica efetiva do dia**, **calorias restantes até a meta** e, caso a meta seja ultrapassada, **quanto o consumo ficou acima dela**. Exibir também **proteínas, carboidratos e gorduras totais consumidos** (em gramas) naquele dia.
 - A diferença é calculada entre meta calórica efetiva **da data consultada** e total consumido: quando o consumo for menor ou igual à meta, apresentar valor restante não negativo; quando for maior, apresentar o excedente como **acima da meta**, sem confundir o usuário com um valor negativo de calorias restantes. Se a data não tiver meta válida, apresentar consumo normalmente e indicar **sem meta definida**, sem inventar saldo nem assumir meta zero.
 - Atualizar o painel quando refeições forem criadas, corrigidas ou excluídas, inclusive lançamentos retroativos, usando a data local de consumo do registro e os valores nutricionais preservados em cada item. **Não arredondar antes de somar**; formatar valores na apresentação conforme as regras nutricionais já definidas.
-- **Metas opcionais de macronutrientes aprovadas:** proteína, carboidrato e gordura podem ter objetivos próprios definidos pelo usuário ou nutricionista autorizado. O painel mostra os totais consumidos mesmo sem objetivos, e apresenta a comparação somente onde houver meta válida. Os gráficos semanais/mensais de consumo com referência de meta histórica foram aprovados; permanecem em aberto os saldos agregados, a distribuição detalhada e critérios de completude.
+- **Metas opcionais de macronutrientes aprovadas:** proteína, carboidrato e gordura podem ter objetivos próprios definidos pelo usuário ou nutricionista autorizado. O painel mostra os totais consumidos mesmo sem objetivos, e apresenta a comparação somente onde houver meta válida. Os gráficos semanais/mensais, contagem estrita de dias acima/abaixo/na meta e diferença acumulada do consumo registrado contra metas diárias também foram aprovados, sempre com indicação de cobertura parcial.
 - Consulta de períodos anteriores, preservando as metas vigentes à época.
 - **Alteração de meta definida pelo nutricionista (confirmado no MVP):** o paciente pode alterar a meta que utiliza para acompanhar calorias e macronutrientes, mesmo quando a referência atual veio de seu nutricionista. Antes de aplicar a alteração, a interface deve avisar explicitamente que a meta foi definida pelo profissional e pedir confirmação inequívoca; cancelar mantém a meta atual.
 - A confirmação cria uma **meta de acompanhamento ajustada pelo paciente**, com autor/origem e vigência identificados, que se torna a referência efetiva dos indicadores a partir da alteração. A meta original prescrita pelo nutricionista **permanece preservada e consultável**, não é modificada e não pode ser falsamente atribuída ao profissional.
@@ -228,7 +228,11 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - Não converter as contagens em **saldo acumulado de nutrientes ou calorias** do período nem tratar **acima da meta alimentar** como sinônimo obrigatório de superávit energético frente ao gasto corporal. O valor nutricional de um alimento e a absorção energética real são estimativas, mesmo com pesagem precisa das porções; evitar rotular dias como sucesso/fracasso clínico.
 - **Semana de acompanhamento (confirmado no MVP):** para todos os resumos, gráficos e contagens semanais do diário, considerar **segunda-feira a domingo**, com sete datas locais consecutivas, independentemente do dia em que o usuário começou a usar a aplicação. Semanas que atravessam mês/ano permanecem um mesmo período de segunda a domingo.
 - Usar a **data local do consumo já preservada** para atribuir cada refeição à semana correspondente, não a data UTC do cadastro nem a mudança posterior do fuso do dispositivo. Lançamentos retroativos e correções recalculam a semana afetada; a semana incompleta em andamento mostra os registros existentes sem inventar consumo dos dias futuros.
-- **Ainda em aberto:** saldos agregados semanais/mensais e precisão de apresentação dos valores em diferentes unidades; a classificação de **na meta** já foi definida como igualdade estrita, sem tolerância. Nenhum gráfico implica diagnóstico clínico.
+- **Diferença acumulada semanal/mensal (confirmada para o MVP):** para o nutriente selecionado (calorias em kcal ou proteínas/carboidratos/gorduras em g), somar **(consumo registrado no dia − meta efetiva do dia)** para cada dia do período que tenha **ao menos uma refeição registrada e uma meta válida para esse nutriente**. A referência da meta é histórica, respeitando mudanças pessoais e profissionais durante o período.
+- Exibir o resultado com sinal e descrição explícita: positivo = **acima da soma das metas nos dias comparáveis**, negativo = **abaixo da soma das metas nos dias comparáveis**, zero = **diferença acumulada igual a zero**. O resultado zero não significa que todos os dias atingiram a meta: dias acima e abaixo podem se compensar, e os contadores diários continuam disponíveis.
+- Mostrar junto à diferença o número de **dias comparáveis** e identificar separadamente **dias sem registros** e **dias com registros mas sem meta para o nutriente**. Não imputar consumo zero nem meta artificial em dias ausentes; mesmo com registros, o diário pode estar incompleto, portanto rotular como **diferença parcial do consumo registrado em relação às metas**, não como saldo energético corporal ou ingestão total.
+- Corrigir/adicionar/excluir refeições, inclusive retroativas e com mudança de data/fuso, atualiza o agregado e os contadores dos períodos afetados. Somar com precisão numérica consistente sem arredondar antes de agregar. Sem dias comparáveis, exibir **comparação indisponível**, em vez de saldo zero.
+- **Ainda em aberto:** precisão de apresentação dos valores em diferentes unidades e critérios de cobertura de micronutrientes; a classificação de **na meta** já foi definida como igualdade estrita, sem tolerância. Nenhum gráfico ou diferença em relação à meta é diagnóstico clínico.
 
 **Adultos:** a aplicação poderá estimar uma meta energética por método validado e permitir ajustes manuais. O cálculo requer dados suficientes, explicação dos limites e revisão de profissionais antes do lançamento.
 
@@ -378,7 +382,7 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 1. Quais medidas proporcionais de aferição de idade se aplicam ao aplicativo 18+, conforme análise jurídica antes do lançamento?
 2. Como lidar com uma conta identificada como pertencente a menor sem reter ou expor indevidamente dados?
 3. Como validar o registro profissional de nutricionista?
-4. Como tratar eventual saldo agregado semanal/mensal com dias não registrados, dado que médias e comparação estrita de metas já foram definidas?
+4. Como sinalizar a cobertura de micronutrientes em relatórios quando parte das fontes alimentares não apresenta esses nutrientes, sem confundir dado ausente com valor zero?
 5. Quais recursos compõem o plano profissional pago? Haverá limites de pacientes?
 6. Quais dados ficam disponíveis depois do encerramento do vínculo profissional?
 7. Qual será o fluxo de exportação, portabilidade, retenção e exclusão dos dados?
