@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 1.6
+> **Versão:** 1.7
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -61,7 +61,7 @@ A mesma implementação de seleção de alimentos, medidas e cálculo nutriciona
 
 ## 4. Biblioteca de refeições do nutricionista (**Definido para o MVP**)
 
-O nutricionista cria a refeição selecionando **alimentos do catálogo**, inclusive os alimentos personalizados aos quais tenha acesso, e informando as quantidades. Ele não cadastra manualmente calorias, proteínas, carboidratos, gorduras, vitaminas ou minerais: a aplicação calcula esses valores a partir da composição nutricional dos alimentos selecionados e das quantidades informadas.
+O nutricionista cria a refeição selecionando **alimentos do catálogo**, inclusive os alimentos personalizados aos quais tenha acesso, e informando as quantidades. Ele não cadastra manualmente calorias, proteínas, carboidratos, gorduras, vitaminas ou minerais **ao montar a refeição**: a aplicação calcula esses valores a partir da composição nutricional dos alimentos selecionados e das quantidades informadas. **Exceção distinta:** ao cadastrar um **novo alimento personalizado**, o criador informa os valores nutricionais essenciais do alimento (kcal, proteínas, carboidratos e gorduras totais) por quantidade de referência; a aplicação então calcula os valores proporcionais nas refeições.
 
 O nutricionista poderá:
 - Criar modelos reutilizáveis com nome, refeições/itens alimentares e quantidades.
@@ -103,7 +103,7 @@ O nutricionista poderá:
 - A aplicação apresenta calorias, macronutrientes e vitaminas/minerais disponíveis na fonte, sem pedir que o nutricionista digite macros.
 - Conversões de unidades e medidas caseiras precisam usar fatores definidos e rastreáveis; não presumir equivalência de gramas e mililitros.
 - Alimentos em estados diferentes (por exemplo, cru e cozido) devem ser selecionados como entradas distintas quando assim constarem no catálogo.
-- Dados ausentes na fonte devem ser apresentados como não disponíveis, nunca como zero inventado.
+- Dados ausentes na fonte devem ser apresentados como não disponíveis, nunca como zero inventado. Alimentos personalizados cadastrados manualmente exigem kcal, proteínas, carboidratos e gorduras totais completos; micronutrientes podem permanecer desconhecidos, e relatórios agregados desses nutrientes devem sinalizar cobertura incompleta.
 - O cálculo e o arredondamento devem ser consistentes entre biblioteca, dieta e diário.
 
 **Isolamento:**
