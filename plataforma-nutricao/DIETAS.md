@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 0.2
+> **Versão:** 0.3
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -65,6 +65,9 @@ O nutricionista cria a refeição selecionando **alimentos do catálogo** e info
 
 O nutricionista poderá:
 - Criar modelos reutilizáveis com nome, refeições/itens alimentares e quantidades.
+- Adicionar uma **observação opcional à refeição inteira** (por exemplo, orientação geral de preparo ou consumo).
+- Adicionar uma **observação opcional a cada alimento/item** (por exemplo, modo de preparo ou detalhe específico daquele alimento).
+- As observações são instruções em texto e não substituem alimento, quantidade ou dados nutricionais.
 - Pesquisar alimentos no catálogo e adicionar, remover ou ajustar suas quantidades.
 - Consultar automaticamente os valores nutricionais calculados por alimento, por refeição e no total do plano.
 - Adicionar substituições alimentares opcionais: para um item ou grupo, definir um alimento principal e uma ou mais alternativas, cada uma com sua própria quantidade. As alternativas são opções mutuamente exclusivas, não alimentos somados juntos.
@@ -73,6 +76,20 @@ O nutricionista poderá:
 - Escolher o paciente e a dieta de destino. Se não houver dieta, iniciar a criação de um plano; se já existir um plano publicado, criar/usar um rascunho para a próxima versão.
 - Ajustar a cópia da refeição dentro do **rascunho** do plano daquele paciente, sem mudar o modelo da biblioteca ou planos de outros pacientes.
 - Criar uma refeição diretamente dentro do rascunho de uma dieta, com opção de também salvá-la na biblioteca profissional para reutilização futura.
+
+**Apresentação das observações — requisito de UX do MVP:**
+- Não exibir campos, rótulos ou espaços vazios para observações não preenchidas.
+- No editor, manter os campos de observação recolhidos por padrão e disponibilizar uma ação discreta como **Adicionar observação**; expandir o campo somente quando solicitado ou quando já houver conteúdo.
+- Na visualização da dieta, mostrar a observação da refeição como texto secundário logo abaixo do nome da refeição, somente quando existir.
+- Mostrar a observação de um alimento em linha secundária abaixo do nome do alimento, somente quando existir; não criar uma coluna extra permanente.
+- Em dispositivos móveis, manter a hierarquia visual compacta e permitir expandir/recolher observações longas.
+- Não misturar observações com valores nutricionais nem dar a elas destaque visual maior que o nome da refeição/alimento.
+
+**Semântica e histórico das observações:**
+- Observações de refeição e de alimento fazem parte do modelo ou da versão do plano em que foram cadastradas.
+- Ao copiar uma refeição da biblioteca para um rascunho, copiar também suas observações; o nutricionista pode ajustá-las na cópia.
+- A atualização do modelo na biblioteca não altera observações em dietas já publicadas.
+- Ao exibir uma refeição planejada no fluxo de registro do diário, as observações podem ser mostradas como referência, mas não devem ser tratadas como prova de que o alimento foi preparado/consumido daquela forma nem gerar alertas automáticos.
 
 **Cálculo nutricional:**
 - O cálculo é derivado dos alimentos, quantidades, unidades e dados de composição disponíveis na fonte nutricional.
@@ -114,7 +131,7 @@ O nutricionista poderá:
 
 - O plano pessoal pertence ao usuário; o profissional é criado pelo nutricionista e atribuído a um paciente.
 - Uma versão em rascunho pode ser editada antes da publicação.
-- A publicação fixa alimentos, quantidades, orientações, valores de referência e início da vigência.
+- A publicação fixa alimentos, quantidades, observações/instruções da refeição e dos itens, valores de referência e início da vigência.
 - Atualização de versão publicada cria nova versão do plano, preservando as anteriores.
 - O histórico deve permitir identificar a versão vigente em determinada data.
 - O paciente pode registrar consumo diferente do plano sem alterar a versão prescrita.
@@ -161,6 +178,9 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 2. Uma refeição planejada pertence a uma versão específica do plano. A versão publicada é imutável.
 3. Exclusão ou edição de modelos pessoais/profissionais não reescreve consumos ou planos publicados.
 4. Copiar uma refeição jamais significa compartilhar o mesmo registro mutável.
+5. Observações de refeição e de alimento são opcionais e não interferem no cálculo nutricional.
+6. Observações vazias não são exibidas na interface.
+7. A apresentação das observações deve ser discreta e progressiva, sem aumentar desnecessariamente a densidade visual.
 5. Nutricionistas informam alimentos e quantidades, não macros manualmente; nutrientes são calculados pela aplicação a partir da fonte nutricional.
 6. Uma substituição representa uma opção alternativa mutuamente exclusiva, com alimento e quantidade próprios; o cálculo não soma todas as alternativas.
 7. Adicionar uma refeição a uma dieta de paciente modifica somente o rascunho/versionamento do plano escolhido; nunca registra consumo no diário.
@@ -190,6 +210,10 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Usuário altera ou exclui modelo pessoal | Refeições já consumidas permanecem iguais |
 | Nutricionista usa um modelo em dois planos de pacientes distintos | Cada plano recebe uma cópia independente |
 | Nutricionista cria refeição com alimentos e quantidades | Sistema calcula automaticamente os nutrientes; não solicita macros manuais |
+| Nutricionista adiciona observação à refeição | A observação aparece discretamente abaixo do nome da refeição |
+| Nutricionista adiciona observação a um alimento | A observação aparece discretamente abaixo do nome do alimento |
+| Refeição/alimento não possui observação | Nenhum espaço ou rótulo vazio é exibido |
+| Refeição da biblioteca é copiada para um plano | Observações são copiadas; alterações no rascunho não modificam o modelo original |
 | Nutricionista adiciona uma refeição da biblioteca à dieta de um paciente | A refeição entra no rascunho da dieta escolhida; não é registrada como consumo |
 | Nutricionista ajusta a cópia para um paciente | Biblioteca e planos de outros pacientes permanecem inalterados |
 | Paciente escolhe uma alternativa alimentar | O cálculo considera a opção selecionada, não soma as alternativas |
