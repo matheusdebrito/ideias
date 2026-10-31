@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (em andamento)
-> **Versão:** 0.9
+> **Versão:** 1.0
 > **Data:** 31/10/2026
 > **Fonte principal da visão:** [IDEA.md](./IDEA.md) e [DIETAS.md](./DIETAS.md)
 > **Convenção:** regras confirmadas estão separadas das decisões em aberto.
@@ -52,7 +52,12 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 - Na ausência de uma meta válida naquele dia, exibir calorias e macros consumidos e informar **sem meta definida**; não calcular restante/excedente sobre zero nem utilizar meta atual para datas passadas.
 - Atualizar cálculos e visualização após criar, editar ou excluir refeições, inclusive retroativas; agrupar pelo dia local do consumo e utilizar a meta efetiva daquela data, sem sobrescrever referências históricas.
 - Totais obtidos de nutrientes não arredondados e valores só formatados na apresentação, com kcal geralmente inteiras ou com uma casa conforme o contexto e macronutrientes com uma casa decimal, respeitando [ALIMENTOS.md](./ALIMENTOS.md).
-- **Ainda não definido:** metas individuais de proteína/carboidrato/gordura e visualizações de sua distribuição; resumos por semana e mês fazem parte do objetivo do MVP, mas suas fórmulas de saldo, médias, tolerâncias e visualização continuam em discussão.
+- **Resumo semanal e mensal (confirmado para o MVP):** apresentar o **total de calorias e de proteínas/carboidratos/gorduras registrados**, a **média diária de cada um desses nutrientes considerando somente dias com pelo menos uma refeição** e a **quantidade de dias com registros** dentro do período selecionado.
+- Usar a **data local do consumo** associada a cada registro e contar **datas distintas** com consumo registrado no intervalo. O total registrado é a soma dos nutrientes das refeições desses dias; a média diária de cada nutriente é **total do período ÷ dias com registros**. Calcular com valores não arredondados e formatar somente na apresentação.
+- **Dias sem registros são dados ausentes, não consumo zero**: não entram no divisor e não devem ser representados como dias de jejum. Dias com alguma refeição registrada também podem estar incompletos, portanto rotular as médias como **média por dia com registros**, sem afirmar cobertura alimentar completa.
+- Se o período não tiver qualquer refeição, exibir **sem dados registrados**, incluindo o contador de dias igual a zero e sem calcular média numérica.
+- Criar, editar, mover de data/fuso ou excluir registros deve recalcular totais, média e dias registrados de todos os períodos afetados, inclusive após lançamento retroativo.
+- **Ainda não definido:** metas específicas de macronutrientes, metas x consumo e tolerância em semanas/meses com dias ausentes, forma de apresentação dos gráficos e a convenção de início da semana. Não supor que o total ou a média registrada represente a alimentação inteira do usuário.
 - Medidas corporais (peso, altura e IMC, com limitações explicadas) integram a visão do produto; o detalhamento de edição e históricos será tratado nesta etapa.
 - Metas e estimativas não são automaticamente prescrições clínicas.
 - **Mudança de meta profissional pelo paciente (confirmado no MVP):** permitir que o paciente altere a meta efetiva de acompanhamento de calorias e/ou macronutrientes, mesmo quando ela foi definida pelo nutricionista. Antes de aplicar, exibir mensagem explícita de origem profissional e solicitar confirmação. Cancelamento não modifica a meta.
@@ -70,8 +75,8 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 ## 4. Decisões em aberto da etapa 5
 
 1. **Metas:** ajuste pessoal com confirmação, aviso discreto no painel profissional e aplicação automática de novas metas do nutricionista definidos. E-mail/push externos por ajuste de meta ficam fora do MVP; detalhes visuais do indicador vão para a etapa de implementação.
-2. **Períodos e fusos:** detectação do fuso do dispositivo, correção manual e preservação do fuso de cada refeição já definidas. Restam detalhes técnicos de horário de verão/conversões (etapa 9) e o cálculo/agrupamento de indicadores por semana e mês.
-3. **Indicadores:** painel diário de calorias consumidas, meta, restante/excedente e totais de proteínas, carboidratos e gorduras já confirmado. Restam resumos semanais/mensais, eventuais metas de macros e critérios de cobertura de micronutrientes.
+2. **Períodos e fusos:** fuso por refeição, correção manual e agrupamento dos registros por data local já definidos. A contagem de dias e média dos períodos semanal/mensal foi confirmada; resta definir a convenção de início da semana. Horário de verão/conversões continuam para a etapa 9.
+3. **Indicadores:** painel diário, totais registrados, média por dia com registros e quantidade de dias registrados por semana/mês já confirmados. Restam gráficos/saldos frente a metas em períodos incompletos, metas de macros e critérios de cobertura de micronutrientes.
 4. **Medidas corporais:** frequência, correção de registros e apresentação de peso/IMC ao longo do tempo.
 5. **Retenção e permissões da trilha de correções:** quais registros de auditoria podem persistir e quais atores poderão visualizá-los, respeitando privacidade e eliminação de dados? Resolver nas etapas 8 e 9.
 
@@ -117,11 +122,25 @@ Mostrar calorias consumidas, meta calórica efetiva da data e diferença context
 
 O painel recalcula automaticamente após salvar, editar ou excluir refeições, inclusive quando a alteração muda o dia do consumo. A visualização não deve tratar o excesso como diagnóstico nem penalizar o usuário.
 
-## 9. Casos de aceitação de referência
+## 9. Resumos semanais e mensais (**Definidos para o MVP**)
+
+O período mostrará totais **registrados** de energia e macronutrientes, médias **por dia com registros** desses mesmos valores e número de dias com registros. Um dia conta uma única vez quando possui uma ou mais refeições. As médias usam somente essas datas, sem representar dias vazios como consumo zero e sem presumir que dias com registros tenham todo o consumo informado.
+
+**Fórmula:** para cada nutriente, `totalPeriodo = soma(nutrientesRegistrados)`; `diasComRegistro = quantidade de datas locais distintas com refeições no período`; `mediaPorDiaComRegistro = totalPeriodo / diasComRegistro`, apenas se `diasComRegistro > 0`. Com zero dias, indicar ausência de dados sem média numérica.
+
+Atualizar esses resultados após inclusão, exclusão ou correção de registros, inclusive lançamentos retroativos e mudanças da data/fuso. Sem arredondamento intermediário.
+
+## 10. Casos de aceitação de referência
 
 | Cenário | Resultado esperado |
 | --- | --- |
 | Usuário sem dieta registra refeição avulsa | Consumo entra no diário normalmente |
+| Semana contém 7 dias e apenas 3 têm refeições registradas, somando 4.500 kcal | Exibir 3 dias com registros, total registrado 4.500 kcal, média 1.500 kcal por dia registrado; não dividir por 7 |
+| Um dia tem várias refeições registradas | Contar esse dia uma única vez no divisor, somando todas as refeições |
+| Período não possui refeições registradas | Exibir sem dados registrados e nenhum valor de média, sem assumir ingestão zero |
+| Dia contém somente uma refeição lançada | Contabilizar o dia entre os registrados, mas não afirmar que a alimentação do dia está completa |
+| Uma refeição de ontem é excluída e não há outros registros naquele dia | Recalcular a média e diminuir a quantidade de dias registrados, se aplicável |
+| Usuário cadastra retroativamente refeição de outro mês | Atualizar totais, médias e dias com registros do mês de consumo |
 | Meta diária é 2.000 kcal e consumo registrado é 1.500 kcal | Exibir 1.500 kcal consumidas e 500 kcal restantes |
 | Meta diária é 2.000 kcal e consumo registrado é 2.200 kcal | Exibir 2.200 kcal consumidas e 200 kcal acima da meta, sem saldo restante negativo |
 | Meta diária é 2.000 kcal e consumo registrado é 2.000 kcal | Exibir meta atingida e diferença igual a zero, sem excedente |
@@ -168,4 +187,4 @@ O painel recalcula automaticamente após salvar, editar ou excluir refeições, 
 
 ---
 
-A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, ajustes confirmados de metas, aviso no painel profissional, aplicação automática de novas metas profissionais e indicadores diários de kcal/meta/restante/excedente e macronutrientes consumidos foram aprovados para o MVP.** Permanecem pendentes indicadores semanais/mensais, metas específicas de macros, detalhes técnicos de horário de verão, retenção e acesso à trilha.
+A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, ajustes confirmados de metas, aviso no painel profissional, novas metas profissionais automáticas, indicadores diários e resumos semanais/mensais por dias com registros foram aprovados para o MVP.** Permanecem pendentes gráficos/saldos por período, metas específicas de macros, peso/IMC, detalhes técnicos de horário de verão, retenção e acesso à trilha.
