@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 2.3
+> **Versão:** 2.4
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -27,7 +27,7 @@ Permitir que usuários adultos organizem seus próprios planos alimentares e reg
 | Refeição planejada | Indica o que compõe o plano alimentar em uma determinada versão | Versão do plano pessoal ou profissional | Editável apenas em rascunho; publicada é histórica |
 | Modelo pessoal de refeição | Atalho reutilizável para registrar consumo | Usuário | Editável e excluível sem alterar diário |
 | Modelo profissional de refeição | Bloco reutilizável para criar dietas dos pacientes | Nutricionista | Editável e excluível sem alterar dietas já publicadas |
-| Refeição consumida | Registro do que a pessoa efetivamente comeu em uma data | Usuário / paciente | Corrigível por ação explícita, sem depender de alterações nos modelos |
+| Refeição consumida | Registro do que a pessoa efetivamente comeu em uma data | Usuário / paciente | Editável ou excluível pelo dono do diário, com recálculo de agregados e histórico discreto de correções, sem depender de alterações nos modelos |
 | Item alimentar | Alimento, quantidade, unidade, fonte e nutrientes | Composição de um desses registros | Deve manter referência e valores próprios ao contexto em que foi usado |
 
 A mesma implementação de seleção de alimentos, medidas e cálculo nutricional pode ser reaproveitada, mas **não** deve acoplar o ciclo de vida dos registros.
@@ -320,7 +320,7 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 - Usuários comuns também poderão criar categorias personalizadas no MVP ou usarão apenas as categorias padrão?
 - Favoritos e etiquetas adicionais (tags) nas bibliotecas pessoal e profissional agregam valor suficiente para o MVP?
 - Refeição registrada a partir de um modelo deverá armazenar um identificador de origem opcional (para análises) sem se tornar dependente do modelo?
-- Quais ações de correção de histórico permitirão auditoria apropriada?
+- Quais regras específicas de retenção, eliminação e visibilidade da trilha de correções do diário serão aprovadas nas etapas 8 e 9?
 
 ## 12. Critérios de priorização
 
