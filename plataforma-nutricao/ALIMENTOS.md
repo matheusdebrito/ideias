@@ -3,7 +3,7 @@
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
 > **Etapa:** 4 de 10 — Base de alimentos e cálculos nutricionais (em andamento)
-> **Versão:** 0.4
+> **Versão:** 0.5
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Decisões confirmadas** são distintas de **propostas a validar**.
@@ -27,7 +27,11 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 - Fibras, vitaminas, minerais e outros componentes são opcionais no cadastro manual. Nutriente opcional não informado deve permanecer **desconhecido**, não zero.
 - Para totais de micronutrientes no plano ou diário, se qualquer item relevante não possuir o nutriente, indicar cobertura incompleta e não apresentar a soma parcial como total exato. Evitar reportar como zero valores desconhecidos.
 - Verificar valores numéricos não negativos, quantidade de referência positiva e unidade válida. Pode-se sinalizar inconsistências relevantes entre energia e macros, mas **não exigir igualdade exata** entre kcal informada e kcal estimada a partir dos macronutrientes, considerando arredondamentos, fibra e fatores nutricionais.
-- A obrigatoriedade dos quatro valores essenciais é uma regra do **cadastro manual personalizado**. Alimentos importados de fontes institucionais podem ter dados não analisados/ausentes e requerem critérios próprios de seleção e apresentação, a definir; não inventar valores para completá-los.
+- **Alimentos importados de fontes institucionais:** podem existir no catálogo e aparecer nos resultados de busca e na consulta nutricional mesmo se faltar energia, proteína, carboidrato ou gordura total, com esses campos explicitamente marcados como indisponíveis.
+- **Bloqueio de uso:** se faltar algum dos quatro nutrientes essenciais no alimento importado, o sistema não permite adicioná-lo a dietas (pessoais ou profissionais), modelos de refeição ou registros de consumo no diário; a interface explica quais campos impedem o uso.
+- Alimento institucional com energia e os três macronutrientes completos pode ser usado mesmo sem dados de fibra, vitaminas ou minerais. Quando um relatório agregar nutrientes desconhecidos, sinalizar que o total não é completo.
+- A checagem de completude e o bloqueio devem ocorrer no backend, inclusive ao salvar uma refeição ou publicar uma dieta, não apenas na escolha visual. Não inferir nutrientes ausentes de outros componentes nem substituir lacuna por zero.
+- **Distinção:** para alimentos privados cadastrados manualmente os quatro campos essenciais são obrigatórios já no salvamento; para alimentos importados incompletos, a visualização é permitida, mas o uso em cálculos de refeições é bloqueado.
 - O alimento selecionado terá quantidade e unidade para o cálculo proporcional.
 - **Referências nutricionais aceitas no cadastro (definido para o MVP):** 100 g, 100 mL ou porção declarada, sempre com quantidade de referência positiva e unidade explícita. Para uma porção declarada, armazenar seu significado (por exemplo, porção de 30 g ou uma unidade), sem presumir que toda porção seja igual.
 - Os nutrientes de uma quantidade consumida são proporcionais aos nutrientes da quantidade de referência, após uma conversão autorizada. Exemplo: 120 kcal para uma porção de 30 g implicam 240 kcal para 60 g.
@@ -49,11 +53,10 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 
 ## 4. Decisões em aberto — não presumir definição
 
-1. Como lidar com rótulos com campos essenciais faltantes (impedem cadastro manual) e alimentos institucionais com nutrientes ausentes (política própria)?
-3. Como sinalizar alimentos semelhantes, marcas, preparação (cru/cozido) e possíveis duplicidades?
-4. Qual é a base nutricional legalmente e operacionalmente disponível para uso comercial? Verificar cobertura da TBCA, formato, direitos de uso/redistribuição e possibilidade de TACO.
-5. Quais campos e regras de arredondamento serão usados na exibição, cálculos e comparação de nutrientes?
-6. Como tratar a permanência dos dados já publicados quando o criador apagar um alimento privado ou quando o vínculo profissional for encerrado?
+1. Como sinalizar alimentos semelhantes, marcas, preparação (cru/cozido) e possíveis duplicidades?
+2. Qual é a base nutricional legalmente e operacionalmente disponível para uso comercial? Verificar cobertura da TBCA, formato, direitos de uso/redistribuição e possibilidade de TACO.
+3. Quais campos e regras de arredondamento serão usados na exibição, cálculos e comparação de nutrientes?
+4. Como tratar a permanência dos dados já publicados quando o criador apagar um alimento privado ou quando o vínculo profissional for encerrado?
 
 ## 5. Critérios de aceitação propostos
 
@@ -68,6 +71,9 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 | Usuário tenta salvar alimento personalizado sem kcal, proteínas, carboidratos ou gorduras totais | Sistema não salva e indica os campos essenciais faltantes |
 | Usuário informa valor zero em proteína, carboidrato ou gordura | Zero informado pode ser aceito; não confundir com campo vazio |
 | Alimento tem micronutrientes desconhecidos e entra em refeição | Refeição pode ser utilizada; agregados desse nutriente são explicitamente incompletos |
+| Alimento importado de tabela institucional não tem gordura total | Aparece na busca e pode ser consultado, com gordura total indisponível; seleção em dieta, modelo ou diário é bloqueada |
+| Alimento importado contém kcal, proteínas, carboidratos e gorduras, mas não vitamina C | Pode ser selecionado; relatório de vitamina C sinaliza cobertura incompleta |
+| Cliente tenta enviar via API refeição com alimento institucional sem um valor essencial | Backend rejeita a operação e indica o nutriente ausente |
 | Energia informada difere levemente do cálculo simplificado 4-4-9 | Não bloquear por diferença exata: validar apenas inconsistências evidentes, respeitando arredondamentos e fatores de conversão |
 | Dieta publicada usa alimento que depois é editado | Dieta publicada mantém seu retrato histórico |
 | Diário registra alimento que depois é editado | Registro de consumo mantém seus valores originais |
