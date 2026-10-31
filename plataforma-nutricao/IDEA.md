@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.27  
+> **Versão:** 0.28  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -88,7 +88,11 @@ Manter um catálogo pesquisável de alimentos com, quando disponíveis:
 Requisitos importantes para a qualidade dos dados:
 - Armazenar a composição por uma base de referência definida, preferencialmente por 100 g de parte comestível.
 - Distinguir valores iguais a zero de nutrientes não analisados ou sem informação.
-- Identificar alimento cru, cozido, assado, frito ou outra condição relevante.
+- Identificar o **estado real do alimento no momento de consumo** (cozido, assado, grelhado, frito ou naturalmente consumido cru), quando afetar a composição nutricional.
+- **Padrão do MVP — peso pronto para consumo:** dietas e diário orientarão a pesar a porção **depois do preparo**, para alimentos que exigem preparo (arroz, feijão, carnes, massas etc.). Buscar e selecionar preferencialmente a entrada nutricional correspondente ao alimento preparado: arroz cozido, frango grelhado etc.
+- **Não excluir todos os alimentos crus:** frutas, saladas, castanhas e outros alimentos efetivamente consumidos crus continuam válidos e calculados no estado de consumo.
+- Para alimentos normalmente preparados, a variante crua não será a opção padrão para montagem da refeição. Se a fonte a contiver, ela poderá ser preservada como dado de referência, sem oferecê-la como alternativa principal de porção pronta; uso de ingredientes crus para cálculo de receitas fica fora do fluxo padrão do MVP e é possibilidade futura.
+- **Não usar valores de alimento cru para calcular o peso do prato pronto.** A absorção/perda de água, óleo e outras mudanças no preparo precisam estar refletidas na entrada nutricional correspondente. Não converter automaticamente peso cru em peso cozido com fator genérico.
 - Registrar a fonte, a versão e a data de referência dos dados.
 - Não misturar valores de fontes diferentes sem identificar sua procedência.
 - Permitir conversão de quantidades e medidas caseiras com regras explícitas.
