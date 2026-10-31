@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.65  
+> **Versão:** 0.66  
 > **Última atualização:** 31/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -362,12 +362,12 @@ O modelo de múltiplos nutricionistas simultâneos está **descartado no MVP**. 
 **Modelo comercial confirmado para o MVP — etapa 7:**
 
 - **Usuários gratuitos, com ou sem nutricionista:** toda conta pessoal adulta acessa sem cobrança diário alimentar, registro de consumo, metas próprias, indicadores, gráficos, peso/IMC, histórico e planos pessoais. A conta e o acesso aos próprios dados não dependem de acompanhamento ou assinatura do nutricionista.
-- **Assinatura mensal do nutricionista:** o profissional paga uma mensalidade pelo acesso aos recursos de gestão e acompanhamento: convites/vínculos, painel e indicadores dos pacientes autorizados, criação/atribuição de dietas e metas profissionais, histórico e biblioteca de uso profissional.
+- **Plano profissional único no MVP (confirmado):** o nutricionista terá **uma única opção de assinatura mensal** reunindo todos os recursos profissionais previstos: convites/vínculos, painel e indicadores de usuários autorizados, criação/atribuição de dietas e metas profissionais, histórico e biblioteca profissional. **Preço e existência/quantidade de limite de pacientes ainda serão decididos**, sem concluir que o plano será ilimitado.
 - **Sem cobrança da plataforma ao paciente para ser acompanhado:** o paciente não precisa pagar assinatura para aceitar convite, visualizar dieta profissional atribuída nem registrar sua alimentação durante o acompanhamento.
 - **Papéis e controles continuam independentes da cobrança:** pagamento não substitui aprovação do CRN, vínculo ativo, autorização do paciente ou verificação de permissões no servidor. Os recursos pessoais continuam disponíveis ao nutricionista em sua própria conta mesmo sem plano profissional habilitado.
 - **Não atribuir consequências por suposição:** interrupção de assinatura profissional não autoriza apagar o histórico do paciente, revogar silenciosamente consentimentos, modificar dietas publicadas ou encerrar automaticamente vínculos; o comportamento exato das ações profissionais em inadimplência/cancelamento será aprovado separadamente.
 
-**Ainda a definir na etapa 7:** número de planos profissionais, limites por plano (pacientes ativos ou outros), preço e condições, período de teste, cobrança/renovação, inadimplência, cancelamento e continuidade operacional de acompanhamentos existentes.
+**Estrutura comercial já aprovada:** somente **um plano profissional mensal** no lançamento, incluindo as funcionalidades profissionais do MVP. **Decisões adiadas pelo produto:** preço e **se haverá ou não limite de pacientes** (e eventual quantidade); não inferir oferta ilimitada. **Ainda a decidir na etapa 7:** período de teste, cobrança/renovação, inadimplência, cancelamento e continuidade operacional de acompanhamentos existentes.
 
 **Especificação comercial em desenvolvimento:** [MONETIZACAO.md](./MONETIZACAO.md).
 
