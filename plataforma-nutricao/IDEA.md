@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.41  
+> **Versão:** 0.42  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -199,7 +199,7 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - **Painel diário confirmado no MVP:** mostrar **calorias consumidas**, **meta calórica efetiva do dia**, **calorias restantes até a meta** e, caso a meta seja ultrapassada, **quanto o consumo ficou acima dela**. Exibir também **proteínas, carboidratos e gorduras totais consumidos** (em gramas) naquele dia.
 - A diferença é calculada entre meta calórica efetiva **da data consultada** e total consumido: quando o consumo for menor ou igual à meta, apresentar valor restante não negativo; quando for maior, apresentar o excedente como **acima da meta**, sem confundir o usuário com um valor negativo de calorias restantes. Se a data não tiver meta válida, apresentar consumo normalmente e indicar **sem meta definida**, sem inventar saldo nem assumir meta zero.
 - Atualizar o painel quando refeições forem criadas, corrigidas ou excluídas, inclusive lançamentos retroativos, usando a data local de consumo do registro e os valores nutricionais preservados em cada item. **Não arredondar antes de somar**; formatar valores na apresentação conforme as regras nutricionais já definidas.
-- **Metas opcionais de macronutrientes aprovadas:** proteína, carboidrato e gordura podem ter objetivos próprios definidos pelo usuário ou nutricionista autorizado. O painel mostra os totais consumidos mesmo sem objetivos, e apresenta a comparação somente onde houver meta válida. Permanecem em aberto os detalhes visuais da distribuição e os gráficos/saldos de comparação por período.
+- **Metas opcionais de macronutrientes aprovadas:** proteína, carboidrato e gordura podem ter objetivos próprios definidos pelo usuário ou nutricionista autorizado. O painel mostra os totais consumidos mesmo sem objetivos, e apresenta a comparação somente onde houver meta válida. Os gráficos semanais/mensais de consumo com referência de meta histórica foram aprovados; permanecem em aberto os saldos agregados, a distribuição detalhada e critérios de completude.
 - Consulta de períodos anteriores, preservando as metas vigentes à época.
 - **Alteração de meta definida pelo nutricionista (confirmado no MVP):** o paciente pode alterar a meta que utiliza para acompanhar calorias e macronutrientes, mesmo quando a referência atual veio de seu nutricionista. Antes de aplicar a alteração, a interface deve avisar explicitamente que a meta foi definida pelo profissional e pedir confirmação inequívoca; cancelar mantém a meta atual.
 - A confirmação cria uma **meta de acompanhamento ajustada pelo paciente**, com autor/origem e vigência identificados, que se torna a referência efetiva dos indicadores a partir da alteração. A meta original prescrita pelo nutricionista **permanece preservada e consultável**, não é modificada e não pode ser falsamente atribuída ao profissional.
@@ -216,7 +216,11 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - **Dia sem registros não é dia com consumo zero**: excluir dias sem lançamentos do divisor da média, não declarar que houve jejum ou consumo nulo e não apresentar os totais registrados como retrato completo do consumo real. Dias com registros podem estar incompletos, por isso identificar as médias como **médias dos dias registrados**.
 - **Cálculo:** total do período = soma dos valores nutricionais das refeições registradas no período; média por dia registrado = total / quantidade de datas locais distintas que possuem ao menos uma refeição no período. Se nenhum dia tiver registros, exibir **sem dados registrados**, sem média zero nem divisão por zero.
 - Adicionar/editar/excluir refeições, inclusive lançamentos retroativos ou alteração de data/fuso, atualiza o período e sua quantidade de dias registrados. Agregar pelo dia local de consumo já preservado; não fazer arredondamento intermediário.
-- Ainda em aberto para planejamento: gráficos, saldos e comparações com metas em períodos que incluam dias sem lançamentos ou mudanças de meta; limites precisos da semana na interface e critérios de completude do diário.
+- **Gráfico semanal/mensal de consumo (confirmado no MVP):** exibir a evolução **diária** do consumo registrado no período, inicialmente de calorias (kcal), com opção de alternar a visualização para proteínas, carboidratos ou gorduras (g). A escolha do indicador não mistura unidades diferentes no mesmo eixo.
+- Quando houver meta válida para o nutriente em um dia, apresentá-la como **referência visual** nessa data, usando a meta efetivamente vigente naquele dia, e não a meta atual aplicada retroativamente. Se o valor ou a origem da meta mudar durante a semana ou mês, a referência também muda na data correspondente; sem meta naquele dia, não inventar referência zero.
+- **Dias sem refeições registradas aparecem como _sem dados_**, e não como ingestão zero, tanto no gráfico quanto no detalhe acessível. Não traçar uma evolução contínua de consumo através desses dias de modo que pareçam medições reais. Dias com registros mostram apenas os nutrientes efetivamente cadastrados, sem presumir diário completo.
+- Incluir data e valores de consumo e meta (quando disponível) em descrição/consulta textual acessível; o gráfico deve funcionar em telas pequenas. Alterações e exclusões no diário, inclusive retroativas, atualizam as datas afetadas.
+- **Ainda em aberto:** saldo agregado e interpretação de metas semanais/mensais com dias não registrados, forma visual exata do gráfico, convenção do início da semana e critérios de completude do diário; nenhum gráfico implica diagnóstico clínico.
 
 **Adultos:** a aplicação poderá estimar uma meta energética por método validado e permitir ajustes manuais. O cálculo requer dados suficientes, explicação dos limites e revisão de profissionais antes do lançamento.
 
