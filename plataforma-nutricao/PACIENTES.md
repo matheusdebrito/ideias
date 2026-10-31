@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 6 de 10 — Gestão de pacientes e permissões (em andamento)
-> **Versão:** 0.5
+> **Versão:** 0.6
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [DIETAS.md](./DIETAS.md), [DIARIO.md](./DIARIO.md)
 
@@ -60,7 +60,22 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 - **Aviso adicional por e-mail aprovado:** após **aceite com vínculo efetivamente ativado** ou **recusa registrada**, enviar ao nutricionista que convidou uma mensagem transacional com o resultado e referência ao painel profissional. O e-mail não deve expor dados nutricionais ou de saúde, conteúdo do diário nem motivos da recusa.
 - **Fonte de verdade:** a resposta no painel é mantida mesmo se o serviço de e-mail falhar. Envios e retentativas não podem criar novo vínculo nem modificar o estado do convite.
 
-## 6. Critérios de aceitação inicial
+## 6. Escopo do acompanhamento e aceite simples (**confirmado no MVP**)
+
+**Dados apresentados para autorização do paciente ao aceitar o convite:**
+- **Diário alimentar:** refeições registradas e composição nutricional consumida.
+- **Metas alimentares:** metas de calorias e macronutrientes, incluindo as referências profissionais e ajustes efetivos relevantes ao acompanhamento.
+- **Gráficos e indicadores:** resumos, totais e evolução do consumo registrado.
+- **Medidas corporais:** peso registrado, evolução do peso e IMC quando calculável.
+- **Planos alimentares profissionais:** dietas profissionais vinculadas ao acompanhamento autorizado, com identificação da autoria e versões pertinentes.
+
+**Experiência de autorização:** uma tela curta com nome do nutricionista e resumo legível dessas categorias, ações inequívocas **Aceitar e autorizar** e **Recusar convite**, e acesso opcional a **Ver detalhes**. Sem sequência extensa de formulários nem chaves individuais para cada categoria neste MVP. A ausência de chaves separadas não autoriza ampliar a lista de dados compartilhados: mudanças materiais do escopo exigem informação clara e nova autorização quando aplicável. O aceite não pode vir pré-selecionado ou ser inferido da navegação.
+
+**Acesso e proteção:** o profissional autenticado só consulta os dados aprovados de paciente com **vínculo ativo e autorização vigente**. A API/banco rejeitam consulta de outras categorias e de outros pacientes, inclusive tentativas diretas a endpoints; o paciente não perde propriedade ou permissão de editar seus próprios registros. A autorização de acesso **não permite ao nutricionista editar refeições consumidas ou medidas do paciente por padrão**; suas ações de prescrição seguem permissões próprias já planejadas. O paciente deve conseguir identificar o profissional vinculado e encontrar o caminho para encerrar/revogar o vínculo; detalhes desse fluxo serão definidos nesta etapa.
+
+**Ponto ainda não decidido:** o período histórico que o novo nutricionista poderá consultar, especialmente **registros anteriores ao início do vínculo**, será definido separadamente; não conceder esse acesso de forma implícita a partir da regra geral de dados compartilháveis. Requisitos jurídicos de transparência/bases legais serão tratados na etapa 8.
+
+## 7. Critérios de aceitação inicial
 
 | Cenário | Comportamento esperado |
 | --- | --- |
@@ -92,13 +107,19 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 | Convite expira sem resposta | Não disparar e-mail de aceite/recusa; status Expirado permanece no painel |
 | Falha na entrega de notificação por e-mail | Decisão registrada permanece válida e consultável no painel; falha pode ser tratada por processo de reenvio |
 | Requisição de aceite ou recusa é repetida | Não duplicar eventos de decisão ou criar notificações contraditórias; regras de idempotência na etapa 9 |
+| Paciente recebe convite na plataforma | Uma tela informa nome do profissional, categorias de dados e ações claras Aceitar e autorizar / Recusar, com detalhes opcionais |
+| Paciente autoriza acompanhamento | Nutricionista vinculado pode consultar diário, metas, indicadores, peso/IMC e planos profissionais autorizados, respeitando período e permissões a definir |
+| Nutricionista tenta consultar dados de usuário sem vínculo autorizado | Servidor nega mesmo que o cliente forneça o ID do paciente |
+| Nutricionista tenta editar refeição consumida pelo paciente só por possuir acesso de acompanhamento | Operação negada, pois leitura não concede edição automática |
+| Profissional tenta acessar dado fora das cinco categorias autorizadas | Acesso negado mesmo com vínculo ativo |
+| Paciente não visualiza detalhes opcionais e escolhe Recusar | Nenhum compartilhamento é criado; não obrigar leitura de telas adicionais para recusar |
 
-## 7. Decisões ainda em aberto na etapa 6
+## 8. Decisões ainda em aberto na etapa 6
 
-- **Entrega e retorno dos convites:** convite por e-mail, identificação do destinatário, validade de **7 dias**, reenvio invalidando o anterior, retorno pelo **painel profissional e por e-mail ao nutricionista quando houver aceite ou recusa** já confirmados. Pendem tratamento técnico de falha/repetição de envios, limites contra abuso e granularidade da autorização. Não expor se determinada pessoa possui conta a usuários não autorizados.
+- **Entrega e retorno dos convites:** convite por e-mail, identificação do destinatário, validade de **7 dias**, reenvio invalidando o anterior e retorno no painel e por e-mail já confirmados. **Escopo de cinco categorias e aceite em tela única com resumo claro também confirmados**, sem múltiplos controles individuais no MVP. Pendem tratamento técnico de falha/repetição de envios e limites contra abuso. Não expor se determinada pessoa possui conta a usuários não autorizados.
 - **Troca:** quem pode iniciar, quando o vínculo anterior termina e como evitar janela com dois profissionais simultâneos.
 - **Planos profissionais antigos:** se uma dieta profissional vigente do nutricionista anterior deve encerrar automaticamente ou continuar apenas para consulta após a troca. Não alterar essa regra por suposição.
-- **Permissões específicas:** quais informações de diário, peso, metas e planos podem ser acessadas pelo profissional autorizado; revogação pelo paciente.
+- **Período dos dados e revogação:** decidir se o profissional autorizado poderá visualizar dados lançados **antes do início do vínculo**, e concluir o procedimento de revogação/encerramento pelo paciente. A lista das categorias visíveis já foi aprovada; a extensão temporal do acesso não foi.
 - **Registro do nutricionista:** verificação do CRN e restrições de acesso antes da validação.
 - **Dados profissionais após encerramento:** guarda obrigatória, eliminação, portabilidade e outros requisitos da LGPD na etapa 8.
 
