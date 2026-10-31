@@ -3,7 +3,7 @@
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
 > **Etapa:** 4 de 10 — Base de alimentos e cálculos nutricionais (em andamento)
-> **Versão:** 0.7
+> **Versão:** 0.8
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Decisões confirmadas** são distintas de **propostas a validar**.
@@ -43,7 +43,9 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 - Medidas caseiras são opcionais e só devem ser oferecidas como seleção se a conversão para a referência nutricional for conhecida. Na ausência da conversão, impedir cálculo nessa medida, mostrar explicação e oferecer uma unidade compatível.
 - Registrar os valores de referência, origem da equivalência e fator de conversão usados no cálculo e preservar o retrato no histórico; mudanças posteriores em porções/equivalências não alteram dieta publicada nem consumo registrado.
 - Alterações posteriores no cadastro de um alimento não podem reescrever o histórico de refeições consumidas ou dietas publicadas. Os registros de destino preservam a composição utilizada no momento da gravação.
-- TBCA é a **fonte principal candidata**, com TACO como possível complemento. A incorporação comercial, atribuição e redistribuição dependem de validação das condições aplicáveis; não há licença presumida.
+- **Decisão adiada pelo usuário (31/10/2026):** a origem/fornecimento da base do catálogo será escolhida em etapa posterior, entre **TBCA, TACO ou arquivo JSON próprio**. Nenhuma opção está confirmada ou hierarquizada neste momento.
+- **JSON representa um formato de entrega/armazenamento, não garante origem própria ou licença livre**. Informar a fonte original de cada composição, sua versão, unidade e direitos de uso. A aplicação pode importar JSON mesmo que os dados nele venham de uma das tabelas, mas a licença da origem continua valendo.
+- Projetar o catálogo e a interface de seleção de alimentos de modo independente do mecanismo de importação ou da fonte. **Retomar decisão na etapa 9 (arquitetura e integrações), antes de desenvolver/importar o catálogo definitivo**; a disponibilidade de fonte comercialmente utilizável continua sendo requisito de lançamento.
 - **Risco confirmado por consulta aos portais oficiais em 31/10/2026:** a [TBCA/USP](https://www.tbca.net.br/index.html) orienta contatar seus coordenadores para fins comerciais e publica restrições de reprodução/comercialização. O acesso livre online não autoriza assumir que a base pode ser copiada, transformada ou distribuída dentro da plataforma paga.
 - **Ação necessária antes de importar/redistribuir dados TBCA:** obter posição formal dos responsáveis sobre uso comercial, armazenamento próprio, API, disponibilização a assinantes, cálculo de nutrientes, requisitos de atribuição e condições financeiras, caso existam. A eventual dispensa de citar para o cálculo de informação nutricional não equivale a permissão ampla de uso comercial.
 - **TACO/NEPA-UNICAMP:** a [publicação oficial da 4ª edição](https://nepa.unicamp.br/tabela-brasileira-de-composicao-de-alimentos-4a-edicao/) está disponível para consulta, mas ainda é necessário verificar as condições de uso dos dados em um serviço comercial; não confundir acesso público com licença de redistribuição.
@@ -62,7 +64,7 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 ## 4. Decisões em aberto — não presumir definição
 
 1. Como sinalizar alimentos semelhantes, marcas, preparação (cru/cozido) e possíveis duplicidades?
-2. Qual é a base nutricional legalmente e operacionalmente disponível para uso comercial? Verificar cobertura da TBCA, formato, direitos de uso/redistribuição e possibilidade de TACO.
+2. **Decisão postergada para a etapa 9:** avaliar TBCA, TACO ou arquivo JSON próprio; confirmar origem, licença, cobertura, formato e estratégia de importação antes da implementação definitiva.
 3. Qual modo de arredondamento decimal e qual precisão interna serão usados pela implementação (a fechar na etapa de arquitetura)?
 4. Como tratar a permanência dos dados já publicados quando o criador apagar um alimento privado ou quando o vínculo profissional for encerrado?
 
@@ -97,7 +99,7 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 
 ## 6. Dependências da etapa
 
-Validar a viabilidade jurídica e técnica da base principal antes de definir integração/importação. **Privacidade do catálogo personalizado definida:** dados privados do criador e somente retratos de nutrientes/nome/porção em dietas publicadas, com autorização no servidor. Não existe catálogo público colaborativo no MVP; eventual mudança exigirá nova decisão de produto e revisão de qualidade e privacidade.
+A escolha da fonte nutricional (TBCA, TACO ou JSON próprio) foi adiada; seguir o planejamento funcional sem eleger uma fonte ou travar a etapa 4 por isso. Antes da importação definitiva e do lançamento comercial, confirmar procedência, viabilidade jurídica e qualidade da fonte selecionada. **Privacidade do catálogo personalizado definida:** dados privados do criador e somente retratos de nutrientes/nome/porção em dietas publicadas, com autorização no servidor. Não existe catálogo público colaborativo no MVP; eventual mudança exigirá nova decisão de produto e revisão de qualidade e privacidade.
 
 ---
 
