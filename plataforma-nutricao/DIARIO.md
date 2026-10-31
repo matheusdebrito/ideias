@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (em andamento)
-> **Versão:** 1.7
+> **Versão:** 1.8
 > **Data:** 31/10/2026
 > **Fonte principal da visão:** [IDEA.md](./IDEA.md) e [DIETAS.md](./DIETAS.md)
 > **Convenção:** regras confirmadas estão separadas das decisões em aberto.
@@ -96,7 +96,7 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 1. **Metas:** ajuste pessoal com confirmação, aviso discreto no painel profissional e aplicação automática de novas metas do nutricionista definidos. E-mail/push externos por ajuste de meta ficam fora do MVP; detalhes visuais do indicador vão para a etapa de implementação.
 2. **Períodos e fusos:** fuso por refeição, correção manual e agrupamento dos registros por data local já definidos; **semana de segunda-feira a domingo** e contagem de dias e média dos períodos semanal/mensal confirmados. Horário de verão/conversões continuam para a etapa 9.
-3. **Indicadores:** painel diário, resumos, gráficos, contagem de dias e diferença acumulada por período para kcal e macros já confirmados, com **igualdade estrita sem tolerância**, semana de segunda a domingo e exclusão de dias sem registros/metas das comparações. Restam apresentação de precisão e cobertura de micronutrientes.
+3. **Indicadores:** painel diário, resumos, gráficos, contagens e diferença acumulada de kcal/macros confirmados, com comparação estrita e semana de segunda a domingo. Vitaminas e minerais disponíveis serão exibidos, com **total parcial identificado quando faltar dado em algum item**. Restam apresentação detalhada da cobertura e eventual uso de referências de micronutrientes.
 4. **Medidas corporais:** registro livre de peso com data, correção de medições, gráfico histórico e IMC atual pelo peso mais recente/altura do perfil foram aprovados. Restam regras técnicas de altura histórica e retenção de medições (etapas 8 e 9).
 5. **Retenção e permissões da trilha de correções:** quais registros de auditoria podem persistir e quais atores poderão visualizá-los, respeitando privacidade e eliminação de dados? Resolver nas etapas 8 e 9.
 
@@ -189,7 +189,18 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 - O resultado reflete somente o que foi **registrado**; até mesmo um dia com registros pode ter refeições faltantes. Não interpretar o saldo frente à meta como balanço energético fisiológico nem como diagnóstico.
 - Atualizar a diferença, os dias comparáveis e os contadores acima/abaixo/na meta sempre que uma refeição for criada, editada, movida para outra data/fuso ou excluída, inclusive retroativamente. Não arredondar valores antes do cálculo.
 
-## 14. Casos de aceitação de referência
+## 14. Vitaminas, minerais e dados incompletos (**Definidos para o MVP**)
+
+- Nos detalhes do diário e em resumos nutricionais, apresentar vitaminas e minerais que tenham dados conhecidos nos alimentos consumidos, como ferro, cálcio, vitamina C e vitamina B12, respeitando os nutrientes de fato disponibilizados pela fonte. Os dados de micronutrientes permanecem opcionais no cadastro de alimentos, conforme [ALIMENTOS.md](./ALIMENTOS.md).
+- **Total com cobertura completa nos itens registrados:** quando todos os itens consumidos possuírem valor conhecido para o micronutriente selecionado, somar as contribuições ajustadas às quantidades informadas e apresentar o **total do consumo registrado**, sem afirmar que o diário contém toda a alimentação do usuário.
+- **Total parcial:** se pelo menos um item tiver valor conhecido e outro não possuir o micronutriente, permitir mostrar a **soma dos dados conhecidos**, mas com destaque **parcial / dados incompletos**; não substituir o desconhecido por zero nem apresentar o resultado parcial como total nutricional exato.
+- **Sem dados:** quando nenhum item consumido tiver informação sobre determinado micronutriente, exibir **sem dados disponíveis**, sem mostrar 0 mg/µg. Um zero fornecido explicitamente pela fonte deve continuar sendo um zero conhecido.
+- Respeitar as unidades apropriadas (mg, µg etc.) e precisão dos dados-fonte, sem arredondamentos intermediários nem somas incompatíveis. Criar, editar, excluir ou registrar refeição retroativa deve atualizar os valores e a cobertura das datas e períodos afetados.
+- O diário não conclui automaticamente deficiência, excesso ou adequação clínica a partir desses dados, nem compara vitaminas/minerais a metas genéricas não aprovadas.
+
+**Em aberto:** modelo de interface para detalhar quais informações faltam e eventual uso de valores de referência para micronutrientes, sem presumir metas individuais.
+
+## 15. Casos de aceitação de referência
 
 | Cenário | Resultado esperado |
 | --- | --- |
@@ -259,6 +270,12 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 | Modelo pessoal é editado após o consumo | Registro antigo permanece independente |
 | Duplo envio da mesma confirmação | Apenas uma refeição é registrada |
 | Micronutriente não está disponível em alguns itens | Total do micronutriente é explicitamente sinalizado como incompleto |
+| Refeição contém alimento com ferro conhecido e outro sem dado de ferro | Exibir apenas a soma conhecida como **total parcial**, sinalizando informação ausente; não tratar dado faltante como 0 mg |
+| Todos os alimentos da refeição possuem dado válido de vitamina C | Somar as quantidades informadas e exibir total do consumo registrado sem aviso de item faltante |
+| Nenhum alimento consumido possui informação de vitamina B12 | Mostrar sem dados disponíveis em vez de 0 µg |
+| Fonte informa explicitamente 0 mg de cálcio | Preservar valor zero conhecido e não confundir com nutriente sem informação |
+| Micronutriente é fornecido em unidades compatíveis com conversão (mg e µg) | Normalizar corretamente para unidade escolhida e evitar soma de unidades incompatíveis |
+| Usuário adiciona refeição retroativa com vitamina C conhecida | Recalcular o total de vitamina C e sua indicação de cobertura no dia e período correspondentes |
 | Usuário altera sua meta futura | Meta anterior permanece associada aos dias históricos em que vigorou |
 | Paciente pede alteração de meta definida pelo nutricionista | Aplicação avisa que a meta é profissional e solicita confirmação expressa |
 | Paciente cancela a confirmação da alteração | Meta efetiva permanece intacta |
@@ -282,4 +299,4 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 
 ---
 
-A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, metas opcionais pessoais/profissionais, novos objetivos profissionais automáticos, indicadores diários, resumos e gráficos semanais/mensais com contagem estrita dos dias acima, abaixo ou exatamente na meta (sem tolerância) e diferença acumulada sobre metas nos dias comparáveis, acompanhamento de peso e IMC atual foram aprovados para o MVP.** Permanecem pendentes detalhes visuais e cobertura de micronutrientes, horário de verão e altura histórica, retenção e acesso à trilha.
+A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, metas opcionais pessoais/profissionais, novos objetivos profissionais automáticos, indicadores diários, resumos e gráficos semanais/mensais com contagem estrita dos dias acima, abaixo ou exatamente na meta (sem tolerância) e diferença acumulada sobre metas nos dias comparáveis, acompanhamento de peso e IMC atual, além de exibição de vitaminas/minerais com indicação de totais parciais quando faltarem dados, foram aprovados para o MVP.** Permanecem pendentes visualização detalhada da cobertura, eventual referência de micronutrientes, horário de verão e altura histórica, retenção e acesso à trilha.
