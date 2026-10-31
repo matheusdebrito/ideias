@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 2.1
+> **Versão:** 2.2
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -103,7 +103,10 @@ O nutricionista poderá:
 - A aplicação apresenta calorias, macronutrientes e vitaminas/minerais disponíveis na fonte nutricional selecionada posteriormente, sem pedir que o nutricionista digite macros.
 - Conversões de unidades e medidas caseiras precisam usar fatores definidos e rastreáveis; não presumir equivalência de gramas e mililitros. São aceitas composições por 100 g, 100 mL ou porção declarada, desde que a referência seja explícita; medidas caseiras somente quando o alimento possuir equivalência documentada.
 - Um alimento não pode ser selecionado em medida incompatível sem fator de conversão rastreável. Uma refeição planejada/consumida deve preservar a referência nutricional e o fator usados em seus totais históricos.
-- Alimentos em estados diferentes (por exemplo, cru e cozido) devem ser selecionados como entradas distintas quando assim constarem no catálogo.
+- **Forma pronta para consumo é o padrão da dieta e do diário.** Refeições com arroz, feijão, carnes, massas etc. devem ser planejadas e pesadas após o preparo, utilizando valores nutricionais correspondentes ao estado realmente consumido (cozido, grelhado, assado, frito etc.).
+- Alimentos normalmente consumidos crus (frutas, saladas, castanhas etc.) continuam válidos. Entradas nutricionais de ingredientes crus que exigem cocção, caso existam na fonte, não serão opções principais no fluxo de prescrição/consumo.
+- Não aplicar valores nutricionais de alimento cru à quantidade pesada após preparo; não converter automaticamente entre cru e cozido por fator genérico. O preparo pode modificar água, gordura e a composição por 100 g.
+- Ao montar receitas a partir de ingredientes crus, poderão ser necessários rendimentos e retenção de nutrientes; esse fluxo não está confirmado para o MVP e permanece como evolução possível.
 - Dados ausentes na fonte devem ser apresentados como não disponíveis, nunca como zero inventado. Alimentos personalizados cadastrados manualmente exigem kcal, proteínas, carboidratos e gorduras totais completos; micronutrientes podem permanecer desconhecidos, e relatórios agregados desses nutrientes devem sinalizar cobertura incompleta.
 - Alimentos importados de bases nutricionais podem aparecer na consulta mesmo sem os quatro dados essenciais, mas **não podem ser adicionados** a uma dieta, modelo de refeição ou diário enquanto faltar energia, proteínas, carboidratos ou gorduras totais. O backend deve validar a completude antes de aceitar o registro; ausência apenas de micronutrientes não bloqueia o uso.
 - O cálculo e o arredondamento devem ser consistentes entre biblioteca, dieta e diário. Para o MVP, **não arredondar valores intermediários**: aplicar fatores proporcionais, somar os nutrientes com a precisão disponível e arredondar somente na apresentação.
