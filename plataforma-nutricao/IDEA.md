@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.10  
+> **Versão:** 0.11  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -159,9 +159,10 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 
 **Organização do cardápio (confirmada para o MVP):**
 - Todo plano começa com um **cardápio diário padrão**, repetido nos sete dias da semana.
+- Um mesmo dia pode conter **várias refeições planejadas da mesma categoria** (por exemplo, mais de um café da manhã ou lanche), cada uma como registro independente, com seus próprios alimentos, quantidades, observações e horário sugerido opcional.
 - O usuário ou nutricionista pode personalizar refeições específicas para **dias da semana** sem precisar refazer todo o cardápio.
 - As refeições não personalizadas em determinado dia continuam herdando o padrão diário.
-- Substituir, adicionar ou retirar uma refeição de um dia não altera os outros dias.
+- Substituir, adicionar ou retirar uma refeição específica de um dia não altera as outras refeições, mesmo que tenham a mesma categoria, nem os outros dias.
 - É possível restaurar o padrão de uma refeição removendo sua personalização. Retirar intencionalmente uma refeição daquele dia é diferente de restaurar o padrão.
 - Os totais nutricionais diários consideram as personalizações aplicáveis. Padrão e personalizações pertencem à versão publicada do plano, preservando seu histórico.
 - Exceções para **datas isoladas**, além dos dias da semana, continuam fora do escopo confirmado.
