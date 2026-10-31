@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.46  
+> **Versão:** 0.47  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -232,7 +232,11 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - Exibir o resultado com sinal e descrição explícita: positivo = **acima da soma das metas nos dias comparáveis**, negativo = **abaixo da soma das metas nos dias comparáveis**, zero = **diferença acumulada igual a zero**. O resultado zero não significa que todos os dias atingiram a meta: dias acima e abaixo podem se compensar, e os contadores diários continuam disponíveis.
 - Mostrar junto à diferença o número de **dias comparáveis** e identificar separadamente **dias sem registros** e **dias com registros mas sem meta para o nutriente**. Não imputar consumo zero nem meta artificial em dias ausentes; mesmo com registros, o diário pode estar incompleto, portanto rotular como **diferença parcial do consumo registrado em relação às metas**, não como saldo energético corporal ou ingestão total.
 - Corrigir/adicionar/excluir refeições, inclusive retroativas e com mudança de data/fuso, atualiza o agregado e os contadores dos períodos afetados. Somar com precisão numérica consistente sem arredondar antes de agregar. Sem dias comparáveis, exibir **comparação indisponível**, em vez de saldo zero.
-- **Ainda em aberto:** precisão de apresentação dos valores em diferentes unidades e critérios de cobertura de micronutrientes; a classificação de **na meta** já foi definida como igualdade estrita, sem tolerância. Nenhum gráfico ou diferença em relação à meta é diagnóstico clínico.
+- **Vitaminas e minerais no acompanhamento (confirmado para o MVP):** disponibilizar no diário e em seus resumos os micronutrientes **efetivamente informados** nas fontes nutricionais dos alimentos consumidos, incluindo, quando disponíveis, ferro, cálcio, vitamina C e vitamina B12. Não criar valores para nutrientes ausentes nem exigir que todos os alimentos possuam dados de todos os micronutrientes.
+- **Cobertura nutricional explícita:** para cada micronutriente, distinguir (a) valor conhecido, inclusive **zero informado**, (b) valor **desconhecido** em um ou mais itens e (c) ausência de qualquer dado conhecido no período. Se algum item consumido não tiver informação do micronutriente, qualquer soma dos valores conhecidos deve ser rotulada **total parcial / dados incompletos**, não total exato; se todos os itens estiverem sem dados, apresentar **sem dados para este nutriente**, não zero.
+- O total de micronutrientes deve considerar as quantidades registradas e as unidades de cada fonte (mg/µg, conforme aplicável), sem somar unidades incompatíveis nem arredondar durante o cálculo. A precisão mostrada deve respeitar a qualidade dos dados originais; corrigir/adicionar/excluir refeições recalcula os totais parciais e seus indicadores de cobertura.
+- **Sem diagnóstico automático:** a existência de uma soma parcial não permite concluir que houve ingestão adequada ou deficiência; dias sem refeições cadastradas não são dias com consumo zero. Os critérios de referência nutricional individual para vitaminas/minerais e o detalhamento visual da cobertura ficam para decisão posterior, sem introduzir recomendações clínicas presumidas.
+- **Ainda em aberto:** apresentação dos valores em diferentes unidades, visualização detalhada da cobertura dos micronutrientes e eventual comparação com referências nutricionais; a classificação de kcal/macros **na meta** já foi definida como igualdade estrita, sem tolerância.
 
 **Adultos:** a aplicação poderá estimar uma meta energética por método validado e permitir ajustes manuais. O cálculo requer dados suficientes, explicação dos limites e revisão de profissionais antes do lançamento.
 
@@ -382,7 +386,7 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 1. Quais medidas proporcionais de aferição de idade se aplicam ao aplicativo 18+, conforme análise jurídica antes do lançamento?
 2. Como lidar com uma conta identificada como pertencente a menor sem reter ou expor indevidamente dados?
 3. Como validar o registro profissional de nutricionista?
-4. Como sinalizar a cobertura de micronutrientes em relatórios quando parte das fontes alimentares não apresenta esses nutrientes, sem confundir dado ausente com valor zero?
+4. Como apresentar de forma simples a cobertura por micronutriente nos relatórios e quando (se for adequado) comparar vitaminas/minerais a referências nutricionais individualizadas? A regra de dados ausentes versus zero e de total parcial já foi definida.
 5. Quais recursos compõem o plano profissional pago? Haverá limites de pacientes?
 6. Quais dados ficam disponíveis depois do encerramento do vínculo profissional?
 7. Qual será o fluxo de exportação, portabilidade, retenção e exclusão dos dados?
