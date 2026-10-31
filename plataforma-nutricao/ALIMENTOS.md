@@ -2,8 +2,8 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Etapa:** 4 de 10 — Base de alimentos e cálculos nutricionais (em andamento)
-> **Versão:** 1.0
+> **Etapa:** 4 de 10 — Base de alimentos e cálculos nutricionais (planejamento funcional concluído; fonte adiada para etapa 9)
+> **Versão:** 1.1
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Decisões confirmadas** são distintas de **propostas a validar**.
@@ -44,7 +44,10 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 - **Identificação por marca (confirmado no MVP):** alimentos comuns/genéricos podem ter marca ausente (arroz branco cozido, banana etc.); produtos industrializados podem identificar marca e variante/apresentação relevante, facilitando a escolha de composição nutricional correspondente.
 - **Pesquisa:** mostrar nome legível e, quando houver, marca e variante, sem poluir os resultados para alimentos não industrializados. Produtos de marcas distintas não devem ser tratados como nutricionalmente equivalentes apenas porque compartilham um nome genérico.
 - Marca é campo opcional no modelo de alimento; pode ser preenchida no cadastro manual de produtos industrializados. Não exigir marca de um alimento genérico nem presumir que uma marca, sozinha, identifique unicamente o produto.
-- **Duplicidade ainda a definir:** não fundir automaticamente registros com nomes parecidos nem bloquear alimentos legítimos de marcas/variações diferentes. A política de aviso ao cadastrar algo semelhante deve ser decidida separadamente.
+- **Duplicidade de alimentos personalizados (definido para o MVP):** ao tentar cadastrar um alimento, pesquisar nomes semelhantes **somente entre os alimentos privados do criador** e exibir sugestões para revisão antes de salvar.
+- A sugestão é **informativa e não bloqueante**: o usuário pode escolher um alimento já existente ou continuar o cadastro de outro registro. Nunca mesclar, sobrescrever ou apagar registros automaticamente.
+- Nomes semelhantes não são prova de identidade; marca, apresentação/variante, forma de preparo e composição nutricional podem diferir.
+- O mecanismo de comparação/sugestão deve respeitar o isolamento de dados: não pesquisar nem revelar alimentos privados cadastrados por outras contas. A técnica exata de similaridade ficará para a etapa de arquitetura, sem usar um nome normalizado como identificador único.
 - O alimento selecionado terá quantidade e unidade para o cálculo proporcional.
 - **Referências nutricionais aceitas no cadastro (definido para o MVP):** 100 g, 100 mL ou porção declarada, sempre com quantidade de referência positiva e unidade explícita. Para uma porção declarada, armazenar seu significado (por exemplo, porção de 30 g ou uma unidade), sem presumir que toda porção seja igual.
 - Os nutrientes de uma quantidade consumida são proporcionais aos nutrientes da quantidade de referência, após uma conversão autorizada. Exemplo: 120 kcal para uma porção de 30 g implicam 240 kcal para 60 g.
@@ -72,10 +75,9 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 
 ## 4. Decisões em aberto — não presumir definição
 
-1. Como avisar sobre possíveis alimentos duplicados no cadastro personalizado, sem fundir automaticamente produtos distintos?
-2. **Decisão postergada para a etapa 9:** avaliar TBCA, TACO ou arquivo JSON próprio; confirmar origem, licença, cobertura, formato e estratégia de importação antes da implementação definitiva.
-3. Qual modo de arredondamento decimal e qual precisão interna serão usados pela implementação (a fechar na etapa de arquitetura)?
-4. Como tratar a permanência dos dados já publicados quando o criador apagar um alimento privado ou quando o vínculo profissional for encerrado?
+1. **Decisão postergada para a etapa 9:** avaliar TBCA, TACO ou arquivo JSON próprio; confirmar origem, licença, cobertura, formato e estratégia de importação antes da implementação definitiva.
+2. Qual algoritmo de similaridade, modo de arredondamento decimal e precisão interna serão usados na implementação (etapa 9)?
+3. Como tratar a permanência dos dados já publicados quando o criador apagar um alimento privado ou quando o vínculo profissional for encerrado (etapas 8 e 9)?
 
 ## 5. Critérios de aceitação propostos
 
@@ -86,6 +88,10 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 | Usuário pesquisa iogurte industrializado | Resultados podem distinguir marca e variante/apresentação quando cadastradas |
 | Dois iogurtes possuem nomes semelhantes e marcas diferentes | Mantêm registros e composições nutricionais independentes; não são agrupados automaticamente |
 | Usuário cadastra alimento genérico sem marca | Cadastro não é rejeitado por ausência de marca |
+| Usuário tenta cadastrar alimento com nome semelhante a outro de seu catálogo | Sugestão privada de possível duplicidade é mostrada antes da confirmação |
+| Usuário confirma cadastro mesmo após alerta de possível duplicidade | O novo alimento é salvo sem alterar, apagar ou mesclar o registro anterior |
+| Dois usuários diferentes cadastram alimentos com nomes semelhantes | Nenhum vê alimentos privados do outro durante a verificação |
+| Alimentos têm nomes parecidos, mas marcas ou preparos diferentes | A sugestão não é tratada como prova de equivalência nutricional; cadastro distinto continua permitido |
 | Usuário pesquisa arroz para prescrição | Exibir arroz preparado/cozido como opção padrão; orientar pesagem após preparo |
 | Usuário pesquisa frango para consumo | Oferecer formas de preparo correspondentes aos valores nutricionais; não calcular frango grelhado como se fosse cru |
 | Usuário seleciona banana ou alface crua | Permitir normalmente, pois o alimento é consumido nessa forma |
@@ -120,5 +126,7 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 A escolha da fonte nutricional (TBCA, TACO ou JSON próprio) foi adiada; seguir o planejamento funcional sem eleger uma fonte ou travar a etapa 4 por isso. Antes da importação definitiva e do lançamento comercial, confirmar procedência, viabilidade jurídica e qualidade da fonte selecionada. **Privacidade do catálogo personalizado definida:** dados privados do criador e somente retratos de nutrientes/nome/porção em dietas publicadas, com autorização no servidor. Não existe catálogo público colaborativo no MVP; eventual mudança exigirá nova decisão de produto e revisão de qualidade e privacidade.
 
 ---
+
+**Conclusão da etapa 4 (31/10/2026):** regras funcionais principais do catálogo e dos cálculos nutricionais aprovadas. A escolha da fonte do catálogo e os detalhes técnicos da importação permanecem para a etapa 9; exclusão e retenção ficam nas etapas 8 e 9. Isso não significa que a funcionalidade foi implementada.
 
 Este é um documento de planejamento; não há funcionalidade implementada no repositório de ideias.
