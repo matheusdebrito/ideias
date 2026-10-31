@@ -200,7 +200,7 @@ O nutricionista poderá:
 3. A categoria personalizada de um nutricionista não aparece na biblioteca de outro.
 4. Arquivar ou renomear a categoria não altera a classificação histórica das dietas já publicadas.
 
-## 6. Organização semanal: padrão diário com personalização (**Definido para o MVP**)
+## 7. Organização semanal: padrão diário com personalização (**Definido para o MVP**)
 
 **Modelo escolhido:** cada plano possui um **cardápio diário padrão**, que se repete nos sete dias da semana. Quem monta o plano (usuário comum ou nutricionista) pode **personalizar refeições em dias específicos da semana**, sem precisar preencher sete cardápios completos.
 
