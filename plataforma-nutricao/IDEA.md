@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.30  
+> **Versão:** 0.31  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -149,6 +149,10 @@ Detalhamento funcional e questões da etapa 4 em [ALIMENTOS.md](./ALIMENTOS.md).
 - Inclusão de alimentos, quantidades e unidades realmente consumidas.
 - Cálculo de calorias, proteínas, carboidratos, gorduras e outros nutrientes disponíveis.
 - Totalização por refeição e dia; consulta, correção explícita e histórico.
+- **Correções do diário (definido no MVP):** o dono do diário pode **editar ou excluir uma refeição já registrada**, incluindo corrigir alimentos, quantidades, unidades e data/horário de consumo, quando necessário. Não é necessário excluir e cadastrar toda a refeição novamente para corrigir uma quantidade.
+- Ao corrigir, o sistema recalcula nutrientes da refeição a partir dos dados corrigidos e atualiza os totais/indicadores das datas afetadas; se a refeição for excluída, deixa de compor os totais de consumo. Nenhuma dessas ações edita a dieta profissional/pessoal ou modelos de refeição.
+- **Histórico discreto de correções:** registrar operação, autor e instante da edição/exclusão e referências à alteração anterior/posterior na medida necessária, sem exigir justificativa e sem poluir a interface. Política de retenção, eliminação efetiva e quem pode consultar a trilha serão definidos nas etapas 8 e 9; exclusão no diário não é promessa de guarda indefinida de dados pessoais.
+- Diferenciar atualização expressamente solicitada pelo usuário de atualização externa no catálogo/dieta: alterações externas nunca reescrevem o diário, mas correção autorizada do registro de consumo pode mudar seus nutrientes históricos de maneira auditável.
 
 **Regra fundamental:** o diário registra **o que a pessoa efetivamente comeu**, independentemente de ter um plano alimentar ativo. Atualizar, encerrar ou trocar uma dieta não modifica registros anteriores de refeições consumidas.
 
