@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 2.0
+> **Versão:** 2.1
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -100,7 +100,7 @@ O nutricionista poderá:
 
 **Cálculo nutricional:**
 - O cálculo é derivado dos alimentos, quantidades, unidades e dados de composição disponíveis na fonte nutricional.
-- A aplicação apresenta calorias, macronutrientes e vitaminas/minerais disponíveis na fonte, sem pedir que o nutricionista digite macros.
+- A aplicação apresenta calorias, macronutrientes e vitaminas/minerais disponíveis na fonte nutricional selecionada posteriormente, sem pedir que o nutricionista digite macros.
 - Conversões de unidades e medidas caseiras precisam usar fatores definidos e rastreáveis; não presumir equivalência de gramas e mililitros. São aceitas composições por 100 g, 100 mL ou porção declarada, desde que a referência seja explícita; medidas caseiras somente quando o alimento possuir equivalência documentada.
 - Um alimento não pode ser selecionado em medida incompatível sem fator de conversão rastreável. Uma refeição planejada/consumida deve preservar a referência nutricional e o fator usados em seus totais históricos.
 - Alimentos em estados diferentes (por exemplo, cru e cozido) devem ser selecionados como entradas distintas quando assim constarem no catálogo.
