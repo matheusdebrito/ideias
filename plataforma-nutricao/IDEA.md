@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.9  
+> **Versão:** 0.10  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -120,7 +120,7 @@ Em qualquer fluxo, o usuário poderá ajustar a refeição antes de confirmá-la
 
 O nutricionista poderá selecionar uma refeição da biblioteca e adicioná-la à dieta de um paciente. A aplicação copia os itens e quantidades para o rascunho do plano escolhido; o profissional poderá ajustar essa cópia para o paciente. A refeição só será apresentada ao paciente quando a versão do plano for publicada. Também será possível criar uma refeição diretamente no rascunho e optar por salvá-la na biblioteca profissional.
 
-O nutricionista poderá cadastrar substituições opcionais, definindo alimento principal e alternativas com quantidades próprias. O paciente escolhe uma das alternativas; o cálculo nutricional considera somente a opção escolhida, nunca soma todas as alternativas. Cada uso copia os alimentos e quantidades para o rascunho do plano do paciente; mudanças posteriores no modelo do nutricionista nunca alteram dietas já publicadas ou outros pacientes. Modelos profissionais não são automaticamente compartilhados com pacientes nem entre nutricionistas.
+O nutricionista define uma composição fixa para cada refeição: alimentos e quantidades determinados. O paciente não recebe listas de alimentos alternativos para escolher dentro da refeição no MVP. Se o nutricionista quiser oferecer outra combinação, deverá criar outra refeição fixa no plano ou atualizar a dieta por meio de uma nova versão. O paciente registra no diário o que realmente consumiu, mesmo que seja diferente do plano; isso não altera a prescrição.
 
 **Especificação funcional:** [DIETAS.md](./DIETAS.md).
 
@@ -178,7 +178,7 @@ Regras detalhadas e critérios de aceitação em [DIETAS.md](./DIETAS.md).
 **Versionamento do plano:**
 - Um rascunho pode ser editado antes da publicação.
 - Ao atualizar um plano publicado, criar uma nova versão com data de início de vigência.
-- Cada versão deve preservar suas refeições planejadas, alimentos, quantidades, observações/instruções, substituições e composição nutricional de referência.
+- Cada versão deve preservar suas refeições planejadas, alimentos, quantidades, observações/instruções e composição nutricional de referência.
 - Registrar autor, data/hora e resumo ou motivo da atualização.
 - Cada plano possui uma única versão vigente por vez; versões antigas permanecem consultáveis, respeitando retenção de dados.
 - Não substituir a versão anterior, pois precisamos reconstruir **qual plano estava vigente em determinado dia**.
@@ -267,7 +267,7 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 5. Quais recursos compõem o plano profissional pago? Haverá limites de pacientes?
 6. Quais dados ficam disponíveis depois do encerramento do vínculo profissional?
 7. Qual será o fluxo de exportação, portabilidade, retenção e exclusão dos dados?
-8. Quais outros campos, além de nome, alimentos, quantidades, observações opcionais, substituições e horário opcional, são realmente necessários em uma refeição?
+8. Quais outros campos, além de nome, alimentos, quantidades, observações opcionais e horário opcional, são realmente necessários em uma refeição?
 9. Como será o processo de troca de nutricionista?
 10. O versionamento dos planos pessoais deverá ter o mesmo detalhamento do profissional?
 
