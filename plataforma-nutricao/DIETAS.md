@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 0.7
+> **Versão:** 0.8
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -146,6 +146,8 @@ O nutricionista poderá:
 - Na vigência programada, a versão é publicada com estado `SCHEDULED`; a versão atualmente vigente permanece ativa até a data/hora programada.
 - Na data/hora programada, a transição ocorre automaticamente: a versão programada passa a `ACTIVE` e a anterior tem sua vigência encerrada. Não depender de login, ação manual ou abertura do aplicativo.
 - Datas/horários programados devem ser interpretados no fuso horário definido para o paciente e armazenados de forma inequívoca (por exemplo, instante UTC mais identificador IANA do fuso), evitando ativação no horário errado por diferenças de fuso ou horário de verão.
+- A ativação automática é responsabilidade do backend, nunca de um temporizador no navegador ou de o paciente abrir o aplicativo. O processamento deve ser idempotente e transacional, suportar retomada após indisponibilidade e não ativar duas versões simultaneamente.
+- A data/hora de vigência é a fonte de verdade. Mesmo que um processo em segundo plano execute com atraso, a leitura do plano vigente deve considerar o instante atual e a linha do tempo de vigência; o processamento em segundo plano não pode deixar o paciente vendo uma versão expirada como atual.
 - A versão programada não pode ter início no passado. O backend valida a data/hora e a ausência de sobreposição de vigências antes de publicar.
 - A publicação fixa alimentos, quantidades, observações/instruções da refeição e dos itens, valores de referência e início da vigência.
 - Uma versão profissional programada é uma publicação válida, mas não é a versão vigente até chegar sua data/hora de início.
