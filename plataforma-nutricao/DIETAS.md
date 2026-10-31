@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 2.2
+> **Versão:** 2.3
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -107,6 +107,7 @@ O nutricionista poderá:
 - Alimentos normalmente consumidos crus (frutas, saladas, castanhas etc.) continuam válidos. Entradas nutricionais de ingredientes crus que exigem cocção, caso existam na fonte, não serão opções principais no fluxo de prescrição/consumo.
 - Não aplicar valores nutricionais de alimento cru à quantidade pesada após preparo; não converter automaticamente entre cru e cozido por fator genérico. O preparo pode modificar água, gordura e a composição por 100 g.
 - Ao montar receitas a partir de ingredientes crus, poderão ser necessários rendimentos e retenção de nutrientes; esse fluxo não está confirmado para o MVP e permanece como evolução possível.
+- O seletor de alimentos diferencia produtos industrializados por marca e variante relevantes quando disponíveis; alimentos genéricos comuns não exigem marca. Produtos de marcas distintas não devem ser combinados como se tivessem a mesma composição nutricional.
 - Dados ausentes na fonte devem ser apresentados como não disponíveis, nunca como zero inventado. Alimentos personalizados cadastrados manualmente exigem kcal, proteínas, carboidratos e gorduras totais completos; micronutrientes podem permanecer desconhecidos, e relatórios agregados desses nutrientes devem sinalizar cobertura incompleta.
 - Alimentos importados de bases nutricionais podem aparecer na consulta mesmo sem os quatro dados essenciais, mas **não podem ser adicionados** a uma dieta, modelo de refeição ou diário enquanto faltar energia, proteínas, carboidratos ou gorduras totais. O backend deve validar a completude antes de aceitar o registro; ausência apenas de micronutrientes não bloqueia o uso.
 - O cálculo e o arredondamento devem ser consistentes entre biblioteca, dieta e diário. Para o MVP, **não arredondar valores intermediários**: aplicar fatores proporcionais, somar os nutrientes com a precisão disponível e arredondar somente na apresentação.
