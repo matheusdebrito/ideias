@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 3.0
+> **Versão:** 3.1
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -166,7 +166,7 @@ O nutricionista poderá:
 - A data/hora de vigência é a fonte de verdade. Mesmo que um processo em segundo plano execute com atraso, a leitura do plano vigente deve considerar o instante atual e a linha do tempo de vigência; o processamento em segundo plano não pode deixar o paciente vendo uma versão expirada como atual.
 - A versão programada não pode ter início no passado. O backend valida a data/hora e a ausência de sobreposição de vigências antes de publicar.
 - Se já existir uma versão `SCHEDULED` para o paciente, uma nova publicação programada deve ser bloqueada com mensagem clara e orientação para cancelar ou reagendar a versão pendente. Não substituir nem cancelar silenciosamente o agendamento anterior.
-- Se o nutricionista precisar publicar uma versão imediatamente enquanto houver uma versão futura programada, deverá primeiro resolver explicitamente o agendamento pendente (por exemplo, cancelá-lo); o sistema não deve cancelar uma versão programada automaticamente.
+- Se o nutricionista precisar publicar uma versão imediatamente enquanto houver uma versão futura programada, deverá primeiro resolver explicitamente o agendamento pendente (por exemplo, cancelá-lo); o sistema não deve cancelar uma versão programada automaticamente **por causa da publicação de outra dieta**. A regra de **encerramento do vínculo pelo paciente** é uma exceção distinta, que cancela agendamentos futuros por perda de vínculo e autorização, sem substituir a prescrição.
 - Antes do início da vigência, o nutricionista autorizado poderá **cancelar** uma versão programada. O estado passa para `CANCELLED`, a versão permanece no histórico de auditoria e a versão atual continua vigente sem interrupção.
 - Antes do início, o nutricionista autorizado poderá **reagendar** a data/hora de início da versão programada. O conteúdo nutricional publicado permanece imutável; apenas os metadados de agendamento mudam.
 - Cancelamento e reagendamento exigem validação no backend e registro de autor, data/hora, ação, data/hora anterior e nova data/hora (quando aplicável), e motivo opcional.
@@ -192,6 +192,16 @@ O nutricionista poderá:
 - O paciente pode registrar consumo diferente do plano sem alterar a versão prescrita.
 - Uma nova versão de dieta não substitui retroativamente valores registrados no diário.
 - É proibido alterar automaticamente dietas de outros pacientes quando o nutricionista modifica um modelo em sua biblioteca.
+
+### 5.1. Encerramento da vigência quando termina o acompanhamento (**Confirmado no MVP**)
+
+- Quando o paciente encerrar o vínculo com o nutricionista, **a versão profissional vigente deixa de ser vigente no instante do encerramento**. Preservar a prescrição publicada sem edições retroativas, com autor e intervalo de vigência real identificáveis. Ela passa a ficar acessível **apenas no histórico do paciente**, para consulta.
+- **Agendamentos futuros do vínculo encerrado não podem mais entrar em vigor.** A versão programada é cancelada por encerramento do vínculo, mantendo conteúdo, autoria, programação original e motivo/data do cancelamento no histórico. Nenhum job de ativação pode ativá-la posteriormente.
+- O **encerramento de vínculo é um evento do domínio diferente de cancelar uma publicação programada por decisão do profissional**. A proibição de cancelamento automático quando o nutricionista publica outra versão não se aplica ao encerramento de acompanhamento iniciado pelo paciente.
+- Preservar versões históricas e o diário de consumo sem mudança retroativa e **não converter a dieta anterior automaticamente em plano pessoal**, nem atribuí-la ao nutricionista seguinte. O paciente pode continuar consultando o que foi prescrito, claramente rotulado como **dieta anterior, não vigente**.
+- As dietas pessoais do paciente não são afetadas pelo término do vínculo profissional.
+- A etapa 9 deverá especificar **operação atômica e idempotente** para fim do vínculo, revogação de acesso, fim de vigência e cancelamento dos agendamentos, mesmo quando concorrer com a transição agendada. Registros de histórico permitem reconstruir qual versão esteve vigente em cada instante.
+- **Não decidido aqui:** destino de metas nutricionais profissionais efetivas após a desvinculação (assunto de metas), notificações ao profissional e fluxo atômico de troca entre profissionais. Ver [PACIENTES.md](./PACIENTES.md).
 
 ## 6. Categorias de refeições (**Definido para o MVP**)
 
@@ -311,6 +321,10 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Nutricionista atualiza dieta de um paciente | Uma nova versão entra em vigor imediatamente ou na data programada; anterior fica no histórico |
 | Usuário atualiza seu plano pessoal salvo | Nova versão pessoal é criada ao salvar; versão anterior continua disponível no histórico |
 | Nutricionista tenta publicar uma segunda dieta profissional vigente para o mesmo paciente | Operação é bloqueada ou direcionada para atualizar o plano vigente; nunca ficam dois planos profissionais ativos |
+| Paciente encerra acompanhamento com dieta profissional ativa | Vigência termina naquele instante; versão, autoria e período real continuam no histórico para consulta |
+| Paciente encerra acompanhamento com versão profissional futura programada | Cancelar agendamento devido ao término do vínculo, preservar versão publicada e histórico; não ativar mais tarde |
+| Paciente encerra acompanhamento com dieta pessoal existente | Dieta pessoal e diário não mudam |
+| Ativação agendada concorre com o término do vínculo | Estado final sem dieta profissional vigente e sem ativação posterior, com cronologia consistente |
 | Paciente registra alimentação diferente do prescrito | O diário registra o ocorrido; plano publicado não muda |
 | Nutricionista tenta obter biblioteca de outro nutricionista | Servidor nega acesso |
 | Usuário envia duas confirmações iguais por erro de rede | Sistema evita consumo duplicado por repetição da mesma operação |
