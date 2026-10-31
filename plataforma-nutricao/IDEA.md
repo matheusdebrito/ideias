@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.31  
+> **Versão:** 0.32  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -181,6 +181,10 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - Comparação do consumo registrado com a meta válida naquele dia, sem tratar isso como diagnóstico.
 - Exibição de calorias e macronutrientes por refeição e total diário.
 - Consulta de períodos anteriores, preservando as metas vigentes à época.
+- **Alteração de meta definida pelo nutricionista (confirmado no MVP):** o paciente pode alterar a meta que utiliza para acompanhar calorias e macronutrientes, mesmo quando a referência atual veio de seu nutricionista. Antes de aplicar a alteração, a interface deve avisar explicitamente que a meta foi definida pelo profissional e pedir confirmação inequívoca; cancelar mantém a meta atual.
+- A confirmação cria uma **meta de acompanhamento ajustada pelo paciente**, com autor/origem e vigência identificados, que se torna a referência efetiva dos indicadores a partir da alteração. A meta original prescrita pelo nutricionista **permanece preservada e consultável**, não é modificada e não pode ser falsamente atribuída ao profissional.
+- Sem ajuste pessoal posterior, uma meta profissional vigente pode ser a referência padrão no acompanhamento; sem meta profissional vigente, usar a meta pessoal disponível. Comparações históricas respeitam a meta efetiva e a origem aplicáveis ao período, sem reescrever metas ou prescrição anteriores.
+- **Ainda a decidir:** se/quando o nutricionista verá ou receberá aviso da mudança pelo paciente, e como uma nova meta profissional publicada interage com um ajuste pessoal vigente. Esses detalhes não impedem a aprovação do aviso e confirmação.
 - Resumos semanais e mensais. Definições de saldo, média e tolerância em aberto.
 
 **Adultos:** a aplicação poderá estimar uma meta energética por método validado e permitir ajustes manuais. O cálculo requer dados suficientes, explicação dos limites e revisão de profissionais antes do lançamento.
