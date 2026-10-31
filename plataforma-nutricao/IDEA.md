@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.38  
+> **Versão:** 0.39  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -204,7 +204,11 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - **Aviso profissional dentro do painel (confirmado no MVP):** quando o paciente alterar sua meta de acompanhamento, o nutricionista poderá identificar a mudança por um **indicador visual discreto, não bloqueante**, no painel do paciente, apresentando meta profissional, meta ajustada, autoria e data/hora. Não exigir que o profissional confirme leitura para continuar trabalhando.
 - **Sem notificações externas no MVP por esse evento:** não enviar e-mail, mensagem ou push automático ao nutricionista apenas porque o paciente modificou sua meta. O aviso é restrito à interface da aplicação e exige vínculo profissional ativo e autorização vigente para ser visualizado.
 - Preservar a separação entre ajuste do paciente e prescrição profissional, evitando comunicar o evento como se o profissional tivesse atualizado a dieta.
-- Resumos semanais e mensais. Definições de saldo, média e tolerância em aberto.
+- **Resumos semanais e mensais (confirmado no MVP):** mostrar o **total registrado** de calorias, proteínas, carboidratos e gorduras, a **média diária desses nutrientes apenas sobre os dias que têm ao menos uma refeição registrada** e a **quantidade de dias com registros** no período selecionado.
+- **Dia sem registros não é dia com consumo zero**: excluir dias sem lançamentos do divisor da média, não declarar que houve jejum ou consumo nulo e não apresentar os totais registrados como retrato completo do consumo real. Dias com registros podem estar incompletos, por isso identificar as médias como **médias dos dias registrados**.
+- **Cálculo:** total do período = soma dos valores nutricionais das refeições registradas no período; média por dia registrado = total / quantidade de datas locais distintas que possuem ao menos uma refeição no período. Se nenhum dia tiver registros, exibir **sem dados registrados**, sem média zero nem divisão por zero.
+- Adicionar/editar/excluir refeições, inclusive lançamentos retroativos ou alteração de data/fuso, atualiza o período e sua quantidade de dias registrados. Agregar pelo dia local de consumo já preservado; não fazer arredondamento intermediário.
+- Ainda em aberto para planejamento: gráficos, saldos e comparações com metas em períodos que incluam dias sem lançamentos ou mudanças de meta; limites precisos da semana na interface e critérios de completude do diário.
 
 **Adultos:** a aplicação poderá estimar uma meta energética por método validado e permitir ajustes manuais. O cálculo requer dados suficientes, explicação dos limites e revisão de profissionais antes do lançamento.
 
