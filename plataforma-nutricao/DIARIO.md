@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (em andamento)
-> **Versão:** 0.4
+> **Versão:** 0.5
 > **Data:** 31/10/2026
 > **Fonte principal da visão:** [IDEA.md](./IDEA.md) e [DIETAS.md](./DIETAS.md)
 > **Convenção:** regras confirmadas estão separadas das decisões em aberto.
@@ -46,11 +46,14 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 - Se houver uma meta profissional vigente e nenhuma alteração pessoal posterior, ela pode servir como referência principal; na ausência de meta profissional vigente, utilizar a meta pessoal. O histórico dos indicadores compara cada data à meta efetivamente aplicada àquele período, incluindo origem, sem alterações retroativas.
 - **Visibilidade profissional confirmada:** com vínculo ativo e autorização vigente, o nutricionista terá no painel do paciente acesso à meta originalmente definida pelo profissional, à meta efetiva ajustada pelo paciente e à data/hora da mudança, identificando a autoria. O ajuste pessoal não substitui a prescrição no histórico profissional.
 - Consultas e APIs deverão respeitar a autorização do paciente e o vínculo ativo. O fim do vínculo revoga a visualização corrente; eventual retenção legal de dados segue política ainda pendente das etapas 8/9.
-- **Pendente:** decidir se haverá notificação automática ao nutricionista; visibilidade passiva no painel não significa que mensagens, alertas ou e-mails serão enviados. Definir também o comportamento diante de uma nova meta profissional publicada após o ajuste.
+- **Nova meta profissional, atualização automática (definido para o MVP):** ao entrar em vigor uma meta definida/publicada posteriormente pelo nutricionista, essa meta passa a ser a referência efetiva dos indicadores, inclusive quando a referência anterior era um ajuste pessoal do paciente. Não exigir aceite, clique ou confirmação do paciente.
+- Se a nova meta tiver vigência futura, ela só substitui a referência atual no início programado; a data efetiva, a autoria profissional e os períodos anteriores devem ser preservados no histórico. Informar a atualização de forma discreta e não bloqueante, sem alterar valores históricos.
+- Após uma atualização profissional, o paciente ainda poderá ajustar a referência por conta própria mediante confirmação, sem modificar a prescrição. Para os indicadores, a meta vigente é a do último evento efetivo de atualização profissional ou ajuste pessoal confirmado, observando seus instantes de vigência.
+- **Pendente:** decidir se haverá notificação automática ao nutricionista quando o paciente alterar uma meta; visualização no painel não implica envio de mensagens, alertas ou e-mails.
 
 ## 4. Decisões em aberto da etapa 5
 
-1. **Metas:** confirmação de ajuste e visibilidade ao nutricionista no painel já definidas. Resta decidir se haverá notificação automática e o que acontece quando o nutricionista publicar uma nova meta profissional após um ajuste do paciente.
+1. **Metas:** ajuste pessoal com confirmação, visibilidade no painel profissional e aplicação automática de novas metas do nutricionista já definidos. Resta decidir se haverá notificação ativa ao nutricionista quando o paciente ajustar uma meta.
 2. **Períodos e fusos:** como classificar refeições lançadas retroativamente ou perto da meia-noite e como tratar histórico após mudança de fuso?
 3. **Indicadores:** quais totais, saldos, médias e critérios de cobertura de micronutrientes serão exibidos?
 4. **Medidas corporais:** frequência, correção de registros e apresentação de peso/IMC ao longo do tempo.
@@ -66,7 +69,9 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 **Visibilidade confirmada:** o painel profissional do paciente mostrará a meta original, a meta ajustada, a data/hora e a autoria do ajuste apenas com vínculo ativo e permissão vigente. O registro de prescrição permanece independente.
 
-**Pendente para próxima decisão:** prioridade quando houver nova meta profissional publicada após o ajuste do paciente; notificações automáticas ao nutricionista ainda não foram aprovadas.
+**Precedência confirmada:** uma nova meta do nutricionista se torna automaticamente a referência dos indicadores no início de sua vigência, sem aceite do paciente. O usuário é informado discretamente e pode ajustar depois se desejar. Atualizações futuras não alteram os indicadores históricos.
+
+**Pendente para próxima decisão:** decidir sobre notificações ativas ao nutricionista quando o paciente ajustar sua meta.
 
 ## 6. Fluxo de correção do diário (**Definido para o MVP**)
 
@@ -97,6 +102,10 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 | Nutricionista sem vínculo ou autorização tenta consultar metas do paciente via API | Acesso negado pelo servidor; dados pessoais não são expostos |
 | Paciente modifica meta de acompanhamento | A aplicação não promete ou envia notificação automática ao profissional sem decisão específica sobre alertas |
 | Paciente consulta indicadores de dias anteriores ao ajuste | Utiliza a meta efetiva vigente na época, sem reescrever histórico |
+| Meta profissional de 2.200 kcal foi ajustada pelo paciente para 2.000 kcal; nutricionista publica nova meta de 2.100 kcal de início imediato | A referência dos indicadores muda automaticamente para 2.100 kcal, sem pedir confirmação ao paciente |
+| Nutricionista agenda uma nova meta para data futura | A meta anterior continua efetiva até a data/hora programada; depois, a nova entra automaticamente |
+| Paciente deseja alterar a nova meta profissional depois da atualização | A aplicação solicita confirmação do ajuste pessoal e preserva a meta profissional publicada |
+| Paciente consulta um período anterior à nova meta | Utiliza metas efetivas daquela época, sem reescrever indicadores históricos |
 | Usuário corrige porção de arroz de 200 g para 150 g | O registro é atualizado, nutrientes e totais são recalculados e ação é registrada discretamente |
 | Usuário edita data de uma refeição | Totais e indicadores são atualizados nas duas datas afetadas |
 | Usuário exclui refeição registrada por engano | Ela deixa de aparecer e de contar nos totais; trilha de ação respeita futura política de retenção |
@@ -105,4 +114,4 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 ---
 
-A etapa 5 continua em planejamento. **A edição e exclusão de refeições, o histórico discreto de correções, a alteração confirmada de meta profissional para acompanhamento pessoal e a visibilidade ao nutricionista autorizado no painel foram aprovados para o MVP.** Prioridade de metas profissionais futuras, notificações automáticas, retenção e acesso à trilha permanecem pendentes.
+A etapa 5 continua em planejamento. **Edição/exclusão de refeições, histórico discreto de correções, ajustes de metas confirmados pelo paciente, visibilidade profissional autorizada e aplicação automática de novas metas do nutricionista foram aprovados para o MVP.** Notificações ativas ao profissional, retenção e acesso à trilha permanecem pendentes.
