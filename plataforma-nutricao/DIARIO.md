@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (em andamento)
-> **Versão:** 0.6
+> **Versão:** 0.7
 > **Data:** 31/10/2026
 > **Fonte principal da visão:** [IDEA.md](./IDEA.md) e [DIETAS.md](./DIETAS.md)
 > **Convenção:** regras confirmadas estão separadas das decisões em aberto.
@@ -21,6 +21,11 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
   3. Registrar uma refeição avulsa.
 - A ação **Registrar consumo** é separada da ação **Salvar refeição como modelo**. Lançamento avulso não cria modelo reutilizável automaticamente.
 - Data/hora real do consumo são dados do diário; horário sugerido pelo plano não vira automaticamente horário efetivo.
+- **Registro retroativo (confirmado no MVP):** o usuário pode lançar refeições consumidas em datas anteriores à data do cadastro, informando a data/hora reais do consumo, sem depender de dieta ativa.
+- O formulário oferece a data e a hora atuais como valores iniciais para minimizar a digitação, mas ambos podem ser editados antes da confirmação.
+- Preservar distintamente o instante do **consumo declarado** e o instante do **cadastro no sistema**; nenhum deve sobrescrever o outro.
+- Nutrientes, indicadores e totais devem ser contabilizados no **dia do consumo**, inclusive quando o registro foi feito depois, recalculando os agregados dos períodos afetados. O consumo retroativo deve ser comparado com a meta efetiva naquela data, e não com a meta vigente no dia do cadastro.
+- O método para classificar a data local do consumo perto da meia-noite ou após mudanças de fuso ainda será definido; não presumir que a data UTC do salvamento determina o dia nutricional.
 - Cada refeição/ingrediente consumido preserva nome, quantidade, unidade, nutrientes calculados, origem e referências aplicáveis ao momento do registro (retrato histórico).
 - Recalcular ou substituir os dados de uma dieta, modelo ou alimento não pode reescrever o consumo histórico.
 - Usar o alimento no estado em que foi consumido; para preparações, a quantidade é normalmente pesada após o preparo.
@@ -56,7 +61,7 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 ## 4. Decisões em aberto da etapa 5
 
 1. **Metas:** ajuste pessoal com confirmação, aviso discreto no painel profissional e aplicação automática de novas metas do nutricionista definidos. E-mail/push externos por ajuste de meta ficam fora do MVP; detalhes visuais do indicador vão para a etapa de implementação.
-2. **Períodos e fusos:** como classificar refeições lançadas retroativamente ou perto da meia-noite e como tratar histórico após mudança de fuso?
+2. **Períodos e fusos:** registros retroativos e padrão de data/hora atual estão aprovados. Falta decidir o fuso usado para classificar refeições perto da meia-noite e o que acontece quando o usuário muda de fuso.
 3. **Indicadores:** quais totais, saldos, médias e critérios de cobertura de micronutrientes serão exibidos?
 4. **Medidas corporais:** frequência, correção de registros e apresentação de peso/IMC ao longo do tempo.
 5. **Retenção e permissões da trilha de correções:** quais registros de auditoria podem persistir e quais atores poderão visualizá-los, respeitando privacidade e eliminação de dados? Resolver nas etapas 8 e 9.
@@ -75,7 +80,17 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 **Aviso confirmado:** o nutricionista autorizado verá um indicador discreto no painel do paciente, sem exigir ação e sem disparar e-mail, push ou mensagem externa. A próxima decisão funcional será sobre data/hora e lançamentos retroativos no diário.
 
-## 6. Fluxo de correção do diário (**Definido para o MVP**)
+## 6. Registro retroativo de refeições (**Definido para o MVP**)
+
+1. Ao adicionar uma refeição, sugerir data e horário atuais, permitindo alterá-los antes de confirmar.
+2. Se o consumo ocorreu ontem ou anteriormente, o usuário escolhe a data e hora do consumo efetivo.
+3. Ao salvar, registrar separadamente quando a refeição foi consumida e quando foi cadastrada.
+4. Contabilizar os nutrientes no dia do consumo declarado e recalcular o total e os indicadores dos períodos afetados, comparando-os à meta que vigorava nessa data.
+5. Não criar uma segunda refeição pelo reenvio da mesma confirmação. Alterações no registro continuam seguindo as regras de edição e exclusão já definidas.
+
+**Pendência de fuso:** definir como interpretar a data/hora local do consumo e tratar mudanças de fuso, sem confundir horário de cadastro com horário de refeição.
+
+## 7. Fluxo de correção do diário (**Definido para o MVP**)
 
 1. O usuário seleciona uma refeição registrada e escolhe **Editar** ou **Excluir**.
 2. Ao editar, o formulário apresenta os dados atuais; a pessoa pode alterar alimentos/porções e demais dados de consumo real sem alterar o plano ou modelos.
@@ -85,11 +100,16 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 **Critério de UX:** permitir corrigir 200 g de arroz para 150 g dentro do mesmo registro, sem forçar exclusão e recadastro. As correções são explícitas; alterações futuras de catálogo, alimento ou dieta não são correções do diário.
 
-## 7. Casos de aceitação de referência
+## 8. Casos de aceitação de referência
 
 | Cenário | Resultado esperado |
 | --- | --- |
 | Usuário sem dieta registra refeição avulsa | Consumo entra no diário normalmente |
+| Usuário abre o cadastro para registrar o almoço de agora | Formulário sugere data e hora atuais, que podem ser editadas |
+| Usuário registra hoje o jantar consumido ontem | Refeição entra no dia de ontem e atualiza os totais daquele dia, sem somar consumo extra no dia de hoje |
+| Usuário lança uma refeição de semana anterior | Resumos da semana e do mês correspondentes são recalculados usando a data do consumo |
+| Meta mudou entre o dia do consumo e o dia do lançamento | O consumo retroativo é comparado com a meta que vigorava no dia informado, preservando o histórico de metas |
+| Consulta distingue consumo do instante de cadastro | Registro preserva os dois instantes para rastreabilidade |
 | Usuário registra alimento diferente do prescrito | Diário reflete o consumo real; dieta permanece igual |
 | Dieta é atualizada depois do consumo | Valores do diário já salvo permanecem os mesmos |
 | Modelo pessoal é editado após o consumo | Registro antigo permanece independente |
@@ -118,4 +138,4 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 ---
 
-A etapa 5 continua em planejamento. **Edição/exclusão de refeições, histórico discreto de correções, ajustes de metas confirmados pelo paciente, aviso discreto no painel do nutricionista autorizado e aplicação automática de novas metas profissionais foram aprovados para o MVP.** E-mails/push externos por ajuste de meta ficam fora do MVP; retenção e acesso à trilha serão definidos nas etapas 8 e 9.
+A etapa 5 continua em planejamento. **Edição/exclusão de refeições, registros retroativos com data/hora de consumo editável, histórico discreto de correções, ajustes de metas confirmados pelo paciente, aviso discreto no painel do nutricionista autorizado e aplicação automática de novas metas profissionais foram aprovados para o MVP.** E-mails/push externos por ajuste de meta ficam fora do MVP; fusos, retenção e acesso à trilha serão definidos posteriormente.
