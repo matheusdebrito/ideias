@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
-> **Versão:** 3.1
+> **Versão:** 3.2
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -195,13 +195,13 @@ O nutricionista poderá:
 
 ### 5.1. Encerramento da vigência quando termina o acompanhamento (**Confirmado no MVP**)
 
-- Quando o paciente encerrar o vínculo com o nutricionista, **a versão profissional vigente deixa de ser vigente no instante do encerramento**. Preservar a prescrição publicada sem edições retroativas, com autor e intervalo de vigência real identificáveis. Ela passa a ficar acessível **apenas no histórico do paciente**, para consulta.
+- Quando o paciente **encerrar o vínculo ou confirmar a troca direta por convite de outro nutricionista**, **a versão profissional vigente do vínculo anterior deixa de ser vigente no instante do encerramento**. Preservar a prescrição publicada sem edições retroativas, com autor e intervalo de vigência real identificáveis. Ela passa a ficar acessível **apenas no histórico do paciente**, para consulta.
 - **Agendamentos futuros do vínculo encerrado não podem mais entrar em vigor.** A versão programada é cancelada por encerramento do vínculo, mantendo conteúdo, autoria, programação original e motivo/data do cancelamento no histórico. Nenhum job de ativação pode ativá-la posteriormente.
 - O **encerramento de vínculo é um evento do domínio diferente de cancelar uma publicação programada por decisão do profissional**. A proibição de cancelamento automático quando o nutricionista publica outra versão não se aplica ao encerramento de acompanhamento iniciado pelo paciente.
 - Preservar versões históricas e o diário de consumo sem mudança retroativa e **não converter a dieta anterior automaticamente em plano pessoal**, nem atribuí-la ao nutricionista seguinte. O paciente pode continuar consultando o que foi prescrito, claramente rotulado como **dieta anterior, não vigente**.
 - As dietas pessoais do paciente não são afetadas pelo término do vínculo profissional.
 - A etapa 9 deverá especificar **operação atômica e idempotente** para fim do vínculo, revogação de acesso, fim de vigência e cancelamento dos agendamentos, mesmo quando concorrer com a transição agendada. Registros de histórico permitem reconstruir qual versão esteve vigente em cada instante.
-- **Não decidido aqui:** destino de metas nutricionais profissionais efetivas após a desvinculação (assunto de metas), notificações ao profissional e fluxo atômico de troca entre profissionais. Ver [PACIENTES.md](./PACIENTES.md).
+- **Troca direta aprovada:** após aceite de convite válido e uma confirmação do paciente, encerrar dieta antiga, cancelar agendamentos futuros e ativar novo vínculo autorizado **na mesma transição atômica** que encerra o vínculo anterior. Falha reverte tudo, preservando dieta e vínculo anteriores. A dieta histórica não vira plano do novo profissional nem é automaticamente substituída por outra. Metas profissionais e notificação ao ex-profissional ainda aguardam decisão. Ver [PACIENTES.md](./PACIENTES.md).
 
 ## 6. Categorias de refeições (**Definido para o MVP**)
 
@@ -325,6 +325,9 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 | Paciente encerra acompanhamento com versão profissional futura programada | Cancelar agendamento devido ao término do vínculo, preservar versão publicada e histórico; não ativar mais tarde |
 | Paciente encerra acompanhamento com dieta pessoal existente | Dieta pessoal e diário não mudam |
 | Ativação agendada concorre com o término do vínculo | Estado final sem dieta profissional vigente e sem ativação posterior, com cronologia consistente |
+| Paciente troca diretamente por convite de outro nutricionista | Dieta antiga deixa de ser vigente e futuras programadas são canceladas atomicamente com a troca do vínculo |
+| Troca direta não consegue ser concluída | Vínculo e dieta anteriores permanecem; convite não é aceito parcialmente |
+| Novo nutricionista assume após confirmação válida | Sem dieta profissional vigente automática, sem transferência da autoria antiga |
 | Paciente registra alimentação diferente do prescrito | O diário registra o ocorrido; plano publicado não muda |
 | Nutricionista tenta obter biblioteca de outro nutricionista | Servidor nega acesso |
 | Usuário envia duas confirmações iguais por erro de rede | Sistema evita consumo duplicado por repetição da mesma operação |
