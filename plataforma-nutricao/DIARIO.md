@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (em andamento)
-> **Versão:** 0.1
+> **Versão:** 0.2
 > **Data:** 31/10/2026
 > **Fonte principal da visão:** [IDEA.md](./IDEA.md) e [DIETAS.md](./DIETAS.md)
 > **Convenção:** regras confirmadas estão separadas das decisões em aberto.
@@ -27,6 +27,12 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 - Os valores nutricionais são calculados sem arredondamento intermediário; a apresentação segue as regras de [ALIMENTOS.md](./ALIMENTOS.md).
 - Repetir a mesma confirmação de registro por falha/reenvio de rede não deve criar consumo duplicado.
 - O diário apresentará totais nutricionais por refeição e por dia e consulta a períodos históricos.
+- **Edição e exclusão (confirmado para o MVP):** o dono do diário pode editar uma refeição já registrada (inclusive seus alimentos, quantidades, unidades e data/hora) ou excluí-la da visualização e dos indicadores de consumo.
+- Uma edição não cria uma nova refeição duplicada; recalcula seus valores nutricionais com os dados corrigidos e recalcula os totais das datas afetadas. Se a data mudar, atualizar os indicadores tanto do dia anterior quanto do novo dia.
+- A exclusão retira o registro dos totais e do diário corrente, mediante ação explícita, sem alterar a prescrição nem a biblioteca de modelos.
+- Registrar um **histórico discreto de correções**, com tipo da ação, autor, data/hora e dados necessários para identificar o antes/depois, sem exigir justificativa para cada ajuste. Proteger essa trilha com autorização no servidor.
+- O período, a visibilidade e o comportamento de retenção/eliminação desse histórico serão definidos nas etapas 8 e 9 em conformidade com o tratamento de dados pessoais; **não presumir retenção indefinida** nem possibilidade de restauração após exclusão. A ação de excluir no diário deve ser descrita com precisão ao usuário.
+- Distinguir uma correção feita pelo dono do diário de atualizações posteriores de alimentos ou planos: apenas a primeira pode alterar explicitamente um registro de consumo existente.
 
 ## 3. Metas e indicadores — confirmado em princípio
 
@@ -38,15 +44,21 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 
 ## 4. Decisões em aberto da etapa 5
 
-1. **Correções no diário:** que ações de editar, excluir e restaurar serão permitidas? Como preservar rastreabilidade sem complicar o uso nem conflitar com privacidade/retenção?
-2. **Metas:** como permitir definir e alterar metas calóricas e de macronutrientes; o que prevalece entre metas pessoais e profissionais?
-3. **Períodos e fusos:** como classificar refeições lançadas retroativamente ou perto da meia-noite e como tratar histórico após mudança de fuso?
-4. **Indicadores:** quais totais, saldos, médias e critérios de cobertura de micronutrientes serão exibidos?
-5. **Medidas corporais:** frequência, correção de registros e apresentação de peso/IMC ao longo do tempo.
+1. **Metas:** como permitir definir e alterar metas calóricas e de macronutrientes; o que prevalece entre metas pessoais e profissionais?
+2. **Períodos e fusos:** como classificar refeições lançadas retroativamente ou perto da meia-noite e como tratar histórico após mudança de fuso?
+3. **Indicadores:** quais totais, saldos, médias e critérios de cobertura de micronutrientes serão exibidos?
+4. **Medidas corporais:** frequência, correção de registros e apresentação de peso/IMC ao longo do tempo.
+5. **Retenção e permissões da trilha de correções:** quais registros de auditoria podem persistir e quais atores poderão visualizá-los, respeitando privacidade e eliminação de dados? Resolver nas etapas 8 e 9.
 
-## 5. Primeira proposta para avaliação (ainda não aprovada)
+## 5. Fluxo de correção do diário (**Definido para o MVP**)
 
-Permitir ao dono do diário corrigir ou excluir registros de consumo incorretos sem alterar o plano. Preservar uma trilha proporcional de correções (autor e momento, alteração anterior/posterior) para registros aos quais profissionais tenham acesso autorizado, respeitando regras futuras de privacidade, retenção e eliminação de dados. A interface deve ser simples; não exigir justificativa para cada correção.
+1. O usuário seleciona uma refeição registrada e escolhe **Editar** ou **Excluir**.
+2. Ao editar, o formulário apresenta os dados atuais; a pessoa pode alterar alimentos/porções e demais dados de consumo real sem alterar o plano ou modelos.
+3. Ao salvar, validar alimentos e unidades, recalcular nutrientes e agregados, registrar a correção com autor e instante, e atualizar a apresentação.
+4. Ao excluir, retirar a refeição dos resultados e totais do diário. Manter somente os dados de auditoria necessários enquanto a política de retenção futura permitir.
+5. Não exigir justificativa para editar ou excluir. O acesso ao histórico de correções e suas regras de guarda/eliminação não estão decididos.
+
+**Critério de UX:** permitir corrigir 200 g de arroz para 150 g dentro do mesmo registro, sem forçar exclusão e recadastro. As correções são explícitas; alterações futuras de catálogo, alimento ou dieta não são correções do diário.
 
 ## 6. Casos de aceitação de referência
 
@@ -59,7 +71,12 @@ Permitir ao dono do diário corrigir ou excluir registros de consumo incorretos 
 | Duplo envio da mesma confirmação | Apenas uma refeição é registrada |
 | Micronutriente não está disponível em alguns itens | Total do micronutriente é explicitamente sinalizado como incompleto |
 | Usuário altera sua meta futura | Meta anterior permanece associada aos dias históricos em que vigorou |
+| Usuário corrige porção de arroz de 200 g para 150 g | O registro é atualizado, nutrientes e totais são recalculados e ação é registrada discretamente |
+| Usuário edita data de uma refeição | Totais e indicadores são atualizados nas duas datas afetadas |
+| Usuário exclui refeição registrada por engano | Ela deixa de aparecer e de contar nos totais; trilha de ação respeita futura política de retenção |
+| Usuário edita refeição já registrada | Prescrição e modelos que originaram o registro permanecem intactos |
+| Sistema atualiza composição nutricional de alimento do catálogo | Não altera registros de consumo já salvos automaticamente |
 
 ---
 
-A etapa 5 está em planejamento; **nenhuma regra sobre edição/exclusão de diário foi aprovada ainda**.
+A etapa 5 continua em planejamento. **A edição e a exclusão explícitas de refeições e o histórico discreto de correções foram aprovados para o MVP**; retenção e acesso à trilha serão definidos em etapas posteriores.
