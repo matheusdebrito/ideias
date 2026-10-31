@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.8  
+> **Versão:** 0.9  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -149,6 +149,14 @@ O nutricionista poderá cadastrar substituições opcionais, definindo alimento 
 - Registrar ou consumir a refeição em horário diferente não gera erro, alerta, aviso de atraso ou penalização.
 - O horário planejado e o horário real de consumo são informações distintas: o primeiro pertence ao plano; o segundo, ao diário alimentar.
 
+**Instruções e observações (confirmadas para o MVP):**
+- O nutricionista ou usuário poderá adicionar uma observação opcional à refeição inteira.
+- Também poderá adicionar uma observação opcional a cada alimento/item da refeição.
+- As observações são instruções em texto, separadas dos alimentos, quantidades e cálculos nutricionais; não substituem nem alteram esses dados.
+- A interface deverá mostrar observações somente quando existirem e usar apresentação discreta, sem criar blocos vazios ou poluir a tela.
+- No editor, os campos de observação poderão ficar recolhidos/ocultos até o usuário escolher adicioná-los. Na visualização, a observação da refeição aparece como texto secundário junto ao título; a observação do alimento aparece abaixo do nome do alimento, em estilo discreto.
+- Em telas pequenas, priorizar expansão sob demanda e não adicionar colunas permanentes apenas para observações.
+
 **Organização do cardápio (confirmada para o MVP):**
 - Todo plano começa com um **cardápio diário padrão**, repetido nos sete dias da semana.
 - O usuário ou nutricionista pode personalizar refeições específicas para **dias da semana** sem precisar refazer todo o cardápio.
@@ -170,7 +178,7 @@ Regras detalhadas e critérios de aceitação em [DIETAS.md](./DIETAS.md).
 **Versionamento do plano:**
 - Um rascunho pode ser editado antes da publicação.
 - Ao atualizar um plano publicado, criar uma nova versão com data de início de vigência.
-- Cada versão deve preservar suas refeições planejadas, alimentos, quantidades, orientações e composição nutricional de referência.
+- Cada versão deve preservar suas refeições planejadas, alimentos, quantidades, observações/instruções, substituições e composição nutricional de referência.
 - Registrar autor, data/hora e resumo ou motivo da atualização.
 - Cada plano possui uma única versão vigente por vez; versões antigas permanecem consultáveis, respeitando retenção de dados.
 - Não substituir a versão anterior, pois precisamos reconstruir **qual plano estava vigente em determinado dia**.
@@ -259,7 +267,7 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 5. Quais recursos compõem o plano profissional pago? Haverá limites de pacientes?
 6. Quais dados ficam disponíveis depois do encerramento do vínculo profissional?
 7. Qual será o fluxo de exportação, portabilidade, retenção e exclusão dos dados?
-8. Quais instruções e observações adicionais poderão ser cadastradas em uma refeição além de nome, alimentos, quantidades, substituições e horário opcional?
+8. Quais outros campos, além de nome, alimentos, quantidades, observações opcionais, substituições e horário opcional, são realmente necessários em uma refeição?
 9. Como será o processo de troca de nutricionista?
 10. O versionamento dos planos pessoais deverá ter o mesmo detalhamento do profissional?
 
