@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.21  
+> **Versão:** 0.22  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -99,6 +99,10 @@ Requisitos importantes para a qualidade dos dados:
 **Alimentos personalizados (confirmado para o MVP):**
 - Usuários comuns e nutricionistas poderão **cadastrar alimentos que não encontrem no catálogo de referência**, inclusive alimentos industrializados.
 - O cadastro poderá usar informações declaradas pelo próprio usuário, como valores do rótulo nutricional, com identificação clara da origem declarada; esses dados não devem aparecer falsamente como validados pela TBCA.
+- **Campos obrigatórios para salvar alimentos personalizados no MVP:** nome, quantidade de referência maior que zero, unidade de referência, energia (kcal), proteínas (g), carboidratos (g) e gorduras totais (g). Os quatro valores nutricionais essenciais devem ser explicitamente preenchidos, aceitando zero quando informado; não aceitar valores ausentes ou negativos.
+- Fibras, vitaminas, minerais e outros micronutrientes/subdivisões são opcionais no cadastro manual. Ausência não significa zero e relatórios que dependam desses nutrientes devem indicar cobertura incompleta, não apresentar o total parcial como completo.
+- Validar unidades, quantidades e inconsistências evidentes, sem exigir igualdade exata entre energia informada e a soma simplificada derivada de macros (rótulos, fibras, fatores de conversão e arredondamentos podem diferir).
+- Esta exigência de campos completos vale para **cadastro manual personalizado**. Dados de tabelas nutricionais institucionais podem ter lacunas próprias e exigem política de qualidade/importação separada, ainda não definida.
 - O alimento personalizado poderá ser selecionado na criação de refeições, dietas e registros de consumo conforme as permissões do seu proprietário.
 - Quantidades, unidade-base e valores informados devem ser explicitados para calcular a porção corretamente. Nutriente sem valor informado deve permanecer **desconhecido**, não assumir zero.
 - Versões de dietas publicadas e refeições consumidas preservam um retrato dos valores utilizados e não são alteradas quando o alimento personalizado for editado.
