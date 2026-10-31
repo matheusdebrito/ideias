@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 6 de 10 — Gestão de pacientes e permissões (em andamento)
-> **Versão:** 1.2
+> **Versão:** 1.3
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [DIETAS.md](./DIETAS.md), [DIARIO.md](./DIARIO.md)
 
@@ -182,6 +182,12 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 | Troca é recusada, cancelada ou falha | Não enviar e-mail de vínculo encerrado ao profissional anterior |
 | Envio do e-mail de encerramento falha | Encerramento permanece válido e aparece no histórico profissional restrito; acesso a dados do paciente segue revogado |
 | Nutricionista anterior abre link do e-mail após desvinculação | Visualiza apenas o evento de encerramento, nunca o painel ou dados privados do paciente |
+| Usuário cadastra nome e CRN ainda não conferido | Conta criada com estado Em validação, sem enviar convites, consultar pacientes ou publicar metas/dietas profissionais |
+| Número do CRN tem formato válido mas não foi verificado | Permissões profissionais permanecem bloqueadas; não confiar no valor digitado |
+| Profissional com registro verificado e aprovado envia convite | Convite permitido, sujeito às regras de autorização, prazo e controles contra abuso |
+| Cadastro CRN tem número/regional divergente ou pertence a outra pessoa | Solicitação não aprovada e opção clara de corrigir os dados; não criar permissões de nutricionista |
+| Conta Em validação tenta chamar API de prescrição diretamente | Servidor bloqueia ação sem depender da interface |
+| Usuário com CRN em validação deseja usar diário e plano pessoal | Recursos pessoais continuam utilizáveis, sem capacidades profissionais |
 
 ## 11. Notificação de encerramento ao nutricionista anterior (**confirmada no MVP**)
 
@@ -201,13 +207,23 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 - **Sem comandos futuros do ex-profissional:** atualização de meta agendada pelo nutricionista anterior não pode modificar a referência após revogação do vínculo. A etapa 9 detalhará garantias de transação e concorrência.
 - **Dieta preservada, vigência encerrada:** o paciente conserva o conteúdo publicado e pode consultá-lo, mas conforme aprovação anterior a prescrição profissional deixa de ser vigente e suas futuras ativações são canceladas. Preservar dados não significa manter uma prescrição como ativa.
 
-## 13. Decisões ainda em aberto na etapa 6
+## 13. Cadastro profissional e validação do CRN (**confirmados no MVP**)
+
+- **Dados simples no cadastro profissional:** solicitar **nome completo**, **número do CRN** e **região/Conselho Regional correspondente ao registro**. A criação da conta pode ser concluída mesmo sem validação profissional imediata; não exigir um processo longo nem documentos extras por padrão sem necessidade de verificação.
+- **Conta criada não equivale a profissional habilitado:** até a confirmação da regularidade e titularidade do registro, a conta permanece **Em validação**, com uma explicação simples do estado. Informar um CRN com formato aparentemente válido não comprova que pertence ao usuário, está ativo ou autoriza exercício profissional.
+- **Liberação apenas após aprovação:** só quando o registro tiver sido **verificado e aprovado** o profissional poderá **enviar convites de acompanhamento**, **ativar/aceitar novos vínculos profissionais**, **acessar dados privados de pacientes na função de nutricionista**, **publicar, editar ou programar prescrições profissionais** e **definir metas profissionais**. Um usuário não validado não pode burlar a restrição acessando APIs diretamente, alterando papel no cliente ou usando convite previamente criado.
+- **Uso pessoal preservado:** um profissional com validação pendente poderá usar as funcionalidades pessoais comuns da própria conta, sem ganhar permissões profissionais por isso. O sistema pode permitir preencher/atualizar os dados cadastrais do registro e visualizar o status da solicitação.
+- **Verificação confiável:** a checagem deve corresponder à **pessoa que fez o cadastro**, ao **registro e respectivo regional** e à **situação profissional aplicável**, por fonte confiável ou procedimento de conferência definido na etapa 9. **Não assumir que há API pública oficial**, que apenas consultar um número é suficiente ou que validação automática está disponível. Se não houver meio automatizado confiável, usar revisão controlada antes de liberar capacidades profissionais.
+- **Estados e rechecagem:** manter estados distinguíveis de **Em validação**, **Validado** e **Não aprovado / requer correção**, com orientação clara para correção sem expor dados desnecessários. Como tratar posterior irregularidade, bloqueio ou revalidação do registro será detalhado nas etapas 8/9, com controle de privilégios baseado em situação efetivamente verificada.
+- **Segurança e histórico:** a validação profissional é um requisito **adicional**, nunca substitui autenticação da conta, aceite do paciente, vínculo ativo e autorização específica de dados. Preservar trilha mínima da decisão de validação e sua autoria para auditoria, com retenção e acesso definidos na etapa 8.
+
+## 14. Decisões ainda em aberto na etapa 6
 
 - **Entrega e retorno dos convites:** convite por e-mail, identificação do destinatário, validade de **7 dias**, reenvio invalidando o anterior e retorno no painel e por e-mail já confirmados. **Escopo de cinco categorias e aceite em tela única com resumo claro também confirmados**, sem múltiplos controles individuais no MVP. Pendem tratamento técnico de falha/repetição de envios e limites contra abuso. Não expor se determinada pessoa possui conta a usuários não autorizados.
 - **Troca direta aprovada:** paciente pode aceitar convite de outro profissional com uma única confirmação, encerrando o vínculo antigo e ativando o novo atomicamente, sem dois profissionais simultâneos.
 - **Planos profissionais antigos — decidido:** ao encerrar vínculo, a dieta profissional vigente vai para consulta no histórico e eventuais versões futuras programadas são canceladas, preservando conteúdo e autoria. Troca direta por convite já definida; **última meta efetiva preservada como referência pessoal após desvinculação**, com origem profissional registrada.
 - **Revogação e encerramento confirmados:** o histórico pessoal anterior ao vínculo será acessível ao profissional autorizado; o paciente poderá encerrar o acompanhamento em **Meu nutricionista**, com confirmação simples, revogação imediata do acesso, encerramento da dieta profissional vigente e cancelamento das versões futuras. **Aviso com nome do paciente ao ex-profissional por e-mail e no histórico de vínculos já aprovado**; não inclui motivo nem dados nutricionais, e não restabelece acesso. A autorização não inclui bibliotecas privadas anteriores.
-- **Registro do nutricionista:** verificação do CRN e restrições de acesso antes da validação.
+- **Registro do nutricionista — decidido:** solicitar nome completo, número e regional do CRN; permitir cadastro em **Em validação**; liberar convites, vínculo e prescrições **somente após aprovação do registro e da titularidade**. **Em aberto para etapas 8/9:** fonte/método de consulta, evidências proporcionais, rechecagens, suspensão e integração técnica.
 - **Dados profissionais após encerramento:** guarda obrigatória, eliminação, portabilidade e outros requisitos da LGPD na etapa 8.
 
 **Observação:** esta especificação registra apenas decisões funcionais; não há implementação do sistema nesta fase.
