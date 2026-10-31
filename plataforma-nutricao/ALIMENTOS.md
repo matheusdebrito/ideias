@@ -3,7 +3,7 @@
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
 > **Etapa:** 4 de 10 — Base de alimentos e cálculos nutricionais (em andamento)
-> **Versão:** 0.6
+> **Versão:** 0.7
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Decisões confirmadas** são distintas de **propostas a validar**.
@@ -44,6 +44,10 @@ Permitir selecionar alimentos de um catálogo nutricional rastreável e registra
 - Registrar os valores de referência, origem da equivalência e fator de conversão usados no cálculo e preservar o retrato no histórico; mudanças posteriores em porções/equivalências não alteram dieta publicada nem consumo registrado.
 - Alterações posteriores no cadastro de um alimento não podem reescrever o histórico de refeições consumidas ou dietas publicadas. Os registros de destino preservam a composição utilizada no momento da gravação.
 - TBCA é a **fonte principal candidata**, com TACO como possível complemento. A incorporação comercial, atribuição e redistribuição dependem de validação das condições aplicáveis; não há licença presumida.
+- **Risco confirmado por consulta aos portais oficiais em 31/10/2026:** a [TBCA/USP](https://www.tbca.net.br/index.html) orienta contatar seus coordenadores para fins comerciais e publica restrições de reprodução/comercialização. O acesso livre online não autoriza assumir que a base pode ser copiada, transformada ou distribuída dentro da plataforma paga.
+- **Ação necessária antes de importar/redistribuir dados TBCA:** obter posição formal dos responsáveis sobre uso comercial, armazenamento próprio, API, disponibilização a assinantes, cálculo de nutrientes, requisitos de atribuição e condições financeiras, caso existam. A eventual dispensa de citar para o cálculo de informação nutricional não equivale a permissão ampla de uso comercial.
+- **TACO/NEPA-UNICAMP:** a [publicação oficial da 4ª edição](https://nepa.unicamp.br/tabela-brasileira-de-composicao-de-alimentos-4a-edicao/) está disponível para consulta, mas ainda é necessário verificar as condições de uso dos dados em um serviço comercial; não confundir acesso público com licença de redistribuição.
+- **Regra de governança:** não realizar importação definitiva/replicação para produção comercial antes da liberação jurídica específica da(s) fonte(s). Manter o módulo desacoplado de qualquer provedor único.
 
 ## 3. Proposta de experiência (a validar)
 
