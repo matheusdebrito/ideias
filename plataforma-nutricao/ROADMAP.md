@@ -22,7 +22,7 @@
 | 1 | Visão de produto e público-alvo | Concluída | Dois públicos, proposta de valor, monetização inicial, MVP adulto |
 | 2 | Modelo de dietas e refeições | Concluída | Plano versus diário, versionamento, bibliotecas, horários/observações, composição fixa |
 | 3 | Criação e atribuição de dietas | Concluída | Fluxo profissional, atribuição, cardápio padrão com personalizações semanais, categorias, vigência imediata/programada, visualização antecipada, cancelamento/reagendamento |
-| 4 | Base de alimentos e cálculos nutricionais | Em andamento | Alimentos personalizados privados com kcal, proteínas, carboidratos e gorduras obrigatórios; demais nutrientes opcionais; pendem uso/licença TBCA, fontes, unidades/porções, regras para lacunas institucionais e importação |
+| 4 | Base de alimentos e cálculos nutricionais | Em andamento | Alimentos personalizados privados com núcleo nutricional obrigatório; referências 100 g/100 mL/porção e medidas caseiras condicionadas a equivalência; pendem licença/fontes TBCA, lacunas institucionais, arredondamento e importação |
 | 5 | Diário alimentar, metas e indicadores | Pendente | Registro do consumo real, histórico, metas datadas, saldo diário/semanal/mensal, peso e IMC |
 | 6 | Gestão de pacientes e permissões | Pendente | Convites, vínculo único, revogação, acesso aos dados, histórico profissional, validação CRN |
 | 7 | Monetização e assinaturas | Pendente | Recursos gratuitos e pagos, planos, limites, cobrança, cancelamento e continuidade do acesso |
@@ -66,6 +66,8 @@ Estas pendências ficam registradas, não são decisões tomadas por omissão.
 
 **Cadastro manual definido:** nome, referência quantitativa e unidade, kcal, proteínas, carboidratos e gorduras totais obrigatórios; demais nutrientes opcionais. Valores ausentes não são zero; relatórios de micronutrientes com dados faltantes indicam incompletude.
 
-**Pendente:** confirmar cobertura/licenciamento comercial e formato da TBCA, fontes complementares, porções e medidas caseiras, política para lacunas dos dados institucionais e regras de arredondamento/validação detalhadas.
+**Porções confirmadas:** composição nutricional por 100 g, 100 mL ou porção declarada; medidas caseiras apenas com equivalências conhecidas por alimento. Não converter massa/volume/unidade sem fator específico e rastreável. Ver [ALIMENTOS.md](./ALIMENTOS.md).
+
+**Pendente:** confirmar cobertura/licenciamento comercial e formato da TBCA, fontes complementares, política para lacunas dos dados institucionais e regras de arredondamento/validação detalhadas.
 
 **Importante:** conclusão das 10 etapas encerra o planejamento, não significa que o software foi desenvolvido, validado ou colocado em produção.
