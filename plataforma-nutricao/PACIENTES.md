@@ -2,7 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 6 de 10 — Gestão de pacientes e permissões (em andamento)
-> **Versão:** 0.9
+> **Versão:** 1.0
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [DIETAS.md](./DIETAS.md), [DIARIO.md](./DIARIO.md)
 
@@ -26,7 +26,7 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 2. **Aceite e autorização expressos:** o paciente destinatário deve estar autenticado, saber quem convida, o objetivo do acompanhamento e quais categorias de dados serão compartilhadas, e **aceitar e autorizar explicitamente** para ativar o vínculo. Receber o convite, criar conta ou apenas visualizá-lo não constitui autorização.
 3. **Recusa e ausência de resposta:** o paciente pode recusar ou não responder, sem ativar vínculo nem conceder acesso ao profissional.
 4. **Validação efetiva:** identidade do destinatário, aceite e autorização devem ser verificados no servidor. Convites não podem conceder acesso a terceiros nem ser usados por outra conta. Detalhes técnicos de identidade, tokens e expiração serão tratados na etapa 9.
-5. **Sem substituição automática:** se o paciente tiver outro nutricionista ativo, o convite não substitui o vínculo existente nem libera acesso. O fluxo de troca será definido separadamente.
+5. **Sem substituição implícita:** um convite recebido ou aberto não substitui um vínculo ativo nem libera dados. A troca direta só ocorre após o paciente autenticado **aceitar, autorizar e confirmar expressamente a troca** em uma única etapa, conforme seção 9.
 6. **Rastreabilidade proporcional:** registrar autoria do convite, aceite e autorização, quando ocorreram e início do vínculo, sujeitos às definições de retenção da etapa 8.
 7. **Canal confirmado no MVP: e-mail.** O nutricionista informa o **e-mail do paciente**; a plataforma envia uma mensagem com acesso ao fluxo de convite, sem incluir diário, peso, metas, dietas nem outros dados sensíveis no conteúdo do e-mail.
 8. **Paciente com conta:** ao acessar o convite, precisa fazer login e ter o endereço destinatário vinculado e verificado na conta. Só após visualizar quem convida e os dados solicitados poderá aceitar e autorizar explicitamente.
@@ -38,7 +38,7 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 14. **Privacidade da recusa:** o profissional pode ver que o convite foi recusado, **sem justificativa obrigatória**, sem acesso a dados privados do paciente e sem saber se o destinatário possui conta apenas pelo ato de enviar o convite. Não confundir estado enviado com entrega confirmada do e-mail.
 15. **Notificação por e-mail ao nutricionista confirmada para o MVP:** após a decisão **aceito ou recusado** ser registrada, enviar uma mensagem ao e-mail verificado da conta profissional **que originou o convite**, com resultado e acesso à área de convites no painel. A mensagem não deve conter valores nutricionais, peso, metas, histórico de saúde ou justificativa de recusa. O status no painel permanece a fonte de verdade.
 16. **Consistência e falhas:** a notificação só pode refletir um estado efetivamente confirmado no servidor: **aceito** exige autorização e vínculo ativado; **recusado** exige recusa real. Falha no envio não reverte a decisão, não impede o paciente de concluir o fluxo e não apresenta sucesso de entrega não confirmado. Processamento assíncrono, retries e prevenção de e-mails duplicados serão especificados na etapa 9.
-17. **Em aberto:** detalhes do provedor de e-mail, falhas de entrega, limites/prevenção de reenvios abusivos, granularidade da autorização e regras de troca. Não ampliar automaticamente o envio de e-mails para outros eventos (ex.: mudança de metas) fora das decisões já aprovadas.
+17. **Em aberto:** provedor de e-mail, falhas/limites de reenvio, destino de metas profissionais depois de desvinculação e eventual notificação ao profissional antigo. **Troca direta por confirmação única já foi aprovada.** Não ampliar e-mails automaticamente para outros eventos.
 
 ## 4. Convite por e-mail para pacientes com ou sem conta (**confirmado no MVP**)
 
@@ -101,7 +101,17 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 - Na etapa 9, especificar transição atômica e idempotente entre vínculo, autorização, fim de vigência e cancelamento da versão futura; resolver concorrência com processadores de ativação agendada. Nunca exibir uma versão como ativa após o fim do vínculo.
 - **Pendente para decisão distinta:** impacto sobre metas nutricionais originalmente prescritas pelo profissional, que podem continuar referenciadas pelo acompanhamento pessoal; não presumir que a regra da dieta as elimina ou altera.
 
-## 9. Critérios de aceitação inicial
+## 9. Troca direta de nutricionista por convite (**confirmado no MVP**)
+
+1. **Fluxo sem etapa extra:** paciente com nutricionista ativo pode receber convite válido de outro nutricionista e escolher **Aceitar e trocar de nutricionista**, sem precisar encerrar seu vínculo manualmente antes. Até sua confirmação, o convite é pendente e não autoriza o novo nutricionista.
+2. **Uma única confirmação clara:** mostrar quem é o profissional atual, quem será o novo, as categorias de dados e histórico pessoal compartilhados e as consequências: revogação do acesso anterior, término da dieta profissional vigente anterior, cancelamento de futuras versões programadas e preservação dos dados/históricos do paciente. Permitir voltar ou recusar. Não criar um fluxo de várias telas ou confirmações.
+3. **Consentimento e validação:** paciente autenticado e adulto, e-mail destinatário verificado, convite não expirado e autorização independente para o novo profissional. Nem o recebimento do e-mail nem o clique em link fazem a troca.
+4. **Atomicidade obrigatória:** servidor e banco realizam em uma única transação lógica: encerrar vínculo antigo e suas autorizações, encerrar a vigência da dieta profissional antiga, cancelar agendamentos futuros da prescrição antiga, registrar o aceite do convite e ativar o novo vínculo com autorização própria. **Jamais podem coexistir dois nutricionistas ativos.** Se houver erro, reverter tudo e manter vínculo, permissões e dieta anteriores; o convite não aparece como Aceito.
+5. **Histórico e limites:** o paciente mantém diário, medições, metas pessoais, histórico de dietas e conta. Os planos antigos continuam consultáveis com autoria original; não os converter em plano pessoal ou atribuir ao novo profissional. A nova autorização não inclui bibliotecas privadas do nutricionista antigo nem publica automaticamente uma nova dieta.
+6. **Concorrência e estado desatualizado:** impedir confirmação simultânea de convites diferentes ou aceite de convite vencido. Se o vínculo ativo mudar desde a abertura da tela, pedir para revisar a situação atual antes de confirmar; não substituir silenciosamente um terceiro profissional.
+7. **Notificações:** somente confirmar **Aceito** no painel e e-mail ao nutricionista convidador depois de ativação real. Eventual notificação de encerramento ao profissional anterior e destino de metas nutricionais profissionais estão em aberto. Detalhes transacionais, locks/constraints e testes ficam na etapa 9.
+
+## 10. Critérios de aceitação inicial
 
 | Cenário | Comportamento esperado |
 | --- | --- |
@@ -120,7 +130,7 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 | Paciente recusa convite | Nenhum vínculo ou acesso é criado |
 | Paciente autenticado aceita e autoriza categorias informadas | Vínculo ativado somente após checagem do destinatário e exclusividade; permissões delimitam o acesso |
 | Nutricionista tenta consultar dados antes do aceite | Servidor nega acesso |
-| Paciente já tem nutricionista ativo e recebe segundo convite | Não substitui profissional nem concede acesso automaticamente |
+| Paciente já tem nutricionista ativo e recebe segundo convite | O recebimento não altera vínculo nem dados; troca exige confirmação explícita em uma etapa |
 | Paciente tenta aceitar convite após 168 horas de sua emissão | Servidor impede ativação e registra estado expirado |
 | Nutricionista reenvia convite pendente | Novo convite com novo prazo é criado; link anterior é invalidado |
 | Paciente tenta aceitar o link anterior depois do reenvio | Servidor recusa o convite substituído, sem criar vínculo |
@@ -155,12 +165,18 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 | Agendador tenta ativar dieta do profissional depois do encerramento | Ativação negada, sem restabelecer vínculo ou prescrição |
 | Agendamento e encerramento ocorrem ao mesmo tempo | Registros convergem para ausência de prescrição profissional vigente, mantendo trilha cronológica |
 | Paciente consulta dieta do nutricionista anterior após término | Pode ler a versão histórica, sem reativá-la nem editá-la como prescrição profissional |
+| Paciente recebe convite de outro profissional e não confirma troca | Vínculo, acesso e dieta antigos permanecem, sem conceder acesso ao convidador |
+| Paciente confirma Aceitar e trocar de nutricionista | Encerra vínculo antigo e dieta vigente, cancela versões programadas, ativa novo vínculo autorizado, preservando histórico em transição única |
+| Troca direta falha durante a operação | Reversão completa: vínculo, acesso e dieta antigos permanecem, convite não é Aceito |
+| Dois convites diferentes são aceitos concorrentemente | No máximo um vínculo ativo; não há compartilhamento simultâneo |
+| Profissional anterior mantém sessão aberta depois da troca | API nega consultas posteriores aos dados do paciente |
+| Vínculo ativo mudou enquanto convite estava aberto | Solicitar revisão da situação atual antes de confirmar, sem substituição silenciosa |
 
-## 10. Decisões ainda em aberto na etapa 6
+## 11. Decisões ainda em aberto na etapa 6
 
 - **Entrega e retorno dos convites:** convite por e-mail, identificação do destinatário, validade de **7 dias**, reenvio invalidando o anterior e retorno no painel e por e-mail já confirmados. **Escopo de cinco categorias e aceite em tela única com resumo claro também confirmados**, sem múltiplos controles individuais no MVP. Pendem tratamento técnico de falha/repetição de envios e limites contra abuso. Não expor se determinada pessoa possui conta a usuários não autorizados.
-- **Troca:** quem pode iniciar, quando o vínculo anterior termina e como evitar janela com dois profissionais simultâneos.
-- **Planos profissionais antigos — decidido:** ao encerrar vínculo, a dieta profissional vigente vai para consulta no histórico e eventuais versões futuras programadas são canceladas, preservando conteúdo e autoria. Pendente detalhar o fluxo de **troca direta de profissional** e o comportamento das metas profissionais efetivas depois da desvinculação.
+- **Troca direta aprovada:** paciente pode aceitar convite de outro profissional com uma única confirmação, encerrando o vínculo antigo e ativando o novo atomicamente, sem dois profissionais simultâneos.
+- **Planos profissionais antigos — decidido:** ao encerrar vínculo, a dieta profissional vigente vai para consulta no histórico e eventuais versões futuras programadas são canceladas, preservando conteúdo e autoria. Troca direta por convite já definida; pendente o comportamento das **metas profissionais efetivas** depois da desvinculação.
 - **Revogação e encerramento confirmados:** o histórico pessoal anterior ao vínculo será acessível ao profissional autorizado; o paciente poderá encerrar o acompanhamento em **Meu nutricionista**, com confirmação simples, revogação imediata do acesso, encerramento da dieta profissional vigente e cancelamento das versões futuras. **Pendente:** eventual notificação de encerramento ao profissional. A autorização não inclui bibliotecas privadas anteriores.
 - **Registro do nutricionista:** verificação do CRN e restrições de acesso antes da validação.
 - **Dados profissionais após encerramento:** guarda obrigatória, eliminação, portabilidade e outros requisitos da LGPD na etapa 8.
