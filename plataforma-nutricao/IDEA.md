@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.6  
+> **Versão:** 0.7  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -116,7 +116,11 @@ O usuário poderá registrar seu consumo de três maneiras:
 
 Em qualquer fluxo, o usuário poderá ajustar a refeição antes de confirmá-la. A confirmação salva uma **cópia independente** no diário; alterar a dieta ou o modelo não altera o histórico de consumo. Evitar duplicação de registro se a mesma confirmação for reenviada.
 
-**Biblioteca profissional no MVP:** o nutricionista poderá criar, consultar, editar, excluir e reutilizar seus próprios modelos de refeições ao montar dietas de diferentes pacientes. Cada uso copia os alimentos e quantidades para o rascunho do plano do paciente; mudanças posteriores no modelo do nutricionista nunca alteram dietas já publicadas ou outros pacientes. Modelos profissionais não são automaticamente compartilhados com pacientes nem entre nutricionistas.
+**Biblioteca profissional no MVP:** o nutricionista cria refeições adicionando alimentos do catálogo e informando quantidades, sem digitar manualmente calorias ou macros. A aplicação calcula automaticamente a composição nutricional a partir dos dados da TBCA. O nutricionista poderá criar, consultar, editar, excluir e reutilizar seus próprios modelos de refeições ao montar dietas de diferentes pacientes.
+
+O nutricionista poderá selecionar uma refeição da biblioteca e adicioná-la à dieta de um paciente. A aplicação copia os itens e quantidades para o rascunho do plano escolhido; o profissional poderá ajustar essa cópia para o paciente. A refeição só será apresentada ao paciente quando a versão do plano for publicada. Também será possível criar uma refeição diretamente no rascunho e optar por salvá-la na biblioteca profissional.
+
+O nutricionista poderá cadastrar substituições opcionais, definindo alimento principal e alternativas com quantidades próprias. O paciente escolhe uma das alternativas; o cálculo nutricional considera somente a opção escolhida, nunca soma todas as alternativas. Cada uso copia os alimentos e quantidades para o rascunho do plano do paciente; mudanças posteriores no modelo do nutricionista nunca alteram dietas já publicadas ou outros pacientes. Modelos profissionais não são automaticamente compartilhados com pacientes nem entre nutricionistas.
 
 **Especificação funcional:** [DIETAS.md](./DIETAS.md).
 
@@ -248,7 +252,7 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 5. Quais recursos compõem o plano profissional pago? Haverá limites de pacientes?
 6. Quais dados ficam disponíveis depois do encerramento do vínculo profissional?
 7. Qual será o fluxo de exportação, portabilidade, retenção e exclusão dos dados?
-8. Quais campos e alternativas estarão disponíveis em um plano: horários, substituições, orientações?
+8. Quais campos adicionais estarão disponíveis em uma refeição além de nome, alimentos, quantidades e substituições: horário, instruções e observações?
 9. Como será o processo de troca de nutricionista?
 10. O versionamento dos planos pessoais deverá ter o mesmo detalhamento do profissional?
 
