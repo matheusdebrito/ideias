@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.11  
+> **Versão:** 0.12  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -140,7 +140,7 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 
 **Plano pessoal:** o usuário pode montar seus próprios planos com refeições, alimentos e quantidades. Isso é organização alimentar, não prescrição clínica automática.
 
-**Plano profissional:** o nutricionista elabora e atribui planos a pacientes. O paciente pode consultar o plano profissional, mas não alterar sua prescrição.
+**Plano profissional:** o nutricionista elabora e atribui planos a pacientes. O paciente pode consultar o plano profissional, mas não alterar sua prescrição. No MVP, cada paciente poderá ter **uma única dieta profissional vigente por vez**. Alterações na prescrição geram novas versões do mesmo plano lógico, mantendo as versões anteriores no histórico.
 
 **Horários sugeridos (confirmado para o MVP):**
 - O horário de uma refeição planejada é opcional.
@@ -182,6 +182,7 @@ Regras detalhadas e critérios de aceitação em [DIETAS.md](./DIETAS.md).
 - Cada versão deve preservar suas refeições planejadas, alimentos, quantidades, observações/instruções e composição nutricional de referência.
 - Registrar autor, data/hora e resumo ou motivo da atualização.
 - Cada plano possui uma única versão vigente por vez; versões antigas permanecem consultáveis, respeitando retenção de dados.
+- No MVP, um paciente não pode ter dois planos profissionais vigentes simultaneamente. A atualização da dieta vigente gera uma nova versão; o plano anterior permanece no histórico, sem coexistência de prescrições profissionais ativas.
 - Não substituir a versão anterior, pois precisamos reconstruir **qual plano estava vigente em determinado dia**.
 - Refeições do diário e seus nutrientes nunca são alterados por atualização de versão do plano.
 
