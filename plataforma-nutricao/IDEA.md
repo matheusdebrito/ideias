@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.54  
+> **Versão:** 0.55  
 > **Última atualização:** 31/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -334,13 +334,15 @@ A independência do diário preserva **o que a pessoa comeu**; o versionamento p
 - **Autorização para novo profissional:** o vínculo com o novo nutricionista e o acesso aos dados do paciente exigem autorização válida; não transferir automaticamente o acesso concedido ao profissional anterior. O fluxo detalhado de convites, aceite e momento exato de transição será decidido nesta etapa.
 - **Garantia de integridade:** a regra de vínculo único deverá ser aplicada no servidor e banco, inclusive contra convites aceitos simultaneamente; detalhes de transação/constraint ficam para a etapa 9.
 - Lista de pacientes vinculados.
-- Visualização de todos os dados disponíveis do paciente, condicionada ao vínculo ativo e à autorização vigente.
+- **Compartilhamento simples e explícito (confirmado no MVP):** na aceitação do convite, o paciente autorizará em **uma tela objetiva** o acesso às categorias relevantes: **diário alimentar e nutrientes consumidos, metas de calorias/macronutrientes, gráficos e indicadores, histórico de peso/IMC e planos alimentares profissionais associados ao acompanhamento**. A tela identifica o nutricionista, resume os dados e apresenta **Aceitar e autorizar** e **Recusar convite**, com detalhes opcionais; não obrigar o paciente a configurar uma sequência de permissões separadas.
+- O nutricionista só terá acesso às **categorias aprovadas**, com vínculo ativo, autorização vigente e validação no servidor. Ter permissão de consulta não permite alterar registros de consumo do paciente. Novos usos ou categorias não são autorizados por omissão; o paciente conserva seus dados e poderá encerrar o vínculo conforme fluxo a detalhar.
+- **Ainda a definir:** se esse acesso inclui registros pessoais criados **antes do início do vínculo**. Não assumir compartilhamento retroativo sem decisão explícita.
 - Acesso ao diário alimentar e aos indicadores por período.
 - Consulta ao histórico de peso.
 - Criação e atribuição de planos alimentares.
 - Histórico de alterações nos planos.
 
-O modelo de múltiplos nutricionistas simultâneos está **descartado no MVP**. O paciente permanece titular de seus registros pessoais ao trocar de nutricionista, e o acesso ativo do antigo profissional é encerrado com o vínculo. **Pendências da etapa 6:** prevenção de abuso nos convites, categorias específicas de dados autorizáveis, troca de profissional e tratamento da dieta anterior. Notificações por e-mail ao nutricionista para aceite/recusa e retorno no painel já estão aprovados; retenção e direitos sobre documentos profissionais ficam para a etapa 8. Ver [PACIENTES.md](./PACIENTES.md).
+O modelo de múltiplos nutricionistas simultâneos está **descartado no MVP**. O paciente permanece titular de seus registros pessoais ao trocar de nutricionista, e o acesso ativo do antigo profissional é encerrado com o vínculo. **Pendências da etapa 6:** prevenção de abuso nos convites, alcance temporal dos registros anteriores ao vínculo, revogação, troca de profissional e tratamento da dieta anterior. **Categorias de acompanhamento e aceite simples em uma tela já estão aprovados**, assim como notificações por e-mail ao nutricionista e retorno no painel; retenção e direitos sobre documentos profissionais ficam para a etapa 8. Ver [PACIENTES.md](./PACIENTES.md).
 
 ### 3.7. Assinaturas e monetização
 
