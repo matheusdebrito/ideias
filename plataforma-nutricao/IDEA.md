@@ -34,7 +34,7 @@ Possíveis necessidades:
 
 ### 2.2. Paciente acompanhado por nutricionista
 
-Usuário que autoriza um nutricionista a acessar os dados da sua conta durante um vínculo profissional ativo. O produto permitirá um único nutricionista ativo por paciente de cada vez.
+Usuário que autoriza um nutricionista a acessar todos os dados disponíveis na plataforma durante um vínculo profissional ativo. O produto permitirá um único nutricionista ativo por paciente de cada vez; o acesso depende de autorização vigente e deve cessar quando o vínculo ou a autorização terminar.
 
 Possíveis necessidades:
 - Vincular-se a um nutricionista por convite e aceite explícito.
@@ -51,7 +51,7 @@ Profissional que utiliza a plataforma para organizar o acompanhamento de seus pa
 Possíveis necessidades:
 - Manter perfil profissional e informações de registro.
 - Convidar pacientes e administrar vínculos.
-- Consultar dados que os pacientes autorizaram compartilhar.
+- Consultar todos os dados disponíveis do paciente, enquanto houver vínculo ativo e autorização vigente.
 - Acompanhar refeições, consumo energético, macronutrientes, peso e histórico.
 - Elaborar planos alimentares e atribuí-los a pacientes.
 - Atualizar planos e consultar versões anteriores.
@@ -147,7 +147,7 @@ Uma atualização não pode alterar retroativamente a dieta que estava vigente e
 - Fluxo explícito para encerrar o vínculo ou transferir o paciente para outro nutricionista.
 - Histórico dos vínculos anteriores, sem manter acesso ativo após o encerramento.
 - Lista de pacientes vinculados.
-- Visualização dos dados autorizados pelo paciente.
+- Visualização de todos os dados disponíveis do paciente, condicionada ao vínculo ativo e à autorização vigente.
 - Acesso ao diário alimentar e aos indicadores por período.
 - Consulta ao histórico de peso.
 - Criação e atribuição de planos alimentares.
