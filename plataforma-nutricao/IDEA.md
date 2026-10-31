@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.56  
+> **Versão:** 0.57  
 > **Última atualização:** 31/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -330,7 +330,9 @@ A independência do diário preserva **o que a pessoa comeu**; o versionamento p
 - Receber ou visualizar convite ou criar conta não equivale a aceitar. A autorização é validada no servidor, exige identidade correspondente ao e-mail convidado e é específica para o vínculo; um novo convite não substitui automaticamente um nutricionista ativo. **Ainda a definir:** tratamento técnico de falhas/abusos, retentativas e detalhes do compartilhamento.
 - **Um único nutricionista ativo por paciente (confirmado no MVP):** um paciente adulto pode possuir **no máximo um vínculo profissional ativo por vez**. Não é permitido criar vínculos profissionais simultâneos para o mesmo paciente.
 - **Troca de nutricionista (confirmado no MVP):** o paciente pode trocar de profissional sem perder **seu histórico alimentar, medições corporais, metas pessoais ou acesso à conta**. Dietas profissionais publicadas e vínculos encerrados permanecem identificados historicamente, sem converter prescrições do antigo profissional em prescrições do novo. O estado de vigência do plano profissional antigo durante a troca será especificado separadamente.
-- **Encerramento do vínculo:** o nutricionista anterior deixa de ter **acesso ativo pelo painel de acompanhamento** aos dados do paciente quando o vínculo ou a autorização terminar. Histórico do vínculo é preservado nos limites de retenção legal ainda a definir, sem conceder acesso contínuo ao ex-profissional aos dados privados do paciente.
+- **Encerramento do vínculo pelo paciente confirmado no MVP:** na área **Meu nutricionista**, o titular escolhe **Encerrar acompanhamento** e confirma a decisão em uma etapa simples, a qualquer momento, sem solicitar aprovação do nutricionista nem acionar suporte. O texto informa que o acesso profissional será revogado, seu histórico pessoal preservado e poderá se vincular a outro profissional posteriormente.
+- Após confirmação e processamento no servidor, o nutricionista anterior perde **imediatamente** a autorização de acompanhamento aos dados novos e históricos, inclusive em requisições de sessões abertas; não é suficiente ocultar itens da interface. O paciente mantém diário, indicadores, medições, metas pessoais, conta e registros históricos. O histórico do vínculo é preservado sujeito a regras de retenção da etapa 8, sem conceder acesso continuado ao ex-profissional.
+- **Não decidido ainda:** o estado de vigência ou agendamento de dietas profissionais no momento do encerramento, e eventual e-mail informando ao nutricionista sobre o encerramento (notificações de aceite/recusa de convite já estão aprovadas, mas são eventos diferentes).
 - **Autorização para novo profissional:** o vínculo com o novo nutricionista e o acesso aos dados do paciente exigem autorização válida; não transferir automaticamente o acesso concedido ao profissional anterior. O fluxo detalhado de convites, aceite e momento exato de transição será decidido nesta etapa.
 - **Garantia de integridade:** a regra de vínculo único deverá ser aplicada no servidor e banco, inclusive contra convites aceitos simultaneamente; detalhes de transação/constraint ficam para a etapa 9.
 - Lista de pacientes vinculados.
@@ -342,7 +344,7 @@ A independência do diário preserva **o que a pessoa comeu**; o versionamento p
 - Criação e atribuição de planos alimentares.
 - Histórico de alterações nos planos.
 
-O modelo de múltiplos nutricionistas simultâneos está **descartado no MVP**. O paciente permanece titular de seus registros pessoais ao trocar de nutricionista, e o acesso ativo do antigo profissional é encerrado com o vínculo. **Pendências da etapa 6:** prevenção de abuso nos convites, revogação do vínculo pelo paciente, troca de profissional e tratamento da dieta profissional anterior. **Compartilhamento do histórico pessoal anterior ao vínculo e aceite informado em uma tela já foram aprovados**, assim como notificações por e-mail ao nutricionista e retorno no painel; retenção e direitos sobre documentos profissionais ficam para a etapa 8. Ver [PACIENTES.md](./PACIENTES.md).
+O modelo de múltiplos nutricionistas simultâneos está **descartado no MVP**. O paciente permanece titular de seus registros pessoais ao trocar de nutricionista, e o acesso ativo do antigo profissional é encerrado com o vínculo. **Pendências da etapa 6:** prevenção de abuso nos convites, detalhes da troca de profissional e estado de dietas profissionais vigentes/programadas após o encerramento. **Revogação simples pelo paciente em Meu nutricionista e bloqueio imediato de acesso foram aprovados**, assim como o compartilhamento do histórico anterior ao vínculo e notificações de resposta ao convite; retenção e direitos sobre documentos profissionais ficam para a etapa 8. Ver [PACIENTES.md](./PACIENTES.md).
 
 ### 3.7. Assinaturas e monetização
 
