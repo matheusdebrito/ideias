@@ -2,15 +2,19 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Etapa:** 6 de 10 — Gestão de pacientes e permissões (concluída funcionalmente)
-> **Versão:** 1.4
+> **Versão:** 1.5
 > **Data:** 31/10/2026
 > **Referências:** [IDEA.md](./IDEA.md), [DIETAS.md](./DIETAS.md), [DIARIO.md](./DIARIO.md)
 
 ## 1. Objetivo
 
-Definir vínculos e autorização entre pacientes adultos e nutricionistas, preservando a titularidade dos dados pessoais e o histórico do acompanhamento durante mudanças de profissional.
+Definir vínculos e autorização entre **usuários adultos e nutricionistas**, preservando a titularidade dos dados pessoais e o histórico do acompanhamento durante mudanças de profissional.
+
+**Vocabulário obrigatório do MVP:** **paciente não é um tipo de conta nem um cadastro separado**. Todo adulto tem uma **conta de usuário** e utiliza a experiência pessoal, tenha ou não nutricionista. **“Paciente” é o termo usado apenas na visão de gestão do nutricionista** (como “Meus pacientes”) para referir-se ao usuário com quem existe ou existiu vínculo, respeitando o acesso permitido. Para o próprio titular, usar “usuário”, “minha conta” e “Meu nutricionista”. Aceitar, encerrar ou trocar vínculos altera as autorizações, **não o tipo de conta, os dados pessoais nem o direito ao acesso gratuito**.
 
 ## 2. Decisão aprovada para o MVP — vínculo profissional único
+
+**Modelo relacional:** uma mesma conta de usuário pode estar **sem vínculo** ou **com vínculo ativo autorizado** de acompanhamento, sem uma migração de conta ou perfil para “paciente”. No painel profissional, “Meus pacientes” mostra apenas os usuários com relação e permissões aplicáveis; vínculos anteriores podem constar de histórico restrito sem manter acesso ao diário. 
 
 1. **No máximo um nutricionista ativo por paciente**, a qualquer instante. Um paciente pode ficar **sem nutricionista** e continuar utilizando os recursos pessoais gratuitos e o próprio diário.
 2. **Os dados de acompanhamento permanecem com o paciente:** nutricionista trabalha nas dietas, metas e acompanhamento do usuário, mas o fim do vínculo não apaga seu diário, refeições, pesagens, indicadores, metas efetivas ou versões de dietas publicadas para ele. Autoria profissional e vigência de prescrições continuam identificadas.
@@ -115,6 +119,8 @@ Definir vínculos e autorização entre pacientes adultos e nutricionistas, pres
 
 | Cenário | Comportamento esperado |
 | --- | --- |
+| Usuário nunca teve nutricionista | Tem conta e recursos pessoais gratuitos, sem precisar ser cadastrado como “paciente” |
+| Usuário aceita, encerra ou troca vínculo com nutricionista | Mantém a mesma identidade e conta; só vínculos, autorizações e prescrições vigentes mudam |
 | Paciente está sem nutricionista | Usa recursos pessoais e seu histórico normalmente |
 | Paciente já possui nutricionista ativo e outro tenta criar vínculo ativo | Segundo vínculo simultâneo não é autorizado |
 | Paciente troca de nutricionista | Mantém diário, medições, metas pessoais e histórico de dietas, com autoria original |
