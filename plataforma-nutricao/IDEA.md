@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.26  
+> **Versão:** 0.27  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -103,7 +103,10 @@ Requisitos importantes para a qualidade dos dados:
 - Preservar os valores e a precisão disponíveis na fonte, de modo que cálculo numérico mais preciso **não signifique maior exatidão nutricional**. O total calculado a partir dos valores integrais poderá diferir em alguns décimos da soma de parcelas já arredondadas na tela.
 - Adotar regras numéricas e de formatação consistentes entre biblioteca, dietas, diário e indicadores, inclusive ao preservar retratos históricos.
 
-**Fontes candidatas:** TBCA como fonte principal a ser avaliada e TACO como fonte complementar. A incorporação de dados em um produto comercial depende da confirmação das condições de uso, atribuição e redistribuição de cada fonte.
+**Escolha da base adiada por decisão do produto (31/10/2026):** o catálogo inicial poderá ser abastecido por **TBCA, TACO ou um arquivo JSON próprio**; nenhuma dessas alternativas foi aprovada ainda. A decisão ocorrerá na etapa 9 (arquitetura e integrações) ou antes da implementação efetiva do importador, considerando viabilidade comercial, cobertura e qualidade.
+- **JSON é o formato do arquivo, não a origem nutricional**: mesmo nesse caso, registrar procedência, versão, unidades e direitos de uso dos dados que compõem o arquivo.
+- Até essa decisão, especificar regras funcionais de catálogo, cálculo, porção, histórico e acesso de forma **independente da fonte**; nenhuma implementação ou importação de base institucional está autorizada por esta definição.
+- Se for escolhida uma base de terceiros, confirmar condições de uso e eventual autorização antes da integração comercial.
 
 **Risco de licenciamento identificado na pesquisa de 31/10/2026 (não é autorização de uso):**
 - A [página oficial da TBCA](https://www.tbca.net.br/index.html) informa que é necessário entrar em contato com os coordenadores para fins comerciais e apresenta restrições à reprodução e comercialização do material. Portanto, **não importar, replicar ou distribuir os dados TBCA comercialmente** com base apenas no acesso público à página. Buscar autorização expressa e definir exatamente as modalidades permitidas (armazenamento, API, exibição, cálculos, atualizações e atribuição).
@@ -139,7 +142,7 @@ Detalhamento funcional e questões da etapa 4 em [ALIMENTOS.md](./ALIMENTOS.md).
 
 **Regra fundamental:** o diário registra **o que a pessoa efetivamente comeu**, independentemente de ter um plano alimentar ativo. Atualizar, encerrar ou trocar uma dieta não modifica registros anteriores de refeições consumidas.
 
-Cada item consumido deve preservar quantidade, unidade, data/hora, composição nutricional calculada no momento do registro e referência/fonte do alimento. Isso evita que uma atualização futura do catálogo TBCA altere retroativamente os totais históricos.
+Cada item consumido deve preservar quantidade, unidade, data/hora, composição nutricional calculada no momento do registro e referência/fonte do alimento. Isso evita que uma atualização futura do catálogo nutricional, independentemente de sua fonte, altere retroativamente os totais históricos.
 
 ### 3.3.1. Registro a partir de refeições e modelos (MVP)
 
@@ -150,7 +153,7 @@ O usuário poderá registrar seu consumo de três maneiras:
 
 Em qualquer fluxo, o usuário poderá ajustar a refeição antes de confirmá-la. A confirmação salva uma **cópia independente** no diário; alterar a dieta ou o modelo não altera o histórico de consumo. Evitar duplicação de registro se a mesma confirmação for reenviada.
 
-**Biblioteca profissional no MVP:** o nutricionista cria refeições adicionando alimentos do catálogo e informando quantidades, sem digitar manualmente calorias ou macros. A aplicação calcula automaticamente a composição nutricional a partir dos dados da TBCA. O nutricionista poderá criar, consultar, editar, excluir e reutilizar seus próprios modelos de refeições ao montar dietas de diferentes pacientes.
+**Biblioteca profissional no MVP:** o nutricionista cria refeições adicionando alimentos do catálogo e informando quantidades, sem digitar manualmente calorias ou macros. A aplicação calcula automaticamente a composição nutricional a partir dos dados da fonte nutricional escolhida (ainda não definida). O nutricionista poderá criar, consultar, editar, excluir e reutilizar seus próprios modelos de refeições ao montar dietas de diferentes pacientes.
 
 O nutricionista poderá selecionar uma refeição da biblioteca e adicioná-la à dieta de um paciente. A aplicação copia os itens e quantidades para o rascunho do plano escolhido; o profissional poderá ajustar essa cópia para o paciente. A refeição só será apresentada ao paciente quando a versão do plano for publicada. Também será possível criar uma refeição diretamente no rascunho e optar por salvá-la na biblioteca profissional.
 
@@ -305,7 +308,7 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 - **Restrição etária:** o produto será 18+, com informação clara no cadastro e nos termos. A idade deve ser validada no backend, sem confiar apenas no frontend. A autodeclaração não garante automaticamente que não haverá acesso por menores; revisar o enquadramento de acesso provável, riscos e controles proporcionais à luz de orientações da ANPD, em especial o guia publicado em 28/10/2026.
 - **Entrada indevida de menores:** planejar um fluxo seguro para denúncia/identificação, restrição ou encerramento de contas que violem a idade mínima, com atenção à proteção dos dados e direitos aplicáveis. A política não é uma transferência automática de responsabilidade para o usuário.
 - **Qualidade nutricional:** fontes podem conter dados ausentes, unidades diferentes e informações específicas de preparo.
-- **Histórico:** atualizações em TBCA, dietas e metas não podem alterar retrospectivamente informações antigas.
+- **Histórico:** atualizações no catálogo nutricional, nas dietas e nas metas não podem alterar retrospectivamente informações antigas.
 - **Custos do gratuito:** estimar armazenamento e uso médio antes do lançamento.
 - **Viabilidade comercial:** validar se o profissional percebe valor suficiente na gestão e no acompanhamento de pacientes para pagar mensalidade.
 
