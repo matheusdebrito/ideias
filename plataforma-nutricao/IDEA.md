@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.44  
+> **Versão:** 0.45  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -226,7 +226,9 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - **Classificação estrita, sem faixa de tolerância (confirmado para o MVP):** para calorias ou qualquer macro selecionado, comparar o consumo registrado da data à meta efetiva daquela data: **abaixo** se consumo < meta; **na meta** somente se consumo = meta; **acima** se consumo > meta. Não considerar 5%, 100 kcal ou qualquer diferença positiva/negativa como cumprimento da meta.
 - A comparação deve utilizar números decimais consistentes (sem artefatos de ponto flutuante e sem arredondamento intermediário); apresentar o consumo e a diferença com precisão suficiente para explicar a classificação. Valores que parecem iguais somente por arredondamento visual não podem gerar uma indicação enganosa de **na meta**.
 - Não converter as contagens em **saldo acumulado de nutrientes ou calorias** do período nem tratar **acima da meta alimentar** como sinônimo obrigatório de superávit energético frente ao gasto corporal. O valor nutricional de um alimento e a absorção energética real são estimativas, mesmo com pesagem precisa das porções; evitar rotular dias como sucesso/fracasso clínico.
-- **Ainda em aberto:** saldos agregados semanais/mensais, convenção do início da semana e precisão de apresentação dos valores em diferentes unidades; a regra de **na meta** já foi definida como igualdade estrita, sem tolerância. Nenhum gráfico implica diagnóstico clínico.
+- **Semana de acompanhamento (confirmado no MVP):** para todos os resumos, gráficos e contagens semanais do diário, considerar **segunda-feira a domingo**, com sete datas locais consecutivas, independentemente do dia em que o usuário começou a usar a aplicação. Semanas que atravessam mês/ano permanecem um mesmo período de segunda a domingo.
+- Usar a **data local do consumo já preservada** para atribuir cada refeição à semana correspondente, não a data UTC do cadastro nem a mudança posterior do fuso do dispositivo. Lançamentos retroativos e correções recalculam a semana afetada; a semana incompleta em andamento mostra os registros existentes sem inventar consumo dos dias futuros.
+- **Ainda em aberto:** saldos agregados semanais/mensais e precisão de apresentação dos valores em diferentes unidades; a classificação de **na meta** já foi definida como igualdade estrita, sem tolerância. Nenhum gráfico implica diagnóstico clínico.
 
 **Adultos:** a aplicação poderá estimar uma meta energética por método validado e permitir ajustes manuais. O cálculo requer dados suficientes, explicação dos limites e revisão de profissionais antes do lançamento.
 
