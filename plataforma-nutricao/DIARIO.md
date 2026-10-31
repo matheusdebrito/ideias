@@ -2,18 +2,20 @@
 
 > **Status:** planejamento funcional concluído para o MVP; software não implementado
 > **Etapa:** 5 de 10 — Diário alimentar, metas e indicadores (definições funcionais principais concluídas)
-> **Versão:** 2.1
+> **Versão:** 2.2
 > **Data:** 31/10/2026
 > **Fonte principal da visão:** [IDEA.md](./IDEA.md) e [DIETAS.md](./DIETAS.md)
 > **Convenção:** regras confirmadas estão separadas das decisões em aberto.
 
 ## 1. Objetivo
 
-Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alimentar independente das prescrições e versões de dieta.
+**Regra transversal atualizada:** metas de acompanhamento e visualização de dados compartilhados podem ser organizadas por **qualquer gestor adulto assinante**, desde que haja vínculo e autorização vigente do titular. **CRN não é obrigatório**; o selo CRN verificado é credencial opcional e não confere acesso adicional. Referências legadas a “profissional” significam autoria ou área de gestão, **não prescrição clínica oferecida pela plataforma**.
+
+Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alimentar independente das planos publicados e versões de dieta.
 
 ## 2. Decisões já confirmadas
 
-- O diário alimentar é de titularidade do usuário/paciente e funciona **sem dieta ativa**.
+- O diário alimentar é de titularidade do usuário/usuário acompanhado e funciona **sem dieta ativa**.
 - O registro de consumo não modifica uma dieta planejada e não depende de uma versão de plano continuar vigente.
 - Existem três formas de lançar uma refeição:
   1. Copiar uma refeição da dieta vigente, ajustando alimentos e porções para refletir o que foi consumido.
@@ -38,7 +40,7 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 - O diário apresentará totais nutricionais por refeição e por dia e consulta a períodos históricos.
 - **Edição e exclusão (confirmado para o MVP):** o dono do diário pode editar uma refeição já registrada (inclusive seus alimentos, quantidades, unidades e data/hora) ou excluí-la da visualização e dos indicadores de consumo.
 - Uma edição não cria uma nova refeição duplicada; recalcula seus valores nutricionais com os dados corrigidos e recalcula os totais das datas afetadas. Se a data mudar, atualizar os indicadores tanto do dia anterior quanto do novo dia.
-- A exclusão retira o registro dos totais e do diário corrente, mediante ação explícita, sem alterar a prescrição nem a biblioteca de modelos.
+- A exclusão retira o registro dos totais e do diário corrente, mediante ação explícita, sem alterar a plano publicado nem a biblioteca de modelos.
 - Registrar um **histórico discreto de correções**, com tipo da ação, autor, data/hora e dados necessários para identificar o antes/depois, sem exigir justificativa para cada ajuste. Proteger essa trilha com autorização no servidor.
 - O período, a visibilidade e o comportamento de retenção/eliminação desse histórico serão definidos nas etapas 8 e 9 em conformidade com o tratamento de dados pessoais; **não presumir retenção indefinida** nem possibilidade de restauração após exclusão. A ação de excluir no diário deve ser descrita com precisão ao usuário.
 - Distinguir uma correção feita pelo dono do diário de atualizações posteriores de alimentos ou planos: apenas a primeira pode alterar explicitamente um registro de consumo existente.
@@ -57,10 +59,10 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 - **Dias sem registros são dados ausentes, não consumo zero**: não entram no divisor e não devem ser representados como dias de jejum. Dias com alguma refeição registrada também podem estar incompletos, portanto rotular as médias como **média por dia com registros**, sem afirmar cobertura alimentar completa.
 - Se o período não tiver qualquer refeição, exibir **sem dados registrados**, incluindo o contador de dias igual a zero e sem calcular média numérica.
 - Criar, editar, mover de data/fuso ou excluir registros deve recalcular totais, média e dias registrados de todos os períodos afetados, inclusive após lançamento retroativo.
-- **Metas opcionais de macronutrientes (confirmado no MVP):** o titular adulto do diário pode definir e alterar metas pessoais de proteína (g), carboidratos (g), gordura total (g) e calorias (kcal) **sem nutricionista**, inclusive no uso pessoal gratuito. Não exigir plano ativo, vínculo ou pagamento profissional.
+- **Metas opcionais de macronutrientes (confirmado no MVP):** o titular adulto do diário pode definir e alterar metas pessoais de proteína (g), carboidratos (g), gordura total (g) e calorias (kcal) **sem gestor**, inclusive no uso pessoal gratuito. Não exigir plano ativo, vínculo ou pagamento profissional.
 - Cada meta é opcional e independente: não há obrigação de preencher todos os nutrientes. Se um nutriente não tiver meta válida, mostrar somente seu consumo registrado, sem calcular restante/excedente ou presumir meta zero.
 - Para nutrientes com metas efetivas válidas na data, mostrar consumo e diferença **restante ou acima da meta**, sem saldos negativos rotulados como restante. Usar dados registrados no diário, com soma sem arredondamento intermediário e apresentação em g (macros) ou kcal (energia).
-- A origem da meta fica explícita: pessoal, profissional ou ajuste do paciente. Metas pessoais podem ser criadas e editadas sem profissional; ao ajustar meta de origem profissional, manter o aviso/confirmação aprovado e a prescrição intacta. Uma nova meta profissional vigente prevalece automaticamente, conforme regras já aprovadas.
+- A origem da meta fica explícita: pessoal, profissional ou ajuste do usuário acompanhado. Metas pessoais podem ser criadas e editadas sem profissional; ao ajustar meta de origem profissional, manter o aviso/confirmação aprovado e a plano publicado intacta. Uma nova meta de acompanhamento vigente prevalece automaticamente, conforme regras já aprovadas.
 - Preservar autoria e vigência de cada alteração, comparando datas históricas com suas metas efetivas. Não forçar equivalência energética exata entre kcal e macros nem gerar automaticamente valores de macros que o usuário não definiu.
 - **Gráficos semanais e mensais (confirmado no MVP):** mostrar, por **dia local de consumo**, o total de calorias registradas (kcal), permitindo alternar para proteínas, carboidratos e gorduras (g), sem misturar unidades na mesma escala.
 - Para cada dia/nutriente com meta válida, representar a **meta efetivamente vigente naquele dia** como referência. Metas pessoais e profissionais respeitam as regras de vigência e autoria; mudanças de meta não transformam uma meta atual em meta histórica de dias anteriores. Sem meta válida, não desenhar referência numérica presumida.
@@ -79,50 +81,50 @@ Registrar o que a pessoa **realmente consumiu** e apresentar acompanhamento alim
 - **IMC atual (confirmado):** calcular com o **peso mais recente registrado** e a **altura válida do perfil**, por `IMC = pesoKg / (alturaMetros * alturaMetros)`. Sem peso ou altura válidos, exibir **IMC indisponível**, sem inventar valores. O MVP atende exclusivamente adultos (18+).
 - **Apresentação responsável:** o IMC é apenas um indicador geral e **não avalia individualmente composição corporal nem define diagnóstico**; evitar alertas automáticos ou julgamentos baseados somente nele. Dados de peso são do usuário e o acesso profissional é condicionado às autorizações já previstas.
 - **Pendente para arquitetura:** como apresentar IMC associado a medições antigas quando a altura cadastrada mudar; nunca reescrever os valores originais de peso nem simular alturas históricas não registradas.
-- Metas e estimativas não são automaticamente prescrições clínicas.
-- **Mudança de meta profissional pelo paciente (confirmado no MVP):** permitir que o paciente altere a meta efetiva de acompanhamento de calorias e/ou macronutrientes, mesmo quando ela foi definida pelo nutricionista. Antes de aplicar, exibir mensagem explícita de origem profissional e solicitar confirmação. Cancelamento não modifica a meta.
-- A alteração confirmada fica marcada como **ajuste do paciente**, com identificação de autoria, data e início de vigência; os indicadores futuros usam essa meta ajustada. Não sobrescrever, editar ou reatribuir a prescrição profissional original: ela continua acessível para comparação e o plano profissional publicado permanece inalterado.
-- Se houver uma meta profissional vigente e nenhuma alteração pessoal posterior, ela pode servir como referência principal; na ausência de meta profissional vigente, utilizar a meta pessoal. O histórico dos indicadores compara cada data à meta efetivamente aplicada àquele período, incluindo origem, sem alterações retroativas.
-- **Visibilidade profissional confirmada:** com vínculo ativo e autorização vigente, o nutricionista terá no painel do paciente acesso à meta originalmente definida pelo profissional, à meta efetiva ajustada pelo paciente e à data/hora da mudança, identificando a autoria. O ajuste pessoal não substitui a prescrição no histórico profissional.
-- Consultas e APIs deverão respeitar a autorização do paciente e o vínculo ativo. O fim do vínculo revoga a visualização corrente; eventual retenção legal de dados segue política ainda pendente das etapas 8/9.
-- **Nova meta profissional, atualização automática (definido para o MVP):** ao entrar em vigor uma meta definida/publicada posteriormente pelo nutricionista, essa meta passa a ser a referência efetiva dos indicadores, inclusive quando a referência anterior era um ajuste pessoal do paciente. Não exigir aceite, clique ou confirmação do paciente.
+- Metas e estimativas não são automaticamente planos publicados clínicas.
+- **Mudança de meta de acompanhamento pelo usuário acompanhado (confirmado no MVP):** permitir que o usuário acompanhado altere a meta efetiva de acompanhamento de calorias e/ou macronutrientes, mesmo quando ela foi definida pelo gestor. Antes de aplicar, exibir mensagem explícita de origem profissional e solicitar confirmação. Cancelamento não modifica a meta.
+- A alteração confirmada fica marcada como **ajuste do usuário acompanhado**, com identificação de autoria, data e início de vigência; os indicadores futuros usam essa meta ajustada. Não sobrescrever, editar ou reatribuir a plano alimentar publicado original: ela continua acessível para comparação e o plano compartilhado publicado permanece inalterado.
+- Se houver uma meta de acompanhamento vigente e nenhuma alteração pessoal posterior, ela pode servir como referência principal; na ausência de meta de acompanhamento vigente, utilizar a meta pessoal. O histórico dos indicadores compara cada data à meta efetivamente aplicada àquele período, incluindo origem, sem alterações retroativas.
+- **Visibilidade profissional confirmada:** com vínculo ativo e autorização vigente, o gestor terá no painel do usuário acompanhado acesso à meta originalmente definida pelo profissional, à meta efetiva ajustada pelo usuário acompanhado e à data/hora da mudança, identificando a autoria. O ajuste pessoal não substitui a plano publicado no histórico profissional.
+- Consultas e APIs deverão respeitar a autorização do usuário acompanhado e o vínculo ativo. O fim do vínculo revoga a visualização corrente; eventual retenção legal de dados segue política ainda pendente das etapas 8/9.
+- **Nova meta de acompanhamento, atualização automática (definido para o MVP):** ao entrar em vigor uma meta definida/publicada posteriormente pelo gestor, essa meta passa a ser a referência efetiva dos indicadores, inclusive quando a referência anterior era um ajuste pessoal do usuário acompanhado. Não exigir aceite, clique ou confirmação do usuário acompanhado.
 - Se a nova meta tiver vigência futura, ela só substitui a referência atual no início programado; a data efetiva, a autoria profissional e os períodos anteriores devem ser preservados no histórico. Informar a atualização de forma discreta e não bloqueante, sem alterar valores históricos.
-- Após uma atualização profissional, o paciente ainda poderá ajustar a referência por conta própria mediante confirmação, sem modificar a prescrição. Para os indicadores, a meta vigente é a do último evento efetivo de atualização profissional ou ajuste pessoal confirmado, observando seus instantes de vigência.
-- **Aviso ao nutricionista (confirmado no MVP):** quando o paciente confirmar uma alteração na meta, o painel do profissional exibirá um **aviso visual discreto**, não bloqueante, com a meta original, a ajustada, autoria e data/hora, apenas durante vínculo ativo e autorização válida.
-- Esse evento não gera e-mail, push nem mensagens externas no MVP; também não exige confirmação de leitura pelo nutricionista. Os detalhes visuais do indicador serão resolvidos na etapa de UX/implementação, sem transformar a alteração em alerta clínico ou sinal de descumprimento.
-- O aviso deve ter acesso protegido no servidor e não expor dados de pacientes sem vínculo/autorização. Prescrição original e meta efetiva ajustada continuam separadas.
+- Após uma atualização profissional, o usuário acompanhado ainda poderá ajustar a referência por conta própria mediante confirmação, sem modificar a plano publicado. Para os indicadores, a meta vigente é a do último evento efetivo de atualização profissional ou ajuste pessoal confirmado, observando seus instantes de vigência.
+- **Aviso ao gestor (confirmado no MVP):** quando o usuário acompanhado confirmar uma alteração na meta, o painel do profissional exibirá um **aviso visual discreto**, não bloqueante, com a meta original, a ajustada, autoria e data/hora, apenas durante vínculo ativo e autorização válida.
+- Esse evento não gera e-mail, push nem mensagens externas no MVP; também não exige confirmação de leitura pelo gestor. Os detalhes visuais do indicador serão resolvidos na etapa de UX/implementação, sem transformar a alteração em alerta clínico ou sinal de descumprimento.
+- O aviso deve ter acesso protegido no servidor e não expor dados de usuários acompanhados sem vínculo/autorização. Prescrição original e meta efetiva ajustada continuam separadas.
 
 ### 3.1. Permanência das metas após encerramento ou troca (**confirmado no MVP**)
 
-- **Dados e metas acompanham o paciente:** quando termina um vínculo, conservar a última meta efetiva utilizada em seus indicadores de calorias e macronutrientes. O valor e o histórico do paciente não são apagados por mudança de profissional.
-- **Por nutriente:** preservar valores definidos para kcal, proteínas, carboidratos e gorduras individualmente, independentemente de a última meta ter vindo do profissional ou de um ajuste do paciente. Não criar metas para nutrientes sem valor.
-- **Referência pessoal de continuidade:** a meta efetiva permanece disponível para comparação nos dias seguintes, sem ser classificada como uma **prescrição profissional vigente** de alguém que já não acompanha o paciente. Guardar autora/origem histórica, vigência original e ajustes.
-- **Exemplo:** a prescrição era 2.200 kcal e o paciente ajustou a referência para 2.000 kcal; encerrado o vínculo, a meta efetiva continua em **2.000 kcal**. A prescrição original de 2.200 kcal fica no histórico e não é reescrita. Sem ajuste, o último valor profissional efetivo de 2.200 kcal continua como referência pessoal.
-- **Edição simples:** sem vínculo ativo com o autor dessa meta, o paciente pode alterar a referência pessoal livremente, sem aviso de estar modificando uma prescrição profissional vigente. Editar cria novo evento de meta e preserva os valores/indicadores históricos.
-- **Se houver troca:** a última meta efetiva persiste até ajuste pessoal ou início de uma nova meta definida pelo nutricionista atualmente autorizado, respeitando a precedência já aprovada. Uma futura atualização do profissional anterior não pode entrar em vigor após seu vínculo terminar.
-- **Separação entre plano e indicador:** a dieta profissional antiga permanece consultável no histórico, mas deixa de ser prescrição vigente; isso **não apaga nem suspende as metas efetivas** do usuário. Ver [DIETAS.md](./DIETAS.md) e [PACIENTES.md](./PACIENTES.md).
+- **Dados e metas acompanham o usuário acompanhado:** quando termina um vínculo, conservar a última meta efetiva utilizada em seus indicadores de calorias e macronutrientes. O valor e o histórico do usuário acompanhado não são apagados por mudança de profissional.
+- **Por nutriente:** preservar valores definidos para kcal, proteínas, carboidratos e gorduras individualmente, independentemente de a última meta ter vindo do profissional ou de um ajuste do usuário acompanhado. Não criar metas para nutrientes sem valor.
+- **Referência pessoal de continuidade:** a meta efetiva permanece disponível para comparação nos dias seguintes, sem ser classificada como uma **plano alimentar publicado vigente** de alguém que já não acompanha o usuário acompanhado. Guardar autora/origem histórica, vigência original e ajustes.
+- **Exemplo:** a plano publicado era 2.200 kcal e o usuário acompanhado ajustou a referência para 2.000 kcal; encerrado o vínculo, a meta efetiva continua em **2.000 kcal**. A plano publicado original de 2.200 kcal fica no histórico e não é reescrita. Sem ajuste, o último valor profissional efetivo de 2.200 kcal continua como referência pessoal.
+- **Edição simples:** sem vínculo ativo com o autor dessa meta, o usuário acompanhado pode alterar a referência pessoal livremente, sem aviso de estar modificando uma plano alimentar publicado vigente. Editar cria novo evento de meta e preserva os valores/indicadores históricos.
+- **Se houver troca:** a última meta efetiva persiste até ajuste pessoal ou início de uma nova meta definida pelo gestor atualmente autorizado, respeitando a precedência já aprovada. Uma futura atualização do profissional anterior não pode entrar em vigor após seu vínculo terminar.
+- **Separação entre plano e indicador:** a dieta compartilhada antiga permanece consultável no histórico, mas deixa de ser plano publicado vigente; isso **não apaga nem suspende as metas efetivas** do usuário. Ver [DIETAS.md](./DIETAS.md) e [PACIENTES.md](./PACIENTES.md).
 
 ## 4. Decisões consolidadas e pendências encaminhadas a outras etapas
 
-1. **Metas:** ajuste pessoal com confirmação, aviso discreto no painel profissional e aplicação automática de novas metas do nutricionista definidos. E-mail/push externos por ajuste de meta ficam fora do MVP; detalhes visuais do indicador vão para a etapa de implementação.
+1. **Metas:** ajuste pessoal com confirmação, aviso discreto no painel profissional e aplicação automática de novas metas do gestor definidos. E-mail/push externos por ajuste de meta ficam fora do MVP; detalhes visuais do indicador vão para a etapa de implementação.
 2. **Períodos e fusos:** fuso por refeição, correção manual e agrupamento dos registros por data local já definidos; **semana de segunda-feira a domingo** e contagem de dias e média dos períodos semanal/mensal confirmados. Horário de verão/conversões continuam para a etapa 9.
 3. **Indicadores:** painel diário, resumos, gráficos, contagens e diferença acumulada de kcal/macros confirmados, com comparação estrita e semana de segunda a domingo. Vitaminas/minerais disponíveis ficarão em **Detalhes nutricionais**, com total parcial sinalizado e opção de identificar os alimentos sem dados. **No MVP não haverá metas, percentuais de adequação ou comparações com valores de referência para micronutrientes**; avaliação dessa funcionalidade será posterior ao MVP.
 4. **Medidas corporais:** registro livre de peso com data, correção de medições, gráfico histórico e IMC atual pelo peso mais recente/altura do perfil foram aprovados. Restam regras técnicas de altura histórica e retenção de medições (etapas 8 e 9).
 5. **Retenção e permissões da trilha de correções:** quais registros de auditoria podem persistir e quais atores poderão visualizá-los, respeitando privacidade e eliminação de dados? Resolver nas etapas 8 e 9.
 
-## 5. Fluxo de alteração de meta profissional (**Definido para o MVP**)
+## 5. Fluxo de alteração de meta de acompanhamento (**Definido para o MVP**)
 
-1. O paciente abre seus indicadores e escolhe **Alterar meta**.
-2. Quando a meta vigente tiver origem profissional, exibir mensagem como: "Esta meta foi definida pelo seu nutricionista. Deseja definir uma meta diferente para o seu acompanhamento? A meta original será preservada."
+1. O usuário acompanhado abre seus indicadores e escolhe **Alterar meta**.
+2. Quando a meta vigente tiver origem profissional, exibir mensagem como: "Esta meta foi definida pelo seu gestor. Deseja definir uma meta diferente para o seu acompanhamento? A meta original será preservada."
 3. Oferecer **Cancelar** e **Confirmar alteração**; não aplicar a mudança sem confirmação explícita.
-4. Ao confirmar, salvar nova referência efetiva com origem **Ajustada pelo paciente** e início de vigência. Não atualizar nem republicar a prescrição do nutricionista.
-5. Exibir de forma distinguível a meta usada nos indicadores e a meta profissional original, para evitar atribuir o ajuste ao nutricionista.
+4. Ao confirmar, salvar nova referência efetiva com origem **Ajustada pelo usuário acompanhado** e início de vigência. Não atualizar nem republicar a plano publicado do gestor.
+5. Exibir de forma distinguível a meta usada nos indicadores e a meta de acompanhamento original, para evitar atribuir o ajuste ao gestor.
 
-**Visibilidade confirmada:** o painel profissional do paciente mostrará a meta original, a meta ajustada, a data/hora e a autoria do ajuste apenas com vínculo ativo e permissão vigente. O registro de prescrição permanece independente.
+**Visibilidade confirmada:** o painel profissional do usuário acompanhado mostrará a meta original, a meta ajustada, a data/hora e a autoria do ajuste apenas com vínculo ativo e permissão vigente. O registro de plano publicado permanece independente.
 
-**Precedência confirmada:** uma nova meta do nutricionista se torna automaticamente a referência dos indicadores no início de sua vigência, sem aceite do paciente. O usuário é informado discretamente e pode ajustar depois se desejar. Atualizações futuras não alteram os indicadores históricos.
+**Precedência confirmada:** uma nova meta do gestor se torna automaticamente a referência dos indicadores no início de sua vigência, sem aceite do usuário acompanhado. O usuário é informado discretamente e pode ajustar depois se desejar. Atualizações futuras não alteram os indicadores históricos.
 
-**Aviso confirmado:** o nutricionista autorizado verá um indicador discreto no painel do paciente, sem exigir ação e sem disparar e-mail, push ou mensagem externa. Lançamentos retroativos e fusos do diário também já foram definidos nesta etapa.
+**Aviso confirmado:** o gestor autorizado verá um indicador discreto no painel do usuário acompanhado, sem exigir ação e sem disparar e-mail, push ou mensagem externa. Lançamentos retroativos e fusos do diário também já foram definidos nesta etapa.
 
 ## 6. Registro retroativo de refeições (**Definido para o MVP**)
 
@@ -173,10 +175,10 @@ Atualizar esses resultados após inclusão, exclusão ou correção de registros
 
 1. O usuário adulto pode definir, no modo pessoal gratuito e **sem profissional vinculado**, meta de calorias e qualquer combinação de metas de proteínas, carboidratos e gorduras; nenhum desses valores é obrigatório.
 2. Valores de meta são consultados junto dos valores de **consumo real** registrados, no dia efetivo de vigência; não gerar diferença para nutrientes sem meta.
-3. Editar uma meta pessoal cria uma referência histórica a partir da nova vigência sem reescrever dias anteriores. Metas pessoais não são identificadas como prescrição profissional.
-4. Se uma referência estiver definida pelo nutricionista, o paciente recebe o aviso e confirma antes de substituí-la em seus indicadores; a meta original fica preservada, visível ao profissional autorizado.
-5. Uma nova meta profissional publicada passa a valer automaticamente na vigência definida, sem tarefa adicional ao paciente. O paciente conserva a possibilidade de ajustá-la depois.
-6. Encerrar ou trocar de nutricionista não apaga a última meta efetiva: mantê-la como referência pessoal com origem histórica e sem caracterizar prescrição profissional vigente do ex-profissional.
+3. Editar uma meta pessoal cria uma referência histórica a partir da nova vigência sem reescrever dias anteriores. Metas pessoais não são identificadas como plano alimentar publicado.
+4. Se uma referência estiver definida pelo gestor, o usuário acompanhado recebe o aviso e confirma antes de substituí-la em seus indicadores; a meta original fica preservada, visível ao profissional autorizado.
+5. Uma nova meta de acompanhamento publicada passa a valer automaticamente na vigência definida, sem tarefa adicional ao usuário acompanhado. O usuário acompanhado conserva a possibilidade de ajustá-la depois.
+6. Encerrar ou trocar de gestor não apaga a última meta efetiva: mantê-la como referência pessoal com origem histórica e sem caracterizar plano alimentar publicado vigente do ex-profissional.
 
 ## 12. Gráficos de consumo semanal e mensal (**Definidos para o MVP**)
 
@@ -251,8 +253,8 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 | Usuário abre o resumo semanal em uma quarta-feira | Mostrar o intervalo completo de segunda a domingo, com dias futuros sem dados e sem classificações fictícias |
 | Uma semana atravessa a virada de mês ou ano | Manter o mesmo período contínuo de segunda-feira a domingo, sem dividir em dois |
 | Usuário registra no sábado uma refeição consumida na segunda-feira anterior | Atualizar a segunda-feira e os resumos da semana do consumo, não a semana do cadastro |
-| Dia com registro parcial tem consumo abaixo da meta | Pode entrar como abaixo no comparativo de dados registrados, sem afirmar consumo insuficiente nem adesão à prescrição |
-| Paciente altera a meta durante o mês | Contagem de cada dia considera o consumo registrado e a meta efetiva naquele dia |
+| Dia com registro parcial tem consumo abaixo da meta | Pode entrar como abaixo no comparativo de dados registrados, sem afirmar consumo insuficiente nem adesão à plano publicado |
+| Usuário acompanhado altera a meta durante o mês | Contagem de cada dia considera o consumo registrado e a meta efetiva naquele dia |
 | Usuário alterna gráfico de calorias para proteínas | Recalcular as contagens para a meta de proteínas, não reutilizar as classificações calóricas |
 | Meta diária de 2.000 kcal e consumo registrado de 2.000 kcal | Classificar o dia como na meta |
 | Meta diária de 2.000 kcal e consumo registrado de 2.001 kcal | Classificar como acima, mesmo sendo diferença pequena; sem tolerância |
@@ -260,16 +262,16 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 | Meta diária de 2.000 kcal e consumo registrado de 2.100 kcal em sete dias | Sete dias acima da meta, e diferença somada de 700 kcal sobre as metas; não apresentar isso como prova de superávit energético sobre o gasto |
 | Arredondamento visual mostra consumo e meta iguais, mas valores internos diferem | Não classificar erroneamente como na meta; permitir visualizar diferença com precisão apropriada |
 | Há meta de proteína apenas em parte do mês | Gráfico de proteína mostra referência somente nos dias em que houve meta válida |
-| Nutricionista altera meta de 2.000 para 2.100 kcal no meio da semana | Referência do gráfico acompanha os valores históricos corretos por data; não reescreve dias anteriores |
+| Gestor altera meta de 2.000 para 2.100 kcal no meio da semana | Referência do gráfico acompanha os valores históricos corretos por data; não reescreve dias anteriores |
 | Um dos sete dias da semana não tem nenhuma refeição registrada | Marcar o dia como sem dados, sem ponto de consumo zero ou interpolação |
 | Usuário lança ou corrige refeição de período anterior | Gráfico semanal/mensal correspondente reflete os nutrientes e a data local corrigidos |
 | Usuário consulta gráficos em celular ou sem recurso visual | Pode consultar as datas e seus valores por alternativa textual acessível |
-| Usuário gratuito sem nutricionista define 120 g de proteína e 2.000 kcal | Salvar as metas pessoais normalmente, sem exigir vinculação profissional |
+| Usuário gratuito sem gestor define 120 g de proteína e 2.000 kcal | Salvar as metas pessoais normalmente, sem exigir vinculação profissional |
 | Usuário decide definir somente 100 g de proteínas | Mostrar objetivo de proteína, mas apenas consumo registrado para kcal, carboidratos e gorduras, sem inventar outras metas |
 | Usuário ainda não definiu meta de gordura | Exibir gordura consumida em gramas sem valor restante/excedente |
-| Usuário sem nutricionista edita sua própria meta | Registrar nova vigência e preservar meta anterior no histórico sem exigir aviso de alteração profissional |
-| Profissional define macros para paciente e paciente solicita ajuste | Mostrar origem profissional e pedir confirmação antes do ajuste, mantendo a prescrição original |
-| Nutricionista publica nova meta de macro depois de ajuste pessoal | Aplicar a nova meta automaticamente a partir da vigência, com histórico preservado |
+| Usuário sem gestor edita sua própria meta | Registrar nova vigência e preservar meta anterior no histórico sem exigir aviso de alteração profissional |
+| Profissional define macros para usuário acompanhado e usuário acompanhado solicita ajuste | Mostrar origem profissional e pedir confirmação antes do ajuste, mantendo a plano publicado original |
+| Gestor publica nova meta de macro depois de ajuste pessoal | Aplicar a nova meta automaticamente a partir da vigência, com histórico preservado |
 | Usuário registra 72 kg medidos em data anterior | Gráfico de peso inclui o ponto na data da medição, sem tratá-lo como pesagem do dia do cadastro |
 | Usuário registra várias medições ao longo de semanas | Gráfico mostra a evolução das medições, sem exigir frequência mínima |
 | Usuário corrige uma medição antiga de 75 para 74 kg | Corrige apenas a medição escolhida, preserva os demais pontos e atualiza o gráfico |
@@ -300,7 +302,7 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 | Consumo ocorre perto da meia-noite local | Totalização usa a data local de consumo e o fuso selecionado, não a data UTC do cadastro |
 | Dispositivo não fornece um fuso válido | Aplicação oferece seleção manual em vez de supor uma localização |
 | Usuário corrige o fuso de uma refeição antiga | Salva correção explícita e recalcula dias envolvidos, preservando trilha autorizada |
-| Usuário registra alimento diferente do prescrito | Diário reflete o consumo real; dieta permanece igual |
+| Usuário registra alimento diferente do planejado | Diário reflete o consumo real; dieta permanece igual |
 | Dieta é atualizada depois do consumo | Valores do diário já salvo permanecem os mesmos |
 | Modelo pessoal é editado após o consumo | Registro antigo permanece independente |
 | Duplo envio da mesma confirmação | Apenas uma refeição é registrada |
@@ -318,25 +320,25 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 | Micronutriente é fornecido em unidades compatíveis com conversão (mg e µg) | Normalizar corretamente para unidade escolhida e evitar soma de unidades incompatíveis |
 | Usuário adiciona refeição retroativa com vitamina C conhecida | Recalcular o total de vitamina C e sua indicação de cobertura no dia e período correspondentes |
 | Usuário altera sua meta futura | Meta anterior permanece associada aos dias históricos em que vigorou |
-| Paciente pede alteração de meta definida pelo nutricionista | Aplicação avisa que a meta é profissional e solicita confirmação expressa |
-| Paciente cancela a confirmação da alteração | Meta efetiva permanece intacta |
-| Paciente confirma uma meta diferente | Meta ajustada pelo paciente entra em vigor nos indicadores, com autoria explícita; meta profissional original não muda |
-| Nutricionista consulta a prescrição publicada após ajuste do paciente | Valores da prescrição original permanecem imutáveis e corretamente atribuídos ao autor |
-| Nutricionista com vínculo ativo e autorização consulta o painel após ajuste | Vê meta original prescrita, meta de acompanhamento ajustada, data/hora e autoria da alteração |
-| Nutricionista sem vínculo ou autorização tenta consultar metas do paciente via API | Acesso negado pelo servidor; dados pessoais não são expostos |
-| Paciente modifica meta de acompanhamento | O nutricionista com vínculo ativo vê aviso discreto no painel, com autoria, valores e data/hora; sem e-mail, push nem mensagem externa |
-| Paciente desvincula-se com meta efetiva profissional de 2.200 kcal | Continua com 2.200 kcal nos indicadores como referência pessoal e mantém autoria histórica |
-| Meta original era 2.200 kcal, ajustada para 2.000 kcal antes de encerrar o vínculo | Mantém 2.000 kcal como referência; meta profissional original fica no histórico |
+| Usuário acompanhado pede alteração de meta definida pelo gestor | Aplicação avisa que a meta é profissional e solicita confirmação expressa |
+| Usuário acompanhado cancela a confirmação da alteração | Meta efetiva permanece intacta |
+| Usuário acompanhado confirma uma meta diferente | Meta ajustada pelo usuário acompanhado entra em vigor nos indicadores, com autoria explícita; meta de acompanhamento original não muda |
+| Gestor consulta a plano publicado publicada após ajuste do usuário acompanhado | Valores da plano publicado original permanecem imutáveis e corretamente atribuídos ao autor |
+| Gestor com vínculo ativo e autorização consulta o painel após ajuste | Vê meta original planejada, meta de acompanhamento ajustada, data/hora e autoria da alteração |
+| Gestor sem vínculo ou autorização tenta consultar metas do usuário acompanhado via API | Acesso negado pelo servidor; dados pessoais não são expostos |
+| Usuário acompanhado modifica meta de acompanhamento | O gestor com vínculo ativo vê aviso discreto no painel, com autoria, valores e data/hora; sem e-mail, push nem mensagem externa |
+| Usuário acompanhado desvincula-se com meta efetiva profissional de 2.200 kcal | Continua com 2.200 kcal nos indicadores como referência pessoal e mantém autoria histórica |
+| Meta original era 2.200 kcal, ajustada para 2.000 kcal antes de encerrar o vínculo | Mantém 2.000 kcal como referência; meta de acompanhamento original fica no histórico |
 | Após troca, novo profissional ainda não cadastrou metas | Meta efetiva anterior permanece até ajuste pessoal ou nova referência profissional válida |
-| Paciente sem vínculo altera meta que veio do acompanhamento antigo | Atualiza sem aviso de prescrição profissional vigente; histórico preservado |
-| Nutricionista anterior programou mudança de meta para após o fim do vínculo | Evento não altera meta efetiva sem vínculo/autorização vigente |
-| Profissional acessa paciente sem vínculo ativo ou autorização | Não vê aviso nem detalhes da mudança de meta |
-| Profissional consulta o painel após ajuste do paciente | Visualiza a alteração sem confirmação obrigatória de leitura |
-| Paciente consulta indicadores de dias anteriores ao ajuste | Utiliza a meta efetiva vigente na época, sem reescrever histórico |
-| Meta profissional de 2.200 kcal foi ajustada pelo paciente para 2.000 kcal; nutricionista publica nova meta de 2.100 kcal de início imediato | A referência dos indicadores muda automaticamente para 2.100 kcal, sem pedir confirmação ao paciente |
-| Nutricionista agenda uma nova meta para data futura | A meta anterior continua efetiva até a data/hora programada; depois, a nova entra automaticamente |
-| Paciente deseja alterar a nova meta profissional depois da atualização | A aplicação solicita confirmação do ajuste pessoal e preserva a meta profissional publicada |
-| Paciente consulta um período anterior à nova meta | Utiliza metas efetivas daquela época, sem reescrever indicadores históricos |
+| Usuário acompanhado sem vínculo altera meta que veio do acompanhamento antigo | Atualiza sem aviso de plano alimentar publicado vigente; histórico preservado |
+| Gestor anterior programou mudança de meta para após o fim do vínculo | Evento não altera meta efetiva sem vínculo/autorização vigente |
+| Profissional acessa usuário acompanhado sem vínculo ativo ou autorização | Não vê aviso nem detalhes da mudança de meta |
+| Profissional consulta o painel após ajuste do usuário acompanhado | Visualiza a alteração sem confirmação obrigatória de leitura |
+| Usuário acompanhado consulta indicadores de dias anteriores ao ajuste | Utiliza a meta efetiva vigente na época, sem reescrever histórico |
+| Meta profissional de 2.200 kcal foi ajustada pelo usuário acompanhado para 2.000 kcal; gestor publica nova meta de 2.100 kcal de início imediato | A referência dos indicadores muda automaticamente para 2.100 kcal, sem pedir confirmação ao usuário acompanhado |
+| Gestor agenda uma nova meta para data futura | A meta anterior continua efetiva até a data/hora programada; depois, a nova entra automaticamente |
+| Usuário acompanhado deseja alterar a nova meta de acompanhamento depois da atualização | A aplicação solicita confirmação do ajuste pessoal e preserva a meta de acompanhamento publicada |
+| Usuário acompanhado consulta um período anterior à nova meta | Utiliza metas efetivas daquela época, sem reescrever indicadores históricos |
 | Usuário corrige porção de arroz de 200 g para 150 g | O registro é atualizado, nutrientes e totais são recalculados e ação é registrada discretamente |
 | Usuário edita data de uma refeição | Totais e indicadores são atualizados nas duas datas afetadas |
 | Usuário exclui refeição registrada por engano | Ela deixa de aparecer e de contar nos totais; trilha de ação respeita futura política de retenção |
@@ -345,4 +347,4 @@ Para cada semana (segunda a domingo) ou mês, e separadamente para calorias, pro
 
 ---
 
-**A etapa 5 está concluída em definições funcionais para o MVP, sem implementação de software.** Foram aprovados edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, metas opcionais pessoais/profissionais, novas metas profissionais automáticas, indicadores diários, resumos e gráficos semanais/mensais com contagem estrita de dias acima/abaixo/na meta (sem tolerância) e diferença acumulada nos dias comparáveis, acompanhamento de peso/IMC e seção **Detalhes nutricionais** com micronutrientes, totais parciais e lista de alimentos sem dados. **Metas, percentuais e comparação com referências de micronutrientes ficam fora do MVP.** Detalhes técnicos de horários/altura, precisão dos cálculos, privacidade, retenção e acesso às trilhas serão tratados nas etapas 8 e 9; escolhas visuais finais na implementação.
+**A etapa 5 está concluída em definições funcionais para o MVP, sem implementação de software.** Foram aprovados edição/exclusão de refeições, registros retroativos, fuso com correção manual, histórico discreto, metas opcionais pessoais/profissionais, novas metas de acompanhamento automáticas, indicadores diários, resumos e gráficos semanais/mensais com contagem estrita de dias acima/abaixo/na meta (sem tolerância) e diferença acumulada nos dias comparáveis, acompanhamento de peso/IMC e seção **Detalhes nutricionais** com micronutrientes, totais parciais e lista de alimentos sem dados. **Metas, percentuais e comparação com referências de micronutrientes ficam fora do MVP.** Detalhes técnicos de horários/altura, precisão dos cálculos, privacidade, retenção e acesso às trilhas serão tratados nas etapas 8 e 9; escolhas visuais finais na implementação.
