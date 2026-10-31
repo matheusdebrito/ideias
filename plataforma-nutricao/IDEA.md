@@ -1,7 +1,7 @@
 # Plataforma de Nutrição — Documento de ideia
 
 > **Status:** descoberta do produto  
-> **Versão:** 0.18  
+> **Versão:** 0.19  
 > **Última atualização:** 30/10/2026  
 > **Este documento registra a visão inicial. Não é uma especificação pronta para implementação.** Decisões ainda não validadas estão marcadas como questões em aberto.
 
@@ -157,6 +157,14 @@ O nutricionista define uma composição fixa para cada refeição: alimentos e q
 - No editor, os campos de observação poderão ficar recolhidos/ocultos até o usuário escolher adicioná-los. Na visualização, a observação da refeição aparece como texto secundário junto ao título; a observação do alimento aparece abaixo do nome do alimento, em estilo discreto.
 - Em telas pequenas, priorizar expansão sob demanda e não adicionar colunas permanentes apenas para observações.
 
+**Categorias de refeições (confirmado para o MVP):**
+- Categorias padrão: **Café da manhã, Lanche da manhã, Almoço, Lanche da tarde, Jantar e Ceia**.
+- O nutricionista pode criar categorias personalizadas para organizar sua biblioteca profissional e os planos que elabora para seus pacientes.
+- Uma categoria é apenas uma forma de classificação/exibição e **não limita a uma refeição por dia**. Por exemplo, segunda-feira pode conter dois ou mais cafés da manhã.
+- Refeições têm identidade própria e poderão ter nome específico além da categoria.
+- Alterar ou arquivar uma categoria personalizada não reescreve nem apaga a classificação existente em versões publicadas de dietas ou no histórico alimentar.
+- A possibilidade de categorias personalizadas para usuários comuns será avaliada separadamente; no MVP está confirmada para o nutricionista.
+
 **Organização do cardápio (confirmada para o MVP):**
 - Todo plano começa com um **cardápio diário padrão**, repetido nos sete dias da semana.
 - Um mesmo dia pode conter **várias refeições planejadas da mesma categoria** (por exemplo, mais de um café da manhã ou lanche), cada uma como registro independente, com seus próprios alimentos, quantidades, observações e horário sugerido opcional.
@@ -269,17 +277,18 @@ Essas funcionalidades poderão ser avaliadas após validar o valor do diário al
 
 ## 7. Questões em aberto para a descoberta
 
-1. Quais medidas proporcionais de aferição de idade são aplicáveis ao aplicativo de nutrição 18+, considerando o guia da ANPD sobre acesso provável por menores? Requer análise jurídica antes do lançamento.
-2. Como lidar com uma conta descoberta como pertencente a menor sem expor ou reter indevidamente seus dados?
-3. Como validar o registro profissional do nutricionista?
+1. Quais medidas proporcionais de aferição de idade se aplicam ao aplicativo 18+, conforme análise jurídica antes do lançamento?
+2. Como lidar com uma conta identificada como pertencente a menor sem reter ou expor indevidamente dados?
+3. Como validar o registro profissional de nutricionista?
 4. Como calcular o saldo semanal/mensal, as médias e a tolerância de meta?
-5. O paciente poderá visualizar uma dieta futura já publicada antes do início da vigência? Quais ações permitirão cancelar ou reagendar uma versão programada?
 5. Quais recursos compõem o plano profissional pago? Haverá limites de pacientes?
 6. Quais dados ficam disponíveis depois do encerramento do vínculo profissional?
 7. Qual será o fluxo de exportação, portabilidade, retenção e exclusão dos dados?
-8. Quais outros campos, além de nome, alimentos, quantidades, observações opcionais e horário opcional, são realmente necessários em uma refeição?
-9. Como será o processo de troca de nutricionista?
-10. O versionamento dos planos pessoais deverá ter o mesmo detalhamento do profissional?
+8. Como será a troca de nutricionista?
+9. O usuário comum poderá criar suas próprias categorias personalizadas de refeições?
+10. Quais campos adicionais realmente agregam valor ao cadastro das refeições, sem poluir a interface?
+
+**Definições funcionais centrais do módulo de dietas concluídas para planejamento:** criação e atribuição, categorias, composição fixa, horários opcionais, observações, cardápio semanal, múltiplas refeições da mesma categoria, biblioteca, histórico/versionamento e agendamentos. Detalhes de implementação e questões transversais serão tratados nas demais etapas.
 
 ## 8. Referências iniciais
 
