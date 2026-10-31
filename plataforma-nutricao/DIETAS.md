@@ -2,6 +2,7 @@
 
 > **Status:** planejamento funcional, não implementado
 > **Módulo:** MVP
+> **Versão:** 0.2
 > **Data:** 31/10/2026
 > **Fonte da visão geral:** [IDEA.md](./IDEA.md)
 > **Regra de trabalho:** decisões confirmadas estão marcadas como **Definido**; sugestões ainda não aprovadas estão marcadas como **Proposta**.
@@ -39,7 +40,7 @@ A mesma implementação de seleção de alimentos, medidas e cálculo nutriciona
 2. Seleciona uma das refeições da versão vigente do seu plano alimentar.
 3. O sistema prepara uma **cópia independente** dos alimentos e das quantidades para revisão.
 4. O usuário pode ajustar porções, remover ou adicionar alimentos segundo o consumo real.
-5. Ao confirmar, a refeição é registrada no diário com data, horário, quantidades e nutrientes calculados.
+5. Ao confirmar, a refeição é registrada no diário com a data, o horário real do consumo (quando informado ou capturado pelo fluxo) e os nutrientes calculados. O horário sugerido no plano não é copiado como se fosse o horário real.
 6. Isso não edita a dieta e não cria um modelo pessoal automaticamente.
 
 ### 3.2. A partir de uma refeição pessoal salva
@@ -97,6 +98,17 @@ O nutricionista poderá:
 6. A refeição só chega ao paciente quando a versão do plano for publicada.
 
 **Persistência:** ao adicionar um modelo profissional a um plano, criar dados próprios daquela versão/rascunho. Atualizar ou excluir o modelo original **não muda** nenhum plano publicado e não altera planos de outros pacientes. Atribuir uma refeição a uma dieta não significa registrar consumo no diário do paciente.
+
+### 4.1. Horários sugeridos das refeições (**Definido para o MVP**)
+
+- O horário da refeição planejada é **opcional**.
+- Se informado, é apenas uma sugestão de organização para o paciente, não uma obrigação.
+- Atrasar ou adiantar uma refeição em relação ao horário sugerido não gera erro, alerta, notificação de atraso, penalidade ou indicação automática de descumprimento.
+- O horário sugerido pertence à refeição planejada na versão do plano.
+- O horário real do consumo pertence ao diário alimentar e deve ser registrado separadamente.
+- A diferença entre horário sugerido e horário de consumo não será usada para classificar adesão ou gerar alertas no MVP.
+
+**Exemplo:** refeição sugerida para 07:00 e registrada pelo usuário às 08:00. O diário salva o consumo normalmente, sem aviso de atraso.
 
 ## 5. Dietas e versionamento (**Definido**)
 
@@ -189,7 +201,6 @@ As refeições do **diário** continuam sendo registros de consumo independentes
 
 ## 10. Decisões em aberto — não presumir definição
 
-- Refeições programadas terão horário obrigatório, opcional ou apenas ordem?
 - Modelos pessoais e profissionais poderão ter categorias, favoritos ou tags desde o MVP?
 - Planos pessoais terão o mesmo detalhamento de histórico/versionamento dos profissionais?
 - Refeição registrada a partir de um modelo deverá armazenar um identificador de origem opcional (para análises) sem se tornar dependente do modelo?
