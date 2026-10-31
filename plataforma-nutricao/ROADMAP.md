@@ -29,8 +29,18 @@
 | 6 | Gestão de pacientes e permissões | Concluída | Convites por e-mail, validade e reenvio, autorização simples, encerramento/troca, preservação de dados/metas/dietas, notificação ao ex-profissional, CRN validado antes de recursos profissionais e proteção contra abuso aprovados |
 | 7 | Monetização e assinaturas | Em andamento | Assinatura única mensal; 7 dias de tolerância por falha na renovação anteriormente paga, mantendo acesso temporário e restringindo após 168h sem regularização; dados e vínculos preservados; teste grátis e gateway pendentes, preço e limites adiados |
 | 8 | Requisitos não funcionais, segurança e privacidade | Pendente | LGPD, controle de acesso, riscos, retenção, portabilidade, observabilidade, desempenho, backup |
-| 9 | Arquitetura, banco e integrações | Pendente | Modelo de dados, TypeScript, APIs, integridade, histórico, automações, infraestrutura e escolha final da fonte de alimentos (TBCA/TACO/JSON) antes da integração |
-| 10 | Escopo final do MVP, cronograma e documentos para agentes de IA | Pendente | Priorização, critérios de aceite, plano de implementação, `PLAN.md`, `AGENTS.md` e `ARCHITECTURE.md` |
+| 9 | Arquitetura, banco e integrações | Pendente | Modelo de dados, TypeScript, APIs, integridade, infraestrutura e fontes de alimentos; **estimativa obrigatória de custos operacionais por cenários de uso**, com premissas, custo por usuário/nutricionista e despesas de pagamentos/e-mail |
+| 10 | Escopo final do MVP, cronograma e documentos para agentes de IA | Pendente | Finalizar MVP, critérios de aceite, `PLAN.md`, `AGENTS.md` e `ARCHITECTURE.md`; **retornar obrigatoriamente aos custos e decidir teste grátis/duração, preço profissional e limite de pacientes antes de concluir o planejamento** |
+
+## Ponto de controle obrigatório — custos e decisões comerciais adiadas
+
+**Situação: PENDENTE.** Durante a etapa 7, decidiu-se **não escolher agora** o preço da assinatura, a existência/quantidade de limite de pacientes nem se haverá teste grátis e sua duração (14 e 30 dias são apenas hipóteses). A decisão depende de uma estimativa de custos, não de palpite.
+
+- [ ] **Etapa 9:** estimar e documentar custos operacionais para cenários de uso (hospedagem, banco, armazenamento, tráfego, e-mail, gateway/taxas, serviços externos), incluindo premissas, custo estimado por nutricionista e usuários vinculados. Identificar incertezas e diferenciar estimativas de despesas medidas.
+- [ ] **Etapa 10, após os resultados da etapa 9:** voltar explicitamente à discussão do **teste gratuito (sim/não e duração)**, **preço da mensalidade** e **limite de pacientes (sim/não e quantidade, se aplicável)**, além de verificar sustentabilidade do modelo.
+- [ ] Atualizar as decisões finais em [MONETIZACAO.md](./MONETIZACAO.md), [IDEA.md](./IDEA.md) e neste roteiro.
+
+**Critério de encerramento:** não marcar a **etapa 10** como concluída com esses itens simplesmente esquecidos. Caso a pesquisa de custos não permita um valor final, registrar a pendência de forma expressa, justificativa, decisão de lançamento e próximo responsável antes de alterar o status.
 
 ## Conclusão da etapa 3
 
