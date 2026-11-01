@@ -7,7 +7,7 @@
 2. `ARCHITECTURE.md` e `DATABASE.md`: decisões e invariantes técnicos; esquemas conceituais não são código pronto.
 3. `PLAN.md`: ordem de implementação, aceites e bloqueios.
 4. `README.md`: visão e status.
-5. Documentos legados (`IDEA.md`, `ALIMENTOS.md`, `DIARIO.md`, etc.) para contexto: **não implementar regras conflitantes sem apontar divergência**.
+5. Documentos temáticos (`IDEA.md`, `ALIMENTOS.md`, `DIARIO.md`, `DIETAS.md`, `PACIENTES.md`, `MONETIZACAO.md`, `ROADMAP.md`), revisados para refletir as mesmas decisões. **Se encontrar qualquer divergência remanescente, parar a funcionalidade afetada, apontar o conflito e não escolher silenciosamente uma versão.**
 
 ## Modo de trabalho
 - Atuar como engenheiro sênior: questionar inconsistências com evidência; não concordar automaticamente.
