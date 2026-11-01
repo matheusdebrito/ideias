@@ -3,7 +3,7 @@
 > 01/11/2026. Nenhuma fase foi implementada; desenvolvimento inicial **somente local**. Avançar por critérios de aceite, não por pressão de cronograma.
 
 ## Fase 0 — Fechar bloqueios de produto e engenharia
-- Revisar divergências dos documentos anteriores versus `REQUIREMENTS.md` (ver abaixo).
+- Confirmar que todos os documentos da pasta continuam consistentes com `REQUIREMENTS.md` após alterações futuras.
 - Verificar licença/redistribuição comercial TBCA antes de copiar dados.
 - Definir política mínima de privacidade, consentimento para vínculo, retenção e tratamento de exclusão.
 - Desenhar schema inicial e contratos REST com exemplos de erro, autorização e datas/fusos.
@@ -49,7 +49,7 @@ Somente após o MVP passar na validação: Docker Compose de produção, proxy H
 ## Pendências comerciais
 Durante beta: todos os recursos gratuitos, sem cobrança. Antes de monetizar: medir custos e retenção (7/30 dias), definir preço/limite, provedor de cobrança, política de redução/suspensão, comunicação prévia; sem inserir pagamento no MVP por antecipação.
 
-## Divergências identificadas ao iniciar consolidação (documentos legados)
+## Histórico de divergências identificadas e corrigidas em 01/11/2026
 1. `ALIMENTOS.md` exige kcal no alimento manual; **decisão recente: kcal opcional com estimativa 4/4/9**.
 2. `ALIMENTOS.md` bloqueia registro de alimentos importados sem os quatro nutrientes essenciais; **decisão recente: permitir uso com total incompleto explicitamente sinalizado**.
 3. `ROADMAP.md`/textos anteriores descrevem assinatura mensal e condições de pagamento como escopo inicial; **decisão recente: beta gratuito, monetização adiada**.
@@ -57,4 +57,4 @@ Durante beta: todos os recursos gratuitos, sem cobrança. Antes de monetizar: me
 5. `ROADMAP.md` e `DIETAS.md` contêm regras mais complexas de agendamento, dietas futuras e gestão comercial; revisar caso a caso e excluir do MVP o que conflitar com plano atual editável simples.
 6. `ALIMENTOS.md` dizia que origem TBCA/TACO/JSON estava em aberto; **decisão recente: TBCA prioritária**, condicionado à licença.
 
-Não atualizar os legados em massa sem revisão; manter rastreabilidade da origem das decisões.
+**Situação:** os documentos temáticos citados foram reescritos para refletir as decisões atuais na `main`. Este registro histórico não constitui instrução de implementação. Em novas alterações, revisar consistência transversal e preservar rastreabilidade.
