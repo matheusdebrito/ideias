@@ -21,7 +21,7 @@ Aplicação web para adultos (18+) registrarem alimentação, metas, hidrataçã
 - [DATABASE.md](DATABASE.md): modelo conceitual e invariantes.
 - [PLAN.md](PLAN.md): fases de execução, testes e bloqueios.
 - [AGENTS.md](AGENTS.md): orientações para agentes e implementação.
-- Documentos preexistentes `IDEA.md`, `ALIMENTOS.md`, `DIARIO.md`, `DIETAS.md`, `PACIENTES.md`, `MONETIZACAO.md`, `ROADMAP.md`: contexto detalhado histórico, **a conciliar antes de implementação de pontos divergentes**.
+- Documentos temáticos `IDEA.md`, `ALIMENTOS.md`, `DIARIO.md`, `DIETAS.md`, `PACIENTES.md`, `MONETIZACAO.md`, `ROADMAP.md`: **revisados e alinhados** ao planejamento consolidado em 01/11/2026. Para regra transversal ambígua, consultar `REQUIREMENTS.md`.
 
 ## Fora do lançamento inicial
 Pagamentos reais, cobrança recorrente, pesquisa pública de profissionais, chat interno, e-mails de convite, receitas, compartilhamento público de alimentos, rastreamento de exercícios, fotos e app mobile.
